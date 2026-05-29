@@ -6,5 +6,6 @@ namespace DAL
 {
     internal class DAL_FamiliaRol
     {
+
     }
 }

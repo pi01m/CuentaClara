@@ -1,0 +1,317 @@
+﻿namespace CuentaClara_TrabajoCampo
+{
+    partial class FormMenu2
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            panelPrincipal = new Panel();
+            lblTitulo = new Label();
+            dgvMenu = new DataGridView();
+            btnSalir = new Button();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
+            button5 = new Button();
+            button7 = new Button();
+            panelPrincipal.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMenu).BeginInit();
+            SuspendLayout();
+            // 
+            // panelPrincipal
+            // 
+            panelPrincipal.BackColor = Color.FromArgb(240, 240, 240);
+            panelPrincipal.Controls.Add(button7);
+            panelPrincipal.Controls.Add(button5);
+            panelPrincipal.Controls.Add(button4);
+            panelPrincipal.Controls.Add(button3);
+            panelPrincipal.Controls.Add(button2);
+            panelPrincipal.Controls.Add(button1);
+            panelPrincipal.Controls.Add(lblTitulo);
+            panelPrincipal.Controls.Add(dgvMenu);
+            panelPrincipal.Controls.Add(btnSalir);
+            panelPrincipal.Dock = DockStyle.Fill;
+            panelPrincipal.Location = new Point(0, 0);
+            panelPrincipal.Name = "panelPrincipal";
+            panelPrincipal.Size = new Size(2317, 1137);
+            panelPrincipal.TabIndex = 0;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(0, 70, 140);
+            lblTitulo.Location = new Point(992, 52);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(213, 81);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Menú ";
+            lblTitulo.Click += lblTitulo_Click;
+            // 
+            // dgvMenu
+            // 
+            dgvMenu.AllowUserToAddRows = false;
+            dgvMenu.AllowUserToDeleteRows = false;
+            dgvMenu.BackgroundColor = Color.White;
+            dgvMenu.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(28, 93, 157);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvMenu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvMenu.ColumnHeadersHeight = 58;
+            dgvMenu.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7 });
+            dgvMenu.EnableHeadersVisualStyles = false;
+            dgvMenu.Location = new Point(244, 170);
+            dgvMenu.Name = "dgvMenu";
+            dgvMenu.ReadOnly = true;
+            dgvMenu.RowHeadersVisible = false;
+            dgvMenu.RowHeadersWidth = 102;
+            dgvMenu.Size = new Size(1753, 423);
+            dgvMenu.TabIndex = 1;
+            // 
+            // btnSalir
+            // 
+            btnSalir.BackColor = Color.FromArgb(28, 93, 157);
+            btnSalir.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            btnSalir.FlatStyle = FlatStyle.Flat;
+            btnSalir.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            btnSalir.ForeColor = Color.White;
+            btnSalir.Location = new Point(51, 797);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(222, 109);
+            btnSalir.TabIndex = 3;
+            btnSalir.Text = "Crear Usuario";
+            btnSalir.UseVisualStyleBackColor = false;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.HeaderText = "ADMIN";
+            dataGridViewTextBoxColumn1.MinimumWidth = 12;
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
+            dataGridViewTextBoxColumn1.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.HeaderText = "MAESTROS";
+            dataGridViewTextBoxColumn2.MinimumWidth = 12;
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
+            dataGridViewTextBoxColumn2.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.HeaderText = "USUARIO";
+            dataGridViewTextBoxColumn3.MinimumWidth = 12;
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
+            dataGridViewTextBoxColumn3.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.HeaderText = "VENTAS";
+            dataGridViewTextBoxColumn4.MinimumWidth = 12;
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            dataGridViewTextBoxColumn4.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.HeaderText = "COMPRAS";
+            dataGridViewTextBoxColumn5.MinimumWidth = 12;
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            dataGridViewTextBoxColumn5.ReadOnly = true;
+            dataGridViewTextBoxColumn5.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.HeaderText = "REPORTES";
+            dataGridViewTextBoxColumn6.MinimumWidth = 12;
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            dataGridViewTextBoxColumn6.ReadOnly = true;
+            dataGridViewTextBoxColumn6.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.HeaderText = "AYUDA";
+            dataGridViewTextBoxColumn7.MinimumWidth = 12;
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            dataGridViewTextBoxColumn7.ReadOnly = true;
+            dataGridViewTextBoxColumn7.Width = 250;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(28, 93, 157);
+            button1.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(633, 797);
+            button1.Name = "button1";
+            button1.Size = new Size(238, 111);
+            button1.TabIndex = 4;
+            button1.Text = "Desbloquear Usuario";
+            button1.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            button2.BackColor = Color.FromArgb(28, 93, 157);
+            button2.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button2.ForeColor = Color.White;
+            button2.Location = new Point(1865, 797);
+            button2.Name = "button2";
+            button2.Size = new Size(222, 109);
+            button2.TabIndex = 5;
+            button2.Text = "Act/Desact. Usuario";
+            button2.UseVisualStyleBackColor = false;
+            // 
+            // button3
+            // 
+            button3.BackColor = Color.FromArgb(28, 93, 157);
+            button3.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button3.ForeColor = Color.White;
+            button3.Location = new Point(1544, 797);
+            button3.Name = "button3";
+            button3.Size = new Size(222, 109);
+            button3.TabIndex = 6;
+            button3.Text = "Logout";
+            button3.UseVisualStyleBackColor = false;
+            // 
+            // button4
+            // 
+            button4.BackColor = Color.FromArgb(28, 93, 157);
+            button4.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button4.ForeColor = Color.White;
+            button4.Location = new Point(924, 799);
+            button4.Name = "button4";
+            button4.Size = new Size(222, 109);
+            button4.TabIndex = 7;
+            button4.Text = "Cambiar Clave";
+            button4.UseVisualStyleBackColor = false;
+            // 
+            // button5
+            // 
+            button5.BackColor = Color.FromArgb(28, 93, 157);
+            button5.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button5.FlatStyle = FlatStyle.Flat;
+            button5.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button5.ForeColor = Color.White;
+            button5.Location = new Point(1246, 797);
+            button5.Name = "button5";
+            button5.Size = new Size(222, 109);
+            button5.TabIndex = 8;
+            button5.Text = "Modificar Usuario";
+            button5.UseVisualStyleBackColor = false;
+            // 
+            // button7
+            // 
+            button7.BackColor = Color.FromArgb(28, 93, 157);
+            button7.FlatAppearance.BorderColor = Color.FromArgb(28, 93, 157);
+            button7.FlatStyle = FlatStyle.Flat;
+            button7.Font = new Font("Segoe UI", 9.900001F, FontStyle.Bold);
+            button7.ForeColor = Color.White;
+            button7.Location = new Point(354, 799);
+            button7.Name = "button7";
+            button7.Size = new Size(222, 109);
+            button7.TabIndex = 10;
+            button7.Text = "Login";
+            button7.UseVisualStyleBackColor = false;
+            // 
+            // FormMenu2
+            // 
+            AutoScaleDimensions = new SizeF(17F, 41F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(2317, 1137);
+            Controls.Add(panelPrincipal);
+            Name = "FormMenu2";
+            Text = "FormMenu2";
+            Load += FormMenu2_Load;
+            panelPrincipal.ResumeLayout(false);
+            panelPrincipal.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMenu).EndInit();
+            ResumeLayout(false);
+        }
+
+        private Button CrearBoton(string texto)
+{
+    Button btn = new Button();
+
+    btn.Text = texto;
+
+    btn.Dock = DockStyle.Fill;
+
+    btn.BackColor = Color.White;
+    btn.ForeColor = Color.FromArgb(28, 93, 157);
+
+    btn.FlatStyle = FlatStyle.Flat;
+
+    btn.FlatAppearance.BorderColor =
+        Color.FromArgb(28, 93, 157);
+
+    btn.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+
+    return btn;
+        }
+        #endregion
+
+        private Panel panelPrincipal;
+        private Label lblTitulo;
+        private DataGridView dgvMenu;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private Button btnSalir;
+        private Button button7;
+        private Button button5;
+        private Button button4;
+        private Button button3;
+        private Button button2;
+        private Button button1;
+    }
+}

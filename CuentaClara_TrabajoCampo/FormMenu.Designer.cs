@@ -95,7 +95,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(112, 66);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(173, 37);
+            lblTitulo.Size = new Size(420, 89);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -189,9 +189,9 @@
             panelUsuario.Controls.Add(lblUsuario);
             panelUsuario.Controls.Add(lblBD);
             panelUsuario.Dock = DockStyle.Bottom;
-            panelUsuario.Location = new Point(0, 1001);
+            panelUsuario.Location = new Point(0, 1239);
             panelUsuario.Name = "panelUsuario";
-            panelUsuario.Size = new Size(1841, 60);
+            panelUsuario.Size = new Size(2391, 60);
             panelUsuario.TabIndex = 3;
             // 
             // lblUsuario
@@ -201,7 +201,7 @@
             lblUsuario.ForeColor = Color.White;
             lblUsuario.Location = new Point(20, 20);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(323, 20);
+            lblUsuario.Size = new Size(795, 50);
             lblUsuario.TabIndex = 0;
             lblUsuario.Text = "Usuario Activo: Devora (Rol: Usuario Operativo)";
             // 
@@ -231,7 +231,7 @@
             lblHistorial.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             lblHistorial.Location = new Point(25, 20);
             lblHistorial.Name = "lblHistorial";
-            lblHistorial.Size = new Size(368, 30);
+            lblHistorial.Size = new Size(900, 72);
             lblHistorial.TabIndex = 0;
             lblHistorial.Text = "Historial Reciente de Movimientos";
             // 
@@ -314,7 +314,7 @@
             lblEstadoSaldos.Font = new Font("Segoe UI", 11F);
             lblEstadoSaldos.Location = new Point(42, 808);
             lblEstadoSaldos.Name = "lblEstadoSaldos";
-            lblEstadoSaldos.Size = new Size(343, 20);
+            lblEstadoSaldos.Size = new Size(842, 50);
             lblEstadoSaldos.TabIndex = 4;
             lblEstadoSaldos.Text = "Saldos Conciliados: Hogar en Equilibrio y Armonía";
             // 
@@ -325,7 +325,7 @@
             lblSaldoGeneral.ForeColor = Color.FromArgb(15, 45, 75);
             lblSaldoGeneral.Location = new Point(340, 35);
             lblSaldoGeneral.Name = "lblSaldoGeneral";
-            lblSaldoGeneral.Size = new Size(736, 32);
+            lblSaldoGeneral.Size = new Size(1812, 81);
             lblSaldoGeneral.TabIndex = 1;
             lblSaldoGeneral.Text = "Saldo Líquido General del Hogar: $732.500,75 [Estado: Estable]";
             // 
@@ -357,7 +357,7 @@
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1841, 1061);
+            ClientSize = new Size(2391, 1299);
             Controls.Add(panelMovimientos);
             Controls.Add(lblSaldoGeneral);
             Controls.Add(panelMenu);

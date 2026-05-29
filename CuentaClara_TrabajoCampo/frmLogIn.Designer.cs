@@ -34,7 +34,7 @@
             lblUsuario = new Label();
             txtUsuario = new TextBox();
             lblClave = new Label();
-            txtClave = new TextBox();
+            txtContrasena = new TextBox();
             btnIngresar = new Button();
             btnSalir = new Button();
             panelLogin.SuspendLayout();
@@ -50,7 +50,7 @@
             panelLogin.Controls.Add(lblUsuario);
             panelLogin.Controls.Add(txtUsuario);
             panelLogin.Controls.Add(lblClave);
-            panelLogin.Controls.Add(txtClave);
+            panelLogin.Controls.Add(txtContrasena);
             panelLogin.Controls.Add(btnIngresar);
             panelLogin.Controls.Add(btnSalir);
             panelLogin.Location = new Point(40, 30);
@@ -106,13 +106,13 @@
             lblClave.TabIndex = 4;
             lblClave.Text = "Contraseña";
             // 
-            // txtClave
+            // txtContrasena
             // 
-            txtClave.Location = new Point(50, 230);
-            txtClave.Name = "txtClave";
-            txtClave.PasswordChar = '*';
-            txtClave.Size = new Size(330, 25);
-            txtClave.TabIndex = 5;
+            txtContrasena.Location = new Point(50, 230);
+            txtContrasena.Name = "txtContrasena";
+            txtContrasena.PasswordChar = '*';
+            txtContrasena.Size = new Size(330, 25);
+            txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
             // 
@@ -127,6 +127,7 @@
             btnIngresar.TabIndex = 6;
             btnIngresar.Text = "Ingresar";
             btnIngresar.UseVisualStyleBackColor = false;
+            btnIngresar.Click += btnIngresar_Click;
             // 
             // btnSalir
             // 
@@ -154,6 +155,7 @@
             Name = "frmLogIn";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Inicio de Sesión";
+            Load += frmLogIn_Load_1;
             panelLogin.ResumeLayout(false);
             panelLogin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
@@ -172,7 +174,7 @@
         private TextBox txtUsuario;
 
         private Label lblClave;
-        private TextBox txtClave;
+        private TextBox txtContrasena;
 
         private Button btnIngresar;
         private Button btnSalir;

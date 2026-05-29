@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DAL;
+using Microsoft.IdentityModel.Protocols;
+using Servicio;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using DAL;
-using Servicio;
 namespace BLL
 {
     public class BLL_Usuario
@@ -11,48 +12,39 @@ namespace BLL
         private readonly BLL_BitacoraEvento _bitacoraServicio;
         private readonly DAL_Usuario _dalUsuario;
         private readonly DAL_FamiliaRol _dalFamiliaPermiso;
-        private readonly DAL_BitacoraEvento _dalBitacora;
         private readonly Servicio_Cripto _encriptadorServicio;
         private readonly SessionManager _sm;
 
-        public BLL_Usuario(DAL_Usuario dalUsuario, DAL_FamiliaRol dalFamiliaPermiso, DAL_BitacoraEvento dalBitacora)
+        public BLL_Usuario()
         {
-            _dalUsuario = dalUsuario;
-            _dalFamiliaPermiso = dalFamiliaPermiso;
-            _dalBitacora = dalBitacora;
+            string connStr = $"Data Source=.;Integrated Security=True;Trust Server Certificate=True";
+
+            _dalUsuario = new DAL_Usuario(connStr);
+            _dalFamiliaPermiso = new DAL_FamiliaRol(connStr);
             _encriptadorServicio = new Servicio_Cripto();
-            _bitacoraServicio = new BLL_BitacoraEvento(_dalBitacora);
+            _bitacoraServicio = new BLL_BitacoraEvento(new DAL_BitacoraEvento(connStr));
             _sm = SessionManager.GetInstancia();
         }
 
-        // ============================================================
-        //  Asignar permisos al objeto usuario
-        // ============================================================
+
         public void AsignarPermisos(List<Servicio_Permiso> permisos, Servicio_Usuario usuario)
         {
             foreach (Servicio_Permiso p in permisos)
                 usuario.Permisos.AgregarPermiso(p);
         }
 
-        // ============================================================
-        //  Punto de entrada desde la GUI
-        // ============================================================
-        /// <summary>
-        /// Recibe credenciales en texto plano, cifra la contraseña
-        /// y ejecuta el flujo completo del CU02.
-        /// Devuelve true si el login fue exitoso.
-        /// </summary>
+        
         public bool CargarCredenciales(string nombreUsuario, string contraseña)
         {
             string hash = _encriptadorServicio.CifrarContraseña(contraseña);
             return IniciarSesion(nombreUsuario, hash);
         }
 
-        
+   
         public bool CompararHash(string hashIngresado, string hashBD) =>
             string.Equals(hashIngresado, hashBD, StringComparison.OrdinalIgnoreCase);
 
-     
+
         public bool IncrementarIntentos(string login)
         {
             try
@@ -66,35 +58,37 @@ namespace BLL
             }
         }
 
-        
+        // ============================================================
+        //  Flujo principal de autenticación
+        // ============================================================
         public bool IniciarSesion(string nombreUsuario, string hash)
         {
-            
+            // a) Autenticar contra BD → DAL_Usuario
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
 
             if (usuario == null)
             {
-                
+                // FA 5.1 – Credenciales incorrectas
                 IncrementarIntentos(nombreUsuario);
                 return false;
             }
 
-    
+            // b) Verificar estado / bloqueo → FA 5.2
             if (!VerificarEstadoUsuario(usuario))
                 return false;
 
-       
+            // c) Reiniciar contador de fallos
             ReiniciarIntentos(nombreUsuario);
 
-     
+            // d) Cargar permisos → BLL_FamiliaRol → DAL_FamiliaPermiso
             BLL_FamiliaRol famRolBLL = new BLL_FamiliaRol(_dalFamiliaPermiso);
             List<Servicio_Permiso> permisos = famRolBLL.ListarPermisos(usuario);
             AsignarPermisos(permisos, usuario);
 
-     
+            // e) Crear sesión global
             _sm.CrearSesion(usuario);
 
-       
+            // f) Registrar evento en bitácora → BLL_BitacoraEvento → DAL_BitacoraEvento
             _bitacoraServicio.RegistrarBitacora("Login Correcto", DateTime.Now);
 
             return true;
@@ -108,13 +102,9 @@ namespace BLL
         // ============================================================
         //  Verificar estado del usuario
         // ============================================================
-        /// <summary>
-        /// Devuelve true si el usuario está habilitado, activo y no bloqueado.
-        /// Bloqueo >= 3 se considera cuenta bloqueada.
-        /// </summary>
         public bool VerificarEstadoUsuario(Servicio_Usuario usuario)
         {
-            if (!usuario.Estado) return false;   // suspendido
+            
             if (usuario.Activo != 1) return false;   // inactivo
             if (usuario.Bloqueo >= 3) return false;   // bloqueado por intentos
             return true;

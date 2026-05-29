@@ -9,7 +9,7 @@ namespace DAL
 {
     public class DAL_Usuario
     {
-        private string _connectionString = $"Data Source=.;Integrated Security=True;Trust Server Certificate=True";
+        private readonly string _connectionString = $"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
 
         public DAL_Usuario(string connectionString)
         {

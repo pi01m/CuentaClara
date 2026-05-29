@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="CuentaClara_TrabajoCampo/CuentaClara_TrabajoCampo.csproj" />
+  <Project Path="DAL/DAL.csproj" Id="8f771a1e-633a-4114-a0a0-4fd8212614cc" />
 </Solution>

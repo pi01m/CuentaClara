@@ -1,0 +1,520 @@
+﻿namespace CuentaClara_TrabajoCampo
+{
+    partial class FormGestionBitacora
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            panelContenedor = new Panel();
+            lblTitulo = new Label();
+            dgvBitacora = new DataGridView();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            lblNombre = new Label();
+            txtNombre = new TextBox();
+            lblApellido = new Label();
+            txtApellido = new TextBox();
+            lblLogin = new Label();
+            cboLogin = new ComboBox();
+            lblFechaInicio = new Label();
+            dtpFechaInicio = new DateTimePicker();
+            lblFechaFin = new Label();
+            dtpFechaFin = new DateTimePicker();
+            lblModulo = new Label();
+            cboModulo = new ComboBox();
+            lblEvento = new Label();
+            cboEvento = new ComboBox();
+            lblCriticidad = new Label();
+            cboCriticidad = new ComboBox();
+            lstMensajes = new ListBox();
+            btnLimpiar = new Button();
+            btnAplicar = new Button();
+            btnImprimir = new Button();
+            btnSalir = new Button();
+            lblCantidadEventos = new Label();
+            lblTotalEventos = new Label();
+            panelInferior = new Panel();
+            lblUsuarioActivo = new Label();
+            panelContenedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvBitacora).BeginInit();
+            panelInferior.SuspendLayout();
+            SuspendLayout();
+            // 
+            // panelContenedor
+            // 
+            panelContenedor.BackColor = Color.White;
+            panelContenedor.Controls.Add(lblTitulo);
+            panelContenedor.Controls.Add(dgvBitacora);
+            panelContenedor.Controls.Add(lblNombre);
+            panelContenedor.Controls.Add(txtNombre);
+            panelContenedor.Controls.Add(lblApellido);
+            panelContenedor.Controls.Add(txtApellido);
+            panelContenedor.Controls.Add(lblLogin);
+            panelContenedor.Controls.Add(cboLogin);
+            panelContenedor.Controls.Add(lblFechaInicio);
+            panelContenedor.Controls.Add(dtpFechaInicio);
+            panelContenedor.Controls.Add(lblFechaFin);
+            panelContenedor.Controls.Add(dtpFechaFin);
+            panelContenedor.Controls.Add(lblModulo);
+            panelContenedor.Controls.Add(cboModulo);
+            panelContenedor.Controls.Add(lblEvento);
+            panelContenedor.Controls.Add(cboEvento);
+            panelContenedor.Controls.Add(lblCriticidad);
+            panelContenedor.Controls.Add(cboCriticidad);
+            panelContenedor.Controls.Add(lstMensajes);
+            panelContenedor.Controls.Add(btnLimpiar);
+            panelContenedor.Controls.Add(btnAplicar);
+            panelContenedor.Controls.Add(btnImprimir);
+            panelContenedor.Controls.Add(btnSalir);
+            panelContenedor.Controls.Add(lblCantidadEventos);
+            panelContenedor.Controls.Add(lblTotalEventos);
+            panelContenedor.Location = new Point(10, 10);
+            panelContenedor.Name = "panelContenedor";
+            panelContenedor.Size = new Size(1080, 620);
+            panelContenedor.TabIndex = 1;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
+            lblTitulo.Location = new Point(30, 20);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(239, 32);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Bitácora de Eventos";
+            // 
+            // dgvBitacora
+            // 
+            dgvBitacora.AllowUserToAddRows = false;
+            dgvBitacora.AllowUserToDeleteRows = false;
+            dgvBitacora.AllowUserToResizeRows = false;
+            dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvBitacora.BackgroundColor = Color.White;
+            dgvBitacora.BorderStyle = BorderStyle.None;
+            dgvBitacora.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvBitacora.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(18, 87, 150);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvBitacora.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvBitacora.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6 });
+            dgvBitacora.EnableHeadersVisualStyles = false;
+            dgvBitacora.GridColor = Color.FromArgb(220, 220, 220);
+            dgvBitacora.Location = new Point(30, 70);
+            dgvBitacora.MultiSelect = false;
+            dgvBitacora.Name = "dgvBitacora";
+            dgvBitacora.ReadOnly = true;
+            dgvBitacora.RowHeadersVisible = false;
+            dgvBitacora.RowTemplate.Height = 28;
+            dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvBitacora.Size = new Size(1030, 240);
+            dgvBitacora.TabIndex = 1;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.HeaderText = "Login";
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.HeaderText = "Fecha";
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.HeaderText = "Hora";
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.HeaderText = "Módulo";
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.HeaderText = "Evento";
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.HeaderText = "Criticidad";
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
+            // lblNombre
+            // 
+            lblNombre.AutoSize = true;
+            lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblNombre.ForeColor = Color.FromArgb(15, 45, 75);
+            lblNombre.Location = new Point(80, 330);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(65, 19);
+            lblNombre.TabIndex = 2;
+            lblNombre.Text = "Nombre";
+            // 
+            // txtNombre
+            // 
+            txtNombre.BorderStyle = BorderStyle.FixedSingle;
+            txtNombre.Font = new Font("Segoe UI", 10F);
+            txtNombre.Location = new Point(80, 355);
+            txtNombre.Name = "txtNombre";
+            txtNombre.ReadOnly = true;
+            txtNombre.Size = new Size(180, 25);
+            txtNombre.TabIndex = 3;
+            // 
+            // lblApellido
+            // 
+            lblApellido.AutoSize = true;
+            lblApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblApellido.ForeColor = Color.FromArgb(15, 45, 75);
+            lblApellido.Location = new Point(300, 330);
+            lblApellido.Name = "lblApellido";
+            lblApellido.Size = new Size(66, 19);
+            lblApellido.TabIndex = 4;
+            lblApellido.Text = "Apellido";
+            // 
+            // txtApellido
+            // 
+            txtApellido.BorderStyle = BorderStyle.FixedSingle;
+            txtApellido.Font = new Font("Segoe UI", 10F);
+            txtApellido.Location = new Point(300, 355);
+            txtApellido.Name = "txtApellido";
+            txtApellido.ReadOnly = true;
+            txtApellido.Size = new Size(180, 25);
+            txtApellido.TabIndex = 5;
+            // 
+            // lblLogin
+            // 
+            lblLogin.AutoSize = true;
+            lblLogin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblLogin.ForeColor = Color.FromArgb(15, 45, 75);
+            lblLogin.Location = new Point(30, 410);
+            lblLogin.Name = "lblLogin";
+            lblLogin.Size = new Size(46, 19);
+            lblLogin.TabIndex = 6;
+            lblLogin.Text = "Login";
+            // 
+            // cboLogin
+            // 
+            cboLogin.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboLogin.Font = new Font("Segoe UI", 10F);
+            cboLogin.Location = new Point(30, 435);
+            cboLogin.Name = "cboLogin";
+            cboLogin.Size = new Size(150, 25);
+            cboLogin.TabIndex = 7;
+            // 
+            // lblFechaInicio
+            // 
+            lblFechaInicio.AutoSize = true;
+            lblFechaInicio.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblFechaInicio.ForeColor = Color.FromArgb(15, 45, 75);
+            lblFechaInicio.Location = new Point(210, 410);
+            lblFechaInicio.Name = "lblFechaInicio";
+            lblFechaInicio.Size = new Size(87, 19);
+            lblFechaInicio.TabIndex = 8;
+            lblFechaInicio.Text = "Fecha Inicio";
+            // 
+            // dtpFechaInicio
+            // 
+            dtpFechaInicio.Font = new Font("Segoe UI", 10F);
+            dtpFechaInicio.Location = new Point(210, 435);
+            dtpFechaInicio.Name = "dtpFechaInicio";
+            dtpFechaInicio.Size = new Size(180, 25);
+            dtpFechaInicio.TabIndex = 9;
+            // 
+            // lblFechaFin
+            // 
+            lblFechaFin.AutoSize = true;
+            lblFechaFin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblFechaFin.ForeColor = Color.FromArgb(15, 45, 75);
+            lblFechaFin.Location = new Point(420, 410);
+            lblFechaFin.Name = "lblFechaFin";
+            lblFechaFin.Size = new Size(70, 19);
+            lblFechaFin.TabIndex = 10;
+            lblFechaFin.Text = "Fecha Fin";
+            // 
+            // dtpFechaFin
+            // 
+            dtpFechaFin.Font = new Font("Segoe UI", 10F);
+            dtpFechaFin.Location = new Point(420, 435);
+            dtpFechaFin.Name = "dtpFechaFin";
+            dtpFechaFin.Size = new Size(180, 25);
+            dtpFechaFin.TabIndex = 11;
+            // 
+            // lblModulo
+            // 
+            lblModulo.AutoSize = true;
+            lblModulo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblModulo.ForeColor = Color.FromArgb(15, 45, 75);
+            lblModulo.Location = new Point(630, 410);
+            lblModulo.Name = "lblModulo";
+            lblModulo.Size = new Size(61, 19);
+            lblModulo.TabIndex = 12;
+            lblModulo.Text = "Módulo";
+            // 
+            // cboModulo
+            // 
+            cboModulo.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboModulo.Font = new Font("Segoe UI", 10F);
+            cboModulo.Location = new Point(630, 435);
+            cboModulo.Name = "cboModulo";
+            cboModulo.Size = new Size(120, 25);
+            cboModulo.TabIndex = 13;
+            // 
+            // lblEvento
+            // 
+            lblEvento.AutoSize = true;
+            lblEvento.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblEvento.ForeColor = Color.FromArgb(15, 45, 75);
+            lblEvento.Location = new Point(780, 410);
+            lblEvento.Name = "lblEvento";
+            lblEvento.Size = new Size(54, 19);
+            lblEvento.TabIndex = 14;
+            lblEvento.Text = "Evento";
+            // 
+            // cboEvento
+            // 
+            cboEvento.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboEvento.Font = new Font("Segoe UI", 10F);
+            cboEvento.Location = new Point(780, 435);
+            cboEvento.Name = "cboEvento";
+            cboEvento.Size = new Size(120, 25);
+            cboEvento.TabIndex = 15;
+            // 
+            // lblCriticidad
+            // 
+            lblCriticidad.AutoSize = true;
+            lblCriticidad.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblCriticidad.ForeColor = Color.FromArgb(15, 45, 75);
+            lblCriticidad.Location = new Point(930, 410);
+            lblCriticidad.Name = "lblCriticidad";
+            lblCriticidad.Size = new Size(74, 19);
+            lblCriticidad.TabIndex = 16;
+            lblCriticidad.Text = "Criticidad";
+            // 
+            // cboCriticidad
+            // 
+            cboCriticidad.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboCriticidad.Font = new Font("Segoe UI", 10F);
+            cboCriticidad.Location = new Point(930, 435);
+            cboCriticidad.Name = "cboCriticidad";
+            cboCriticidad.Size = new Size(120, 25);
+            cboCriticidad.TabIndex = 17;
+            // 
+            // lstMensajes
+            // 
+            lstMensajes.BorderStyle = BorderStyle.FixedSingle;
+            lstMensajes.Font = new Font("Segoe UI", 9F);
+            lstMensajes.Location = new Point(30, 466);
+            lstMensajes.Name = "lstMensajes";
+            lstMensajes.Size = new Size(1030, 47);
+            lstMensajes.TabIndex = 18;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.BackColor = Color.White;
+            btnLimpiar.FlatStyle = FlatStyle.Flat;
+            btnLimpiar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnLimpiar.ForeColor = Color.FromArgb(18, 87, 150);
+            btnLimpiar.Location = new Point(320, 570);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(120, 38);
+            btnLimpiar.TabIndex = 19;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = false;
+            // 
+            // btnAplicar
+            // 
+            btnAplicar.BackColor = Color.FromArgb(18, 87, 150);
+            btnAplicar.FlatAppearance.BorderSize = 0;
+            btnAplicar.FlatStyle = FlatStyle.Flat;
+            btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAplicar.ForeColor = Color.White;
+            btnAplicar.Location = new Point(460, 570);
+            btnAplicar.Name = "btnAplicar";
+            btnAplicar.Size = new Size(120, 38);
+            btnAplicar.TabIndex = 20;
+            btnAplicar.Text = "Aplicar";
+            btnAplicar.UseVisualStyleBackColor = false;
+            // 
+            // btnImprimir
+            // 
+            btnImprimir.BackColor = Color.White;
+            btnImprimir.FlatStyle = FlatStyle.Flat;
+            btnImprimir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnImprimir.ForeColor = Color.FromArgb(18, 87, 150);
+            btnImprimir.Location = new Point(600, 570);
+            btnImprimir.Name = "btnImprimir";
+            btnImprimir.Size = new Size(120, 38);
+            btnImprimir.TabIndex = 21;
+            btnImprimir.Text = "Imprimir";
+            btnImprimir.UseVisualStyleBackColor = false;
+            // 
+            // btnSalir
+            // 
+            btnSalir.BackColor = Color.White;
+            btnSalir.FlatStyle = FlatStyle.Flat;
+            btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
+            btnSalir.Location = new Point(920, 20);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(140, 38);
+            btnSalir.TabIndex = 22;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = false;
+            // 
+            // lblCantidadEventos
+            // 
+            lblCantidadEventos.AutoSize = true;
+            lblCantidadEventos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblCantidadEventos.ForeColor = Color.FromArgb(15, 45, 75);
+            lblCantidadEventos.Location = new Point(860, 330);
+            lblCantidadEventos.Name = "lblCantidadEventos";
+            lblCantidadEventos.Size = new Size(64, 19);
+            lblCantidadEventos.TabIndex = 23;
+            lblCantidadEventos.Text = "Eventos:";
+            // 
+            // lblTotalEventos
+            // 
+            lblTotalEventos.AutoSize = true;
+            lblTotalEventos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTotalEventos.ForeColor = Color.FromArgb(18, 87, 150);
+            lblTotalEventos.Location = new Point(940, 330);
+            lblTotalEventos.Name = "lblTotalEventos";
+            lblTotalEventos.Size = new Size(17, 19);
+            lblTotalEventos.TabIndex = 24;
+            lblTotalEventos.Text = "0";
+            // 
+            // panelInferior
+            // 
+            panelInferior.BackColor = Color.FromArgb(18, 87, 150);
+            panelInferior.Controls.Add(lblUsuarioActivo);
+            panelInferior.Dock = DockStyle.Bottom;
+            panelInferior.Location = new Point(0, 645);
+            panelInferior.Name = "panelInferior";
+            panelInferior.Size = new Size(1100, 35);
+            panelInferior.TabIndex = 0;
+            // 
+            // lblUsuarioActivo
+            // 
+            lblUsuarioActivo.AutoSize = true;
+            lblUsuarioActivo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblUsuarioActivo.ForeColor = Color.White;
+            lblUsuarioActivo.Location = new Point(20, 10);
+            lblUsuarioActivo.Name = "lblUsuarioActivo";
+            lblUsuarioActivo.Size = new Size(171, 15);
+            lblUsuarioActivo.TabIndex = 0;
+            lblUsuarioActivo.Text = "Usuario activo: Administrador";
+            // 
+            // FormGestionBitacora
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(245, 246, 248);
+            ClientSize = new Size(1100, 680);
+            Controls.Add(panelInferior);
+            Controls.Add(panelContenedor);
+            Font = new Font("Segoe UI", 9F);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            Name = "FormGestionBitacora";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "CuentaClara - Gestión de Bitácora";
+            panelContenedor.ResumeLayout(false);
+            panelContenedor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvBitacora).EndInit();
+            panelInferior.ResumeLayout(false);
+            panelInferior.PerformLayout();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Panel panelContenedor;
+
+        private System.Windows.Forms.Label lblTitulo;
+
+        private System.Windows.Forms.DataGridView dgvBitacora;
+
+        private System.Windows.Forms.Label lblNombre;
+        private System.Windows.Forms.TextBox txtNombre;
+
+        private System.Windows.Forms.Label lblApellido;
+        private System.Windows.Forms.TextBox txtApellido;
+
+        private System.Windows.Forms.Label lblLogin;
+        private System.Windows.Forms.ComboBox cboLogin;
+
+        private System.Windows.Forms.Label lblFechaInicio;
+        private System.Windows.Forms.DateTimePicker dtpFechaInicio;
+
+        private System.Windows.Forms.Label lblFechaFin;
+        private System.Windows.Forms.DateTimePicker dtpFechaFin;
+
+        private System.Windows.Forms.Label lblModulo;
+        private System.Windows.Forms.ComboBox cboModulo;
+
+        private System.Windows.Forms.Label lblEvento;
+        private System.Windows.Forms.ComboBox cboEvento;
+
+        private System.Windows.Forms.Label lblCriticidad;
+        private System.Windows.Forms.ComboBox cboCriticidad;
+
+        private System.Windows.Forms.ListBox lstMensajes;
+
+        private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.Button btnAplicar;
+        private System.Windows.Forms.Button btnImprimir;
+        private System.Windows.Forms.Button btnSalir;
+
+        private System.Windows.Forms.Label lblCantidadEventos;
+        private System.Windows.Forms.Label lblTotalEventos;
+
+        private System.Windows.Forms.Panel panelInferior;
+        private System.Windows.Forms.Label lblUsuarioActivo;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+    }
+}

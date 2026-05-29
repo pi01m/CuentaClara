@@ -222,7 +222,7 @@
             panelMovimientos.Controls.Add(lblEstadoSaldos);
             panelMovimientos.Location = new Point(340, 120);
             panelMovimientos.Name = "panelMovimientos";
-            panelMovimientos.Size = new Size(1453, 881);
+            panelMovimientos.Size = new Size(1401, 881);
             panelMovimientos.TabIndex = 0;
             // 
             // lblHistorial
@@ -292,7 +292,7 @@
             // 
             btnNuevoIngreso.FlatStyle = FlatStyle.Flat;
             btnNuevoIngreso.Font = new Font("Segoe UI", 11F);
-            btnNuevoIngreso.Location = new Point(1143, 192);
+            btnNuevoIngreso.Location = new Point(1119, 191);
             btnNuevoIngreso.Name = "btnNuevoIngreso";
             btnNuevoIngreso.Size = new Size(240, 60);
             btnNuevoIngreso.TabIndex = 2;
@@ -302,7 +302,7 @@
             // 
             btnNuevoEgreso.FlatStyle = FlatStyle.Flat;
             btnNuevoEgreso.Font = new Font("Segoe UI", 11F);
-            btnNuevoEgreso.Location = new Point(1143, 333);
+            btnNuevoEgreso.Location = new Point(1119, 323);
             btnNuevoEgreso.Name = "btnNuevoEgreso";
             btnNuevoEgreso.Size = new Size(240, 60);
             btnNuevoEgreso.TabIndex = 3;
@@ -353,7 +353,7 @@
             dataGridViewTextBoxColumn3.ReadOnly = true;
             dataGridViewTextBoxColumn3.Width = 250;
             // 
-            // Form1
+            // FormMenu
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
@@ -362,7 +362,7 @@
             Controls.Add(lblSaldoGeneral);
             Controls.Add(panelMenu);
             Controls.Add(panelUsuario);
-            Name = "Form1";
+            Name = "FormMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Gestión Financiera Familiar";
             panelMenu.ResumeLayout(false);

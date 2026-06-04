@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             panelMenu = new Panel();
             picLogo = new PictureBox();
             lblTitulo = new Label();
@@ -55,6 +55,8 @@
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            button1 = new Button();
+            button2 = new Button();
             panelMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             panelUsuario.SuspendLayout();
@@ -65,6 +67,8 @@
             // panelMenu
             // 
             panelMenu.BackColor = Color.White;
+            panelMenu.Controls.Add(button2);
+            panelMenu.Controls.Add(button1);
             panelMenu.Controls.Add(picLogo);
             panelMenu.Controls.Add(lblTitulo);
             panelMenu.Controls.Add(btnInicio);
@@ -95,7 +99,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(112, 66);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(420, 89);
+            lblTitulo.Size = new Size(173, 37);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -189,9 +193,9 @@
             panelUsuario.Controls.Add(lblUsuario);
             panelUsuario.Controls.Add(lblBD);
             panelUsuario.Dock = DockStyle.Bottom;
-            panelUsuario.Location = new Point(0, 1239);
+            panelUsuario.Location = new Point(0, 1001);
             panelUsuario.Name = "panelUsuario";
-            panelUsuario.Size = new Size(2391, 60);
+            panelUsuario.Size = new Size(1924, 60);
             panelUsuario.TabIndex = 3;
             // 
             // lblUsuario
@@ -201,7 +205,7 @@
             lblUsuario.ForeColor = Color.White;
             lblUsuario.Location = new Point(20, 20);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(795, 50);
+            lblUsuario.Size = new Size(323, 20);
             lblUsuario.TabIndex = 0;
             lblUsuario.Text = "Usuario Activo: Devora (Rol: Usuario Operativo)";
             // 
@@ -231,7 +235,7 @@
             lblHistorial.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             lblHistorial.Location = new Point(25, 20);
             lblHistorial.Name = "lblHistorial";
-            lblHistorial.Size = new Size(900, 72);
+            lblHistorial.Size = new Size(368, 30);
             lblHistorial.TabIndex = 0;
             lblHistorial.Text = "Historial Reciente de Movimientos";
             // 
@@ -241,24 +245,24 @@
             dgvMovimientos.AllowUserToDeleteRows = false;
             dgvMovimientos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMovimientos.BackgroundColor = Color.White;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvMovimientos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvMovimientos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgvMovimientos.ColumnHeadersHeight = 30;
             dgvMovimientos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6 });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvMovimientos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Window;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dgvMovimientos.DefaultCellStyle = dataGridViewCellStyle6;
             dgvMovimientos.Location = new Point(78, 120);
             dgvMovimientos.Name = "dgvMovimientos";
             dgvMovimientos.ReadOnly = true;
@@ -314,7 +318,7 @@
             lblEstadoSaldos.Font = new Font("Segoe UI", 11F);
             lblEstadoSaldos.Location = new Point(42, 808);
             lblEstadoSaldos.Name = "lblEstadoSaldos";
-            lblEstadoSaldos.Size = new Size(842, 50);
+            lblEstadoSaldos.Size = new Size(343, 20);
             lblEstadoSaldos.TabIndex = 4;
             lblEstadoSaldos.Text = "Saldos Conciliados: Hogar en Equilibrio y Armonía";
             // 
@@ -325,7 +329,7 @@
             lblSaldoGeneral.ForeColor = Color.FromArgb(15, 45, 75);
             lblSaldoGeneral.Location = new Point(340, 35);
             lblSaldoGeneral.Name = "lblSaldoGeneral";
-            lblSaldoGeneral.Size = new Size(1812, 81);
+            lblSaldoGeneral.Size = new Size(736, 32);
             lblSaldoGeneral.TabIndex = 1;
             lblSaldoGeneral.Text = "Saldo Líquido General del Hogar: $732.500,75 [Estado: Estable]";
             // 
@@ -353,11 +357,41 @@
             dataGridViewTextBoxColumn3.ReadOnly = true;
             dataGridViewTextBoxColumn3.Width = 250;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.White;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            button1.Location = new Point(20, 872);
+            button1.Name = "button1";
+            button1.Size = new Size(260, 50);
+            button1.TabIndex = 8;
+            button1.Text = "Gestión de Usuarios";
+            button1.TextAlign = ContentAlignment.MiddleLeft;
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.BackColor = Color.White;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            button2.Location = new Point(20, 928);
+            button2.Name = "button2";
+            button2.Size = new Size(260, 50);
+            button2.TabIndex = 9;
+            button2.Text = "Gestión de Bitácora";
+            button2.TextAlign = ContentAlignment.MiddleLeft;
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
+            // 
             // FormMenu
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(2391, 1299);
+            ClientSize = new Size(1924, 1061);
             Controls.Add(panelMovimientos);
             Controls.Add(lblSaldoGeneral);
             Controls.Add(panelMenu);
@@ -411,5 +445,7 @@
 
         private Label lblEstadoSaldos;
         private Label lblSaldoGeneral;
+        private Button button2;
+        private Button button1;
     }
 }

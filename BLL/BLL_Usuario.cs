@@ -31,6 +31,10 @@ namespace BLL
 
             _sm = SessionManager.GetInstancia();
         }
+        public DataTable ListarUsuarios()
+        {
+            return _dalUsuario.ListarUsuarios();
+        }
 
         public void AsignarPermisos( List<Servicio_Permiso> permisos,Servicio_Usuario usuario){
             foreach (Servicio_Permiso permiso in permisos)
@@ -64,7 +68,38 @@ namespace BLL
                 return false;
             }
         }
+        public bool CrearUsuario(Servicio_Usuario usuario)
+    
+        {
+            try
+            {
+                if (_dalUsuario.ExisteUsuario(usuario.Login))
+                    return false;
 
+                string contraseñaInicial = usuario.Apellido + usuario.DNI;
+                   
+
+                usuario.Password =_encriptadorServicio .CifrarContraseña( contraseñaInicial);
+                       
+                usuario.Bloqueo = 0;
+
+                bool resultado = _dalUsuario.CrearUsuario(usuario);
+                   
+
+                if (resultado)
+                {
+                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administracion",1);
+     
+                        
+                }
+
+                return resultado;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public void ReiniciarIntentos(string login)
         {
             _dalUsuario.ReiniciarIntentos(login);
@@ -80,10 +115,13 @@ namespace BLL
                 return false;
             }
 
+           
+
             if (!VerificarEstadoUsuario(usuario))
             {
                 _bitacoraServicio.RegistrarBitacora("Usuario Bloqueado o Inactivo",nombreUsuario,"Seguridad",3);
-                return false;
+                throw new Exception("Usuario bloqueado");
+           
             }
 
             ReiniciarIntentos(nombreUsuario);
@@ -99,6 +137,11 @@ namespace BLL
             _sm.CrearSesion(usuario);
 
             _bitacoraServicio.RegistrarBitacora("Login Correcto",usuario.Login,"Seguridad", 1); return true;
+        }
+
+        public int ObtenerIntentos(string login)
+        {
+            return _dalUsuario.ObtenerIntentos(login);
         }
 
         public bool VerificarEstadoUsuario(Servicio_Usuario usuario)

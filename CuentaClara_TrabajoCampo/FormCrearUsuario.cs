@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BLL;
+using Servicio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +18,42 @@ namespace CuentaClara_TrabajoCampo
         }
 
         private void FormCrearUsuario_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            Servicio_Usuario usuario = new Servicio_Usuario();
+
+
+            usuario.Nombre = txtNombre.Text;
+            usuario.Apellido = txtApellido.Text;
+            usuario.DNI = txtDNI.Text;
+            usuario.email = txtCorreo.Text;
+            usuario.Login = txtLogin.Text;
+
+            usuario.Activo = chkActivo.Checked ? 1 : 0;
+
+            txtPassword.Enabled = false;
+            BLL_Usuario bll = new BLL_Usuario();
+
+
+            if (bll.CrearUsuario(usuario))
+            {
+                MessageBox.Show("Usuario creado correctamente");
+
+
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("El usuario ya existe");
+
+            }
+        }
+
+        private void FormCrearUsuario_Load_1(object sender, EventArgs e)
         {
 
         }

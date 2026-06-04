@@ -247,6 +247,7 @@
             btnGuardar.TabIndex = 17;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // FormCrearUsuario
             // 
@@ -260,6 +261,7 @@
             Name = "FormCrearUsuario";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Crear Usuario";
+            Load += FormCrearUsuario_Load_1;
             panelPrincipal.ResumeLayout(false);
             panelPrincipal.PerformLayout();
             ResumeLayout(false);

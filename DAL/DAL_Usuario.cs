@@ -34,10 +34,8 @@ namespace DAL
 
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataSet ds = new DataSet();
-
-                conn.Open();
+            
                 adapter.Fill(ds, "Usuario");
-                conn.Close();
 
                 if (ds.Tables["Usuario"].Rows.Count != 1)
                     return null;
@@ -57,6 +55,38 @@ namespace DAL
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
                     //IdFamiliaRol = new Servicio_FamiliaRol(row["IdFamiliaRol"].ToString(), "")
                 };
+            }
+        }
+
+        public int ObtenerIntentos(string login)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Usuario WHERE Login = @Login",
+                        conn);
+
+                adapter.SelectCommand.Parameters.Add(
+                    new SqlParameter("@Login",
+                        SqlDbType.NVarChar, 100)
+                    {
+                        Value = login
+                    });
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Usuario");
+
+                if (ds.Tables["Usuario"].Rows.Count > 0)
+                {
+                    return Convert.ToInt32(
+                        ds.Tables["Usuario"]
+                        .Rows[0]["Bloqueo"]);
+                }
+
+                return 0;
             }
         }
 
@@ -93,16 +123,116 @@ namespace DAL
                 }
             }
         }
+        public bool CrearUsuario(Servicio_Usuario usuario)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario",conn);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Usuario");
+
+                DataRow fila = ds.Tables["Usuario"].NewRow();
+                   
+
+                fila["Nombre"] = usuario.Nombre;
+                fila["Apellido"] = usuario.Apellido;
+                fila["DNI"] = usuario.DNI;
+                fila["Email"] = usuario.email;
+                fila["Login"] = usuario.Login;
+                fila["Password"] = usuario.Password;
+                fila["Activo"] = usuario.Activo;
+                fila["Bloqueo"] = usuario.Bloqueo;
+
+                ds.Tables["Usuario"].Rows.Add(fila);
+
+                SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
+                    
+
+                adapter.Update(ds, "Usuario");
+
+                return true;
+            }
+        }
+        public void ModificarUsuario(Servicio_Usuario usuario)
+    
+        {
+            using (SqlConnection conn =new SqlConnection(_connectionString))
+                
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario",conn);
+   
+                DataSet ds =new DataSet();
+   
+                adapter.Fill(ds, "Usuario");
+
+                DataRow fila = ds.Tables["Usuario"].Select($"DNI={usuario.DNI}")[0];
+                        
+   
+                fila["Nombre"] =usuario.Nombre;
+  
+                fila["Apellido"] = usuario.Apellido;
+
+                fila["Email"] = usuario.email;
+               
+
+                fila["Activo"] = usuario.Activo;
+                   
+
+                SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
+                 
+                adapter.Update(ds, "Usuario");
+
+                
+            }
+        }
+        public bool ExisteUsuario(string login)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario",  conn);
+                               
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Usuario");
+
+                foreach (DataRow fila in ds.Tables["Usuario"].Rows)
+                {
+                    if (fila["Login"].ToString() == login)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+        public DataTable ListarUsuarios()
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario",  conn);
+
+                DataTable tabla = new DataTable();
+                   
+
+                adapter.Fill(tabla);
+
+                return tabla;
+            }
+        }
 
         public void ReiniciarIntentos(string login)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Usuario WHERE Login = @Login",
-                        conn);
-
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Login = @Login",conn);
+   
                 adapter.SelectCommand.Parameters.Add(
                     new SqlParameter("@Login", SqlDbType.NVarChar, 100)
                     {

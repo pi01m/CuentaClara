@@ -20,11 +20,6 @@ namespace CuentaClara_TrabajoCampo
             InitializeComponent(); _bllUsuario = new BLL_Usuario();
         }
 
-        private void frmLogIn_Load(object sender, EventArgs e)
-        {
-            
-        }
-
         private void frmLogIn_Load_1(object sender, EventArgs e)
         {
 
@@ -42,13 +37,12 @@ namespace CuentaClara_TrabajoCampo
             string contrasena = txtContrasena.Text;
 
             btnIngresar.Enabled = false;
- 
+
 
             try
             {
-                
-                bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
+                bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
                 if (loginExitoso)
                 {
                     ConfigurarMenu();
@@ -56,7 +50,23 @@ namespace CuentaClara_TrabajoCampo
                 }
                 else
                 {
-                    MensajeErrorAutenticacion();
+                    int intentos = _bllUsuario.ObtenerIntentos(nombreUsuario);
+
+
+                    if (intentos >= 3)
+                    {
+                        MessageBox.Show("Usuario bloqueado. Contacte al administrador.");
+                            
+     
+                    }
+                    else
+                    {
+                        MessageBox.Show("Usuario o contraseña incorrectos.");
+                        int restantes = 3 - intentos;
+
+                        MessageBox.Show($"Usuario o contraseña incorrectos.\n" + $"Intentos restantes: {restantes}");
+
+                    }
                 }
             }
             catch (Exception ex)
@@ -76,7 +86,7 @@ namespace CuentaClara_TrabajoCampo
 
             foreach (Servicio_Permiso permiso in usuarioSesion.Permisos.ListaPermisos)
             {
-               
+
                 System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdPermiso} – {permiso.Nombre}");
             }
         }
@@ -98,14 +108,23 @@ namespace CuentaClara_TrabajoCampo
             MessageBox.Show(mensaje);
         }
 
-        
-        
+
+
 
         private void MostrarPantallaPrincipal()
         {
             FormMenu fr = new FormMenu();
+
+            this.Hide();
+
             fr.ShowDialog();
-            this.Close();
+
+            this.Show();
+        }
+
+        private void panelLogin_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

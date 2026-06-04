@@ -10,15 +10,13 @@ namespace Servicio
 
         public List<Servicio_Permiso> ListaPermisos => _listaPermisos;
 
-        public Servicio_FamiliaRol(string idFamilia, string nombre)
-            : base(idFamilia, nombre) { }
+        public Servicio_FamiliaRol(string idFamilia, string nombre): base(idFamilia, nombre) { }
 
         public void AgregarPermiso(Servicio_Permiso permiso) => _listaPermisos.Add(permiso);
         public void EliminarPermiso(Servicio_Permiso permiso) => _listaPermisos.Remove(permiso);
         public List<Servicio_Permiso> ObtenerHijos() => _listaPermisos;
 
-        public Servicio_Permiso BuscarPermiso(string nombre) =>
-            _listaPermisos.Find(p => string.Equals(p.Nombre, nombre, System.StringComparison.OrdinalIgnoreCase));
+        public Servicio_Permiso BuscarPermiso(string nombre) =>_listaPermisos.Find(p => string.Equals(p.Nombre, nombre, System.StringComparison.OrdinalIgnoreCase));
 
     }
 }

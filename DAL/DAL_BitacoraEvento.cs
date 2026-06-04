@@ -20,29 +20,33 @@ namespace DAL
 
         public bool GuardarBitacora(Servicio_Bitacora bitacora)
         {
-            const string sql =
-                "INSERT INTO Bitacora " +
-                "       (IdEvento, Evento, Descripcion, Usuario, Login, Modulo, Fecha, Hora, Criticidad) " +
-                "VALUES (@IdEvento, @Evento, @Descripcion, @Usuario, @Login, @Modulo, @Fecha, @Hora, @Criticidad)";
-
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                cmd.Parameters.Add(new SqlParameter("@IdEvento", SqlDbType.NVarChar, 50) { Value = bitacora.id_Evento });
-                cmd.Parameters.Add(new SqlParameter("@Evento", SqlDbType.NVarChar, 100) { Value = bitacora.Evento });
-         
-                cmd.Parameters.Add(new SqlParameter("@Usuario", SqlDbType.NVarChar, 100) { Value = bitacora.Usuario });
-                cmd.Parameters.Add(new SqlParameter("@Login", SqlDbType.NVarChar, 100) { Value = bitacora.Login });
-                cmd.Parameters.Add(new SqlParameter("@Modulo", SqlDbType.NVarChar, 100) { Value = bitacora.Modulo });
-                cmd.Parameters.Add(new SqlParameter("@Fecha", SqlDbType.Date) { Value = bitacora.Fecha.Date });
-                cmd.Parameters.Add(new SqlParameter("@Hora", SqlDbType.DateTime) { Value = bitacora.Hora });
-                cmd.Parameters.Add(new SqlParameter("@Criticidad", SqlDbType.Int) { Value = bitacora.Criticidad });
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter("SELECT * FROM Bitacora WHERE 1 = 0", conn);
 
-                conn.Open();
-                int filas = cmd.ExecuteNonQuery();
-                conn.Close();
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Bitacora");
 
-                return filas > 0;
+                DataTable tabla = ds.Tables["Bitacora"];
+
+                DataRow fila = tabla.NewRow();
+
+                fila["idEvento"] = bitacora.id_Evento;
+                fila["Evento"] = bitacora.Evento;
+                fila["Login"] = bitacora.Login;
+                fila["Modulo"] = bitacora.Modulo;
+                fila["Fecha"] = bitacora.Fecha.Date;
+                fila["Hora"] = bitacora.Hora;
+                fila["Criticidad"] = bitacora.Criticidad;
+
+                tabla.Rows.Add(fila);
+
+                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Bitacora");
+
+                return true;
             }
         }
     }

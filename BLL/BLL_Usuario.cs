@@ -17,40 +17,47 @@ namespace BLL
 
         public BLL_Usuario()
         {
-            string connStr = $"Data Source=.;Integrated Security=True;Trust Server Certificate=True";
+            string connStr ="Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
             _dalUsuario = new DAL_Usuario(connStr);
-            _dalFamiliaPermiso = new DAL_FamiliaRol(connStr);
+
+            //_dalFamiliaPermiso = new DAL_FamiliaRol(connStr);
+
             _encriptadorServicio = new Servicio_Cripto();
-            _bitacoraServicio = new BLL_BitacoraEvento(new DAL_BitacoraEvento(connStr));
+
+            _bitacoraServicio =
+                new BLL_BitacoraEvento(
+                    new DAL_BitacoraEvento(connStr));
+
             _sm = SessionManager.GetInstancia();
         }
 
-
-        public void AsignarPermisos(List<Servicio_Permiso> permisos, Servicio_Usuario usuario)
-        {
-            foreach (Servicio_Permiso p in permisos)
-                usuario.Permisos.AgregarPermiso(p);
+        public void AsignarPermisos( List<Servicio_Permiso> permisos,Servicio_Usuario usuario){
+            foreach (Servicio_Permiso permiso in permisos)
+            {
+                usuario.Permisos.AgregarPermiso(permiso);
+            }
         }
 
-        
-        public bool CargarCredenciales(string nombreUsuario, string contraseña)
-        {
-            string hash = _encriptadorServicio.CifrarContraseña(contraseña);
+        public bool CargarCredenciales(string nombreUsuario,string contraseña){
+            
+            string hash =_encriptadorServicio.CifrarContraseña(contraseña);
             return IniciarSesion(nombreUsuario, hash);
         }
 
-   
-        public bool CompararHash(string hashIngresado, string hashBD) =>
-            string.Equals(hashIngresado, hashBD, StringComparison.OrdinalIgnoreCase);
+        public bool CompararHash(string hashIngresado,string hashBD) {
 
+            return string.Equals(hashIngresado,hashBD,StringComparison.OrdinalIgnoreCase);
+        }
 
         public bool IncrementarIntentos(string login)
         {
             try
             {
                 _dalUsuario.IncrementarIntentos(login);
-                return true;
+
+                _bitacoraServicio.RegistrarBitacora("Login Incorrecto",login,"Seguridad",2);
+                 return true;
             }
             catch
             {
@@ -58,55 +65,48 @@ namespace BLL
             }
         }
 
-        // ============================================================
-        //  Flujo principal de autenticación
-        // ============================================================
+        public void ReiniciarIntentos(string login)
+        {
+            _dalUsuario.ReiniciarIntentos(login);
+        }
+
         public bool IniciarSesion(string nombreUsuario, string hash)
         {
-            // a) Autenticar contra BD → DAL_Usuario
-            Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
+            Servicio_Usuario usuario =_dalUsuario.AutenticarUsuario(nombreUsuario,hash);
 
             if (usuario == null)
             {
-                // FA 5.1 – Credenciales incorrectas
                 IncrementarIntentos(nombreUsuario);
                 return false;
             }
 
-            // b) Verificar estado / bloqueo → FA 5.2
             if (!VerificarEstadoUsuario(usuario))
+            {
+                _bitacoraServicio.RegistrarBitacora("Usuario Bloqueado o Inactivo",nombreUsuario,"Seguridad",3);
                 return false;
+            }
 
-            // c) Reiniciar contador de fallos
             ReiniciarIntentos(nombreUsuario);
 
-            // d) Cargar permisos → BLL_FamiliaRol → DAL_FamiliaPermiso
-            BLL_FamiliaRol famRolBLL = new BLL_FamiliaRol(_dalFamiliaPermiso);
-            List<Servicio_Permiso> permisos = famRolBLL.ListarPermisos(usuario);
-            AsignarPermisos(permisos, usuario);
+            //BLL_FamiliaRol famRolBLL =
+            //    new BLL_FamiliaRol(_dalFamiliaPermiso);
 
-            // e) Crear sesión global
+            //List<Servicio_Permiso> permisos =
+            //    famRolBLL.ListarPermisos(usuario);
+
+            //AsignarPermisos(permisos, usuario);
+
             _sm.CrearSesion(usuario);
 
-            // f) Registrar evento en bitácora → BLL_BitacoraEvento → DAL_BitacoraEvento
-            _bitacoraServicio.RegistrarBitacora("Login Correcto", DateTime.Now);
-
-            return true;
+            _bitacoraServicio.RegistrarBitacora("Login Correcto",usuario.Login,"Seguridad", 1); return true;
         }
 
-        // ============================================================
-        //  Reiniciar intentos
-        // ============================================================
-        public void ReiniciarIntentos(string login) => _dalUsuario.ReiniciarIntentos(login);
-
-        // ============================================================
-        //  Verificar estado del usuario
-        // ============================================================
         public bool VerificarEstadoUsuario(Servicio_Usuario usuario)
         {
-            
-            if (usuario.Activo != 1) return false;   // inactivo
-            if (usuario.Bloqueo >= 3) return false;   // bloqueado por intentos
+            if (usuario.Activo != 1) return false;
+
+            if (usuario.Bloqueo >= 3) return false;
+
             return true;
         }
     }

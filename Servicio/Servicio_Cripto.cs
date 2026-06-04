@@ -16,8 +16,9 @@ namespace Servicio
 
                 StringBuilder sb = new StringBuilder();
                 foreach (byte b in hashBytes)
+                {
                     sb.Append(b.ToString("x2"));
-
+                }
                 return sb.ToString();
             }
         }

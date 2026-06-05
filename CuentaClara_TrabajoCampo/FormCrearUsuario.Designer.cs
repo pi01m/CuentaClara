@@ -74,7 +74,7 @@
             panelPrincipal.Controls.Add(btnGuardar);
             panelPrincipal.Location = new Point(30, 30);
             panelPrincipal.Name = "panelPrincipal";
-            panelPrincipal.Size = new Size(660, 430);
+            panelPrincipal.Size = new Size(1390, 832);
             panelPrincipal.TabIndex = 0;
             // 
             // lblTitulo
@@ -82,9 +82,9 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(25, 20);
+            lblTitulo.Location = new Point(76, 14);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(252, 32);
+            lblTitulo.Size = new Size(617, 81);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Crear Nuevo Usuario";
             // 
@@ -92,121 +92,121 @@
             // 
             lblDNI.AutoSize = true;
             lblDNI.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblDNI.Location = new Point(30, 90);
+            lblDNI.Location = new Point(79, 124);
             lblDNI.Name = "lblDNI";
-            lblDNI.Size = new Size(34, 19);
+            lblDNI.Size = new Size(83, 46);
             lblDNI.TabIndex = 1;
             lblDNI.Text = "DNI";
             // 
             // txtDNI
             // 
-            txtDNI.Location = new Point(30, 115);
+            txtDNI.Location = new Point(79, 173);
             txtDNI.Name = "txtDNI";
-            txtDNI.Size = new Size(250, 25);
+            txtDNI.Size = new Size(250, 52);
             txtDNI.TabIndex = 2;
             // 
             // lblRol
             // 
             lblRol.AutoSize = true;
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblRol.Location = new Point(360, 90);
+            lblRol.Location = new Point(461, 123);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(98, 19);
+            lblRol.Size = new Size(232, 46);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol Asignado";
             // 
             // cmbRol
             // 
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRol.Location = new Point(360, 115);
+            cmbRol.Location = new Point(461, 172);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(250, 25);
+            cmbRol.Size = new Size(250, 53);
             cmbRol.TabIndex = 4;
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
             lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblNombre.Location = new Point(30, 160);
+            lblNombre.Location = new Point(79, 251);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(71, 19);
+            lblNombre.Size = new Size(167, 46);
             lblNombre.TabIndex = 5;
             lblNombre.Text = "Nombres";
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(30, 185);
+            txtNombre.Location = new Point(79, 300);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(250, 25);
+            txtNombre.Size = new Size(250, 52);
             txtNombre.TabIndex = 6;
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
             lblApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblApellido.Location = new Point(360, 160);
+            lblApellido.Location = new Point(461, 248);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(72, 19);
+            lblApellido.Size = new Size(170, 46);
             lblApellido.TabIndex = 7;
             lblApellido.Text = "Apellidos";
             // 
             // txtApellido
             // 
-            txtApellido.Location = new Point(360, 185);
+            txtApellido.Location = new Point(461, 297);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(250, 25);
+            txtApellido.Size = new Size(250, 52);
             txtApellido.TabIndex = 8;
             // 
             // lblCorreo
             // 
             lblCorreo.AutoSize = true;
             lblCorreo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblCorreo.Location = new Point(30, 230);
+            lblCorreo.Location = new Point(79, 386);
             lblCorreo.Name = "lblCorreo";
-            lblCorreo.Size = new Size(134, 19);
+            lblCorreo.Size = new Size(316, 46);
             lblCorreo.TabIndex = 9;
             lblCorreo.Text = "Correo Electrónico";
             // 
             // txtCorreo
             // 
-            txtCorreo.Location = new Point(30, 255);
+            txtCorreo.Location = new Point(79, 435);
             txtCorreo.Name = "txtCorreo";
-            txtCorreo.Size = new Size(250, 25);
+            txtCorreo.Size = new Size(250, 52);
             txtCorreo.TabIndex = 10;
             // 
             // lblLogin
             // 
             lblLogin.AutoSize = true;
             lblLogin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblLogin.Location = new Point(360, 230);
+            lblLogin.Location = new Point(461, 386);
             lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(127, 19);
+            lblLogin.Size = new Size(299, 46);
             lblLogin.TabIndex = 11;
             lblLogin.Text = "Nombre de Login";
             // 
             // txtLogin
             // 
-            txtLogin.Location = new Point(360, 255);
+            txtLogin.Location = new Point(461, 435);
             txtLogin.Name = "txtLogin";
-            txtLogin.Size = new Size(250, 25);
+            txtLogin.Size = new Size(250, 52);
             txtLogin.TabIndex = 12;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
             lblPassword.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblPassword.Location = new Point(30, 300);
+            lblPassword.Location = new Point(79, 518);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(84, 19);
+            lblPassword.Size = new Size(200, 46);
             lblPassword.TabIndex = 13;
             lblPassword.Text = "Contraseña";
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(30, 325);
+            txtPassword.Location = new Point(79, 567);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(250, 25);
+            txtPassword.Size = new Size(250, 52);
             txtPassword.TabIndex = 14;
             // 
             // chkActivo
@@ -214,9 +214,9 @@
             chkActivo.AutoSize = true;
             chkActivo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             chkActivo.ForeColor = Color.FromArgb(20, 70, 120);
-            chkActivo.Location = new Point(360, 325);
+            chkActivo.Location = new Point(710, 529);
             chkActivo.Name = "chkActivo";
-            chkActivo.Size = new Size(195, 23);
+            chkActivo.Size = new Size(454, 50);
             chkActivo.TabIndex = 15;
             chkActivo.Text = "Habilitar Acceso (Activo)";
             // 
@@ -227,9 +227,9 @@
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancelar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCancelar.Location = new Point(360, 375);
+            btnCancelar.Location = new Point(710, 632);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(120, 40);
+            btnCancelar.Size = new Size(230, 122);
             btnCancelar.TabIndex = 16;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
@@ -241,9 +241,9 @@
             btnGuardar.FlatStyle = FlatStyle.Flat;
             btnGuardar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(490, 375);
+            btnGuardar.Location = new Point(1034, 632);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(120, 40);
+            btnGuardar.Size = new Size(258, 122);
             btnGuardar.TabIndex = 17;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
@@ -253,7 +253,7 @@
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(720, 500);
+            ClientSize = new Size(1726, 897);
             Controls.Add(panelPrincipal);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedSingle;

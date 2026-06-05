@@ -11,35 +11,49 @@ namespace CuentaClara_TrabajoCampo
 {
     public partial class FormGestionUsuarios : Form
     {
-        private BLL_Usuario bll =new BLL_Usuario();
-     
+        private BLL_Usuario bll = new BLL_Usuario();
+
         public FormGestionUsuarios()
         {
             InitializeComponent();
+            dgvUsuarios.MultiSelect = false;
+            dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
-        
+
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
             FormCrearUsuario frm = new FormCrearUsuario();
 
             frm.ShowDialog(); CargarUsuarios();
-           
+
         }
 
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
-            
+            CargarUsuarios();
         }
 
 
         private void CargarUsuarios()
         {
-            dgvUsuarios.DataSource = bll.ListarUsuarios();
+            dgvUsuarios.DataSource = null;
+          dgvUsuarios.DataSource = bll.ListarUsuarios();
 
-            lblTotalUsuarios.Text =dgvUsuarios.Rows.Count.ToString();
-                
+            lblTotalUsuarios.Text = dgvUsuarios.Rows.Count.ToString();
+
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            FormModificarUsuario frm = new FormModificarUsuario();
+            
+            this.Hide();
+
+            frm.ShowDialog();
+
+            this.Show();
         }
     }
 }

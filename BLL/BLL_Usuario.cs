@@ -152,5 +152,39 @@ namespace BLL
 
             return true;
         }
+
+        public Servicio_Usuario ObtenerUsuario(string dni)
+        {
+            return _dalUsuario.ObtenerUsuario(dni);
+        }
+
+        public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido)
+        {
+            try
+            {
+                Servicio_Usuario usuario = _dalUsuario.ObtenerUsuario(dni);
+
+                if (usuario == null)return false;
+
+                if (!VerificarEstadoUsuario(usuario))return false;
+
+                usuario.Nombre = nuevoNombre;
+                usuario.Apellido = nuevoApellido;
+
+                _dalUsuario.ModificarUsuario(usuario);
+
+                Servicio_Usuario admin =_sm.GetUsuarioActual();
+
+                _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administracion",1);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        
     }
 }

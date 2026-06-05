@@ -140,7 +140,7 @@ namespace DAL
                 fila["Nombre"] = usuario.Nombre;
                 fila["Apellido"] = usuario.Apellido;
                 fila["DNI"] = usuario.DNI;
-                fila["Email"] = usuario.email;
+                fila["email"] = usuario.email;
                 fila["Login"] = usuario.Login;
                 fila["Password"] = usuario.Password;
                 fila["Activo"] = usuario.Activo;
@@ -168,17 +168,17 @@ namespace DAL
    
                 adapter.Fill(ds, "Usuario");
 
-                DataRow fila = ds.Tables["Usuario"].Select($"DNI={usuario.DNI}")[0];
-                        
-   
+                DataRow fila =ds.Tables["Usuario"].Select($"DNI = '{usuario.DNI}'")[0];
+
+
                 fila["Nombre"] =usuario.Nombre;
   
                 fila["Apellido"] = usuario.Apellido;
 
-                fila["Email"] = usuario.email;
+                //fila["email"] = usuario.email;
                
 
-                fila["Activo"] = usuario.Activo;
+                //fila["Activo"] = usuario.Activo;
                    
 
                 SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
@@ -213,8 +213,7 @@ namespace DAL
         }
         public DataTable ListarUsuarios()
         {
-            using (SqlConnection conn =
-                new SqlConnection(_connectionString))
+            using (SqlConnection conn =new SqlConnection(_connectionString))
             {
                 SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario",  conn);
 
@@ -254,6 +253,37 @@ namespace DAL
 
                     adapter.Update(ds, "Usuario");
                 }
+            }
+        }
+
+        public Servicio_Usuario ObtenerUsuario(string dni)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE DNI = @DNI",conn);
+
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@DNI",SqlDbType.NVarChar, 50){Value = dni});
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Usuario");
+
+                if (ds.Tables["Usuario"].Rows.Count == 0) return null;
+
+                DataRow fila = ds.Tables["Usuario"].Rows[0];
+
+                Servicio_Usuario usuario = new Servicio_Usuario();
+
+                usuario.Nombre = fila["Nombre"].ToString();
+                usuario.Apellido = fila["Apellido"].ToString();
+                usuario.DNI = fila["DNI"].ToString();
+                usuario.email = fila["email"].ToString();
+                usuario.Login = fila["Login"].ToString();
+                usuario.Password = fila["Password"].ToString();
+                usuario.Activo = Convert.ToInt32(fila["Activo"]);
+                usuario.Bloqueo = Convert.ToInt32(fila["Bloqueo"]);
+
+                return usuario;
             }
         }
     }

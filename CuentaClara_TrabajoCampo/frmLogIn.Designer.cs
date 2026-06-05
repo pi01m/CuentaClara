@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panelLogin = new Panel();
+            label1 = new Label();
+            button1 = new Button();
             picLogo = new PictureBox();
             lblTitulo = new Label();
             lblUsuario = new Label();
@@ -46,6 +48,8 @@
             panelLogin.Anchor = AnchorStyles.None;
             panelLogin.BackColor = Color.White;
             panelLogin.BorderStyle = BorderStyle.FixedSingle;
+            panelLogin.Controls.Add(label1);
+            panelLogin.Controls.Add(button1);
             panelLogin.Controls.Add(picLogo);
             panelLogin.Controls.Add(lblTitulo);
             panelLogin.Controls.Add(lblUsuario);
@@ -54,10 +58,35 @@
             panelLogin.Controls.Add(txtContrasena);
             panelLogin.Controls.Add(btnIngresar);
             panelLogin.Controls.Add(btnSalir);
-            panelLogin.Location = new Point(12, 18);
+            panelLogin.Location = new Point(209, 91);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(451, 466);
+            panelLogin.Size = new Size(888, 747);
             panelLogin.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(67, 642);
+            label1.Name = "label1";
+            label1.Size = new Size(483, 45);
+            label1.TabIndex = 9;
+            label1.Text = "¿No tiene una cuenta creada? ";
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(18, 87, 150);
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(562, 630);
+            button1.Name = "button1";
+            button1.Size = new Size(245, 68);
+            button1.TabIndex = 8;
+            button1.Text = "Registrarme";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // picLogo
             // 
@@ -75,9 +104,9 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(147, 47);
+            lblTitulo.Location = new Point(231, 43);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(173, 37);
+            lblTitulo.Size = new Size(420, 89);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -85,35 +114,35 @@
             // 
             lblUsuario.AutoSize = true;
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.Location = new Point(32, 142);
+            lblUsuario.Location = new Point(288, 188);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(128, 17);
+            lblUsuario.Size = new Size(322, 45);
             lblUsuario.TabIndex = 2;
             lblUsuario.Text = "Nombre de Usuario";
             // 
             // txtUsuario
             // 
-            txtUsuario.Location = new Point(32, 179);
+            txtUsuario.Location = new Point(90, 236);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(364, 25);
+            txtUsuario.Size = new Size(749, 52);
             txtUsuario.TabIndex = 3;
             // 
             // lblClave
             // 
             lblClave.AutoSize = true;
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblClave.Location = new Point(32, 230);
+            lblClave.Location = new Point(354, 331);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(77, 17);
+            lblClave.Size = new Size(196, 45);
             lblClave.TabIndex = 4;
             lblClave.Text = "Contraseña";
             // 
             // txtContrasena
             // 
-            txtContrasena.Location = new Point(32, 268);
+            txtContrasena.Location = new Point(90, 379);
             txtContrasena.Name = "txtContrasena";
             txtContrasena.PasswordChar = '*';
-            txtContrasena.Size = new Size(364, 25);
+            txtContrasena.Size = new Size(749, 52);
             txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
@@ -123,9 +152,9 @@
             btnIngresar.FlatStyle = FlatStyle.Flat;
             btnIngresar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(259, 358);
+            btnIngresar.Location = new Point(521, 475);
             btnIngresar.Name = "btnIngresar";
-            btnIngresar.Size = new Size(137, 42);
+            btnIngresar.Size = new Size(250, 91);
             btnIngresar.TabIndex = 6;
             btnIngresar.Text = "Ingresar";
             btnIngresar.UseVisualStyleBackColor = false;
@@ -138,9 +167,9 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(32, 358);
+            btnSalir.Location = new Point(170, 471);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(137, 42);
+            btnSalir.Size = new Size(250, 95);
             btnSalir.TabIndex = 7;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
@@ -149,7 +178,7 @@
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(477, 502);
+            ClientSize = new Size(1671, 932);
             Controls.Add(panelLogin);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -180,5 +209,7 @@
 
         private Button btnIngresar;
         private Button btnSalir;
+        private Label label1;
+        private Button button1;
     }
 }

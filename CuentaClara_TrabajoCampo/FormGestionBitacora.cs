@@ -24,5 +24,10 @@ namespace CuentaClara_TrabajoCampo
         {
 
         }
+
+        private void panelContenedor_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace BLL
         public bool RegistrarBitacora(string evento,string login,string modulo,int criticidad){
             Servicio_Bitacora bitacora = new Servicio_Bitacora
             {
-                id_Evento = Guid.NewGuid().ToString(),
+                id_Evento = Guid.NewGuid().ToString(), //aleatorioo
                 Evento = evento,
                 Login = login,
                 Modulo = modulo,

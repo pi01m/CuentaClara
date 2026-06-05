@@ -56,8 +56,8 @@ namespace CuentaClara_TrabajoCampo
                     if (intentos >= 3)
                     {
                         MessageBox.Show("Usuario bloqueado. Contacte al administrador.");
-                            
-     
+
+
                     }
                     else
                     {
@@ -125,6 +125,17 @@ namespace CuentaClara_TrabajoCampo
         private void panelLogin_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormCrearUsuario fr = new FormCrearUsuario();
+
+            this.Hide(); 
+
+            fr.ShowDialog();
+
+            this.Show();
         }
     }
 }

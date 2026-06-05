@@ -33,12 +33,6 @@
             panelContenedor = new Panel();
             lblTitulo = new Label();
             dgvUsuarios = new DataGridView();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
             btnCrear = new Button();
             btnDesbloquear = new Button();
             btnModificar = new Button();
@@ -75,9 +69,10 @@
             panelContenedor.Controls.Add(lblCantidadUsuarios);
             panelContenedor.Controls.Add(lblTotalUsuarios);
             panelContenedor.Controls.Add(lstMensajes);
-            panelContenedor.Location = new Point(20, 20);
+            panelContenedor.Location = new Point(49, 55);
+            panelContenedor.Margin = new Padding(7, 8, 7, 8);
             panelContenedor.Name = "panelContenedor";
-            panelContenedor.Size = new Size(1240, 680);
+            panelContenedor.Size = new Size(3011, 1859);
             panelContenedor.TabIndex = 0;
             // 
             // lblTitulo
@@ -85,9 +80,10 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(30, 20);
+            lblTitulo.Location = new Point(73, 55);
+            lblTitulo.Margin = new Padding(7, 0, 7, 0);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(272, 37);
+            lblTitulo.Size = new Size(661, 89);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Gestión de Usuarios";
             // 
@@ -97,7 +93,7 @@
             dgvUsuarios.AllowUserToDeleteRows = false;
             dgvUsuarios.AllowUserToResizeRows = false;
             dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvUsuarios.BackgroundColor = Color.White;
+            dgvUsuarios.BackgroundColor = Color.FromArgb(18, 87, 150);
             dgvUsuarios.BorderStyle = BorderStyle.None;
             dgvUsuarios.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvUsuarios.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
@@ -109,7 +105,7 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvUsuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvUsuarios.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6 });
+            dgvUsuarios.ColumnHeadersHeight = 58;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
@@ -120,53 +116,17 @@
             dgvUsuarios.DefaultCellStyle = dataGridViewCellStyle2;
             dgvUsuarios.EnableHeadersVisualStyles = false;
             dgvUsuarios.GridColor = Color.FromArgb(230, 230, 230);
-            dgvUsuarios.Location = new Point(35, 105);
+            dgvUsuarios.Location = new Point(85, 287);
+            dgvUsuarios.Margin = new Padding(7, 8, 7, 8);
             dgvUsuarios.MultiSelect = false;
             dgvUsuarios.Name = "dgvUsuarios";
             dgvUsuarios.ReadOnly = true;
             dgvUsuarios.RowHeadersVisible = false;
+            dgvUsuarios.RowHeadersWidth = 102;
             dgvUsuarios.RowTemplate.Height = 32;
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsuarios.Size = new Size(1165, 320);
+            dgvUsuarios.Size = new Size(2829, 875);
             dgvUsuarios.TabIndex = 1;
-            dgvUsuarios.AutoGenerateColumns = false;
-           
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            dataGridViewTextBoxColumn1.HeaderText = "Nombre";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            dataGridViewTextBoxColumn2.HeaderText = "Apellido";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            dataGridViewTextBoxColumn3.HeaderText = "DNI";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            dataGridViewTextBoxColumn3.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            dataGridViewTextBoxColumn4.HeaderText = "Rol";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            dataGridViewTextBoxColumn5.HeaderText = "Login";
-            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            dataGridViewTextBoxColumn5.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            dataGridViewTextBoxColumn6.HeaderText = "Estado";
-            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            dataGridViewTextBoxColumn6.ReadOnly = true;
             // 
             // btnCrear
             // 
@@ -175,9 +135,10 @@
             btnCrear.FlatStyle = FlatStyle.Flat;
             btnCrear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCrear.ForeColor = Color.White;
-            btnCrear.Location = new Point(35, 565);
+            btnCrear.Location = new Point(85, 1544);
+            btnCrear.Margin = new Padding(7, 8, 7, 8);
             btnCrear.Name = "btnCrear";
-            btnCrear.Size = new Size(140, 42);
+            btnCrear.Size = new Size(340, 115);
             btnCrear.TabIndex = 2;
             btnCrear.Text = "Crear";
             btnCrear.UseVisualStyleBackColor = false;
@@ -189,9 +150,10 @@
             btnDesbloquear.FlatStyle = FlatStyle.Flat;
             btnDesbloquear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnDesbloquear.ForeColor = Color.FromArgb(18, 87, 150);
-            btnDesbloquear.Location = new Point(190, 565);
+            btnDesbloquear.Location = new Point(461, 1544);
+            btnDesbloquear.Margin = new Padding(7, 8, 7, 8);
             btnDesbloquear.Name = "btnDesbloquear";
-            btnDesbloquear.Size = new Size(140, 42);
+            btnDesbloquear.Size = new Size(340, 115);
             btnDesbloquear.TabIndex = 3;
             btnDesbloquear.Text = "Desbloquear";
             btnDesbloquear.UseVisualStyleBackColor = false;
@@ -202,12 +164,14 @@
             btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnModificar.Location = new Point(345, 565);
+            btnModificar.Location = new Point(838, 1544);
+            btnModificar.Margin = new Padding(7, 8, 7, 8);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(140, 42);
+            btnModificar.Size = new Size(340, 115);
             btnModificar.TabIndex = 4;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = false;
+            btnModificar.Click += btnModificar_Click;
             // 
             // btnActivarDesactivar
             // 
@@ -215,9 +179,10 @@
             btnActivarDesactivar.FlatStyle = FlatStyle.Flat;
             btnActivarDesactivar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnActivarDesactivar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnActivarDesactivar.Location = new Point(500, 565);
+            btnActivarDesactivar.Location = new Point(1214, 1544);
+            btnActivarDesactivar.Margin = new Padding(7, 8, 7, 8);
             btnActivarDesactivar.Name = "btnActivarDesactivar";
-            btnActivarDesactivar.Size = new Size(180, 42);
+            btnActivarDesactivar.Size = new Size(437, 115);
             btnActivarDesactivar.TabIndex = 5;
             btnActivarDesactivar.Text = "Activar / Desactivar";
             btnActivarDesactivar.UseVisualStyleBackColor = false;
@@ -229,9 +194,10 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.White;
-            btnAplicar.Location = new Point(835, 565);
+            btnAplicar.Location = new Point(2028, 1544);
+            btnAplicar.Margin = new Padding(7, 8, 7, 8);
             btnAplicar.Name = "btnAplicar";
-            btnAplicar.Size = new Size(140, 42);
+            btnAplicar.Size = new Size(340, 115);
             btnAplicar.TabIndex = 6;
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
@@ -242,9 +208,10 @@
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancelar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCancelar.Location = new Point(990, 565);
+            btnCancelar.Location = new Point(2404, 1544);
+            btnCancelar.Margin = new Padding(7, 8, 7, 8);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(140, 42);
+            btnCancelar.Size = new Size(340, 115);
             btnCancelar.TabIndex = 7;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
@@ -255,9 +222,10 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(1145, 565);
+            btnSalir.Location = new Point(2781, 1544);
+            btnSalir.Margin = new Padding(7, 8, 7, 8);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(90, 42);
+            btnSalir.Size = new Size(219, 115);
             btnSalir.TabIndex = 8;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
@@ -267,9 +235,10 @@
             chkUsuariosActivos.AutoSize = true;
             chkUsuariosActivos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             chkUsuariosActivos.ForeColor = Color.FromArgb(15, 45, 75);
-            chkUsuariosActivos.Location = new Point(40, 70);
+            chkUsuariosActivos.Location = new Point(97, 191);
+            chkUsuariosActivos.Margin = new Padding(7, 8, 7, 8);
             chkUsuariosActivos.Name = "chkUsuariosActivos";
-            chkUsuariosActivos.Size = new Size(138, 23);
+            chkUsuariosActivos.Size = new Size(323, 50);
             chkUsuariosActivos.TabIndex = 2;
             chkUsuariosActivos.Text = "Usuarios Activos";
             chkUsuariosActivos.UseVisualStyleBackColor = true;
@@ -279,9 +248,10 @@
             chkTodosUsuarios.AutoSize = true;
             chkTodosUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             chkTodosUsuarios.ForeColor = Color.FromArgb(15, 45, 75);
-            chkTodosUsuarios.Location = new Point(220, 70);
+            chkTodosUsuarios.Location = new Point(534, 191);
+            chkTodosUsuarios.Margin = new Padding(7, 8, 7, 8);
             chkTodosUsuarios.Name = "chkTodosUsuarios";
-            chkTodosUsuarios.Size = new Size(129, 23);
+            chkTodosUsuarios.Size = new Size(301, 50);
             chkTodosUsuarios.TabIndex = 3;
             chkTodosUsuarios.Text = "Todos Usuarios";
             chkTodosUsuarios.UseVisualStyleBackColor = true;
@@ -291,9 +261,10 @@
             lblCantidadUsuarios.AutoSize = true;
             lblCantidadUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCantidadUsuarios.ForeColor = Color.FromArgb(15, 45, 75);
-            lblCantidadUsuarios.Location = new Point(960, 73);
+            lblCantidadUsuarios.Location = new Point(2331, 200);
+            lblCantidadUsuarios.Margin = new Padding(7, 0, 7, 0);
             lblCantidadUsuarios.Name = "lblCantidadUsuarios";
-            lblCantidadUsuarios.Size = new Size(128, 19);
+            lblCantidadUsuarios.Size = new Size(304, 46);
             lblCantidadUsuarios.TabIndex = 4;
             lblCantidadUsuarios.Text = "Total de Usuarios:";
             // 
@@ -302,9 +273,10 @@
             lblTotalUsuarios.AutoSize = true;
             lblTotalUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblTotalUsuarios.ForeColor = Color.FromArgb(18, 87, 150);
-            lblTotalUsuarios.Location = new Point(1105, 73);
+            lblTotalUsuarios.Location = new Point(2684, 200);
+            lblTotalUsuarios.Margin = new Padding(7, 0, 7, 0);
             lblTotalUsuarios.Name = "lblTotalUsuarios";
-            lblTotalUsuarios.Size = new Size(25, 19);
+            lblTotalUsuarios.Size = new Size(60, 46);
             lblTotalUsuarios.TabIndex = 5;
             lblTotalUsuarios.Text = "15";
             // 
@@ -313,10 +285,11 @@
             lstMensajes.BorderStyle = BorderStyle.FixedSingle;
             lstMensajes.Font = new Font("Segoe UI", 9F);
             lstMensajes.FormattingEnabled = true;
-            lstMensajes.ItemHeight = 15;
-            lstMensajes.Location = new Point(35, 445);
+            lstMensajes.ItemHeight = 41;
+            lstMensajes.Location = new Point(85, 1216);
+            lstMensajes.Margin = new Padding(7, 8, 7, 8);
             lstMensajes.Name = "lstMensajes";
-            lstMensajes.Size = new Size(1165, 92);
+            lstMensajes.Size = new Size(2826, 248);
             lstMensajes.TabIndex = 6;
             // 
             // panelInferior
@@ -324,9 +297,10 @@
             panelInferior.BackColor = Color.FromArgb(18, 87, 150);
             panelInferior.Controls.Add(lblUsuarioActivo);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 720);
+            panelInferior.Location = new Point(0, 1968);
+            panelInferior.Margin = new Padding(7, 8, 7, 8);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(1280, 40);
+            panelInferior.Size = new Size(3109, 109);
             panelInferior.TabIndex = 0;
             // 
             // lblUsuarioActivo
@@ -334,22 +308,24 @@
             lblUsuarioActivo.AutoSize = true;
             lblUsuarioActivo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblUsuarioActivo.ForeColor = Color.White;
-            lblUsuarioActivo.Location = new Point(20, 12);
+            lblUsuarioActivo.Location = new Point(49, 33);
+            lblUsuarioActivo.Margin = new Padding(7, 0, 7, 0);
             lblUsuarioActivo.Name = "lblUsuarioActivo";
-            lblUsuarioActivo.Size = new Size(171, 15);
+            lblUsuarioActivo.Size = new Size(440, 41);
             lblUsuarioActivo.TabIndex = 0;
             lblUsuarioActivo.Text = "Usuario activo: Administrador";
             // 
             // FormGestionUsuarios
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1280, 760);
+            ClientSize = new Size(3109, 2077);
             Controls.Add(panelInferior);
             Controls.Add(panelContenedor);
             Font = new Font("Segoe UI", 9F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(7, 8, 7, 8);
             MaximizeBox = false;
             Name = "FormGestionUsuarios";
             StartPosition = FormStartPosition.CenterScreen;
@@ -386,11 +362,5 @@
 
         private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Label lblUsuarioActivo;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
     }
 }

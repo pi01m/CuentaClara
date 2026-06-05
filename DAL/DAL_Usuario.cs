@@ -188,6 +188,23 @@ namespace DAL
                 
             }
         }
+
+        public DataTable ListarUsuariosBloqueados()
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+               
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Bloqueo >= 3",conn);
+
+                DataTable tabla =new DataTable();
+
+                adapter.Fill(tabla);
+
+                return tabla;
+            }
+        }
+
+
         public bool ExisteUsuario(string login)
         {
             using (SqlConnection conn =

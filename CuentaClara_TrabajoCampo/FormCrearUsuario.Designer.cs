@@ -84,7 +84,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(76, 14);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(617, 81);
+            lblTitulo.Size = new Size(252, 32);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Crear Nuevo Usuario";
             // 
@@ -94,7 +94,7 @@
             lblDNI.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblDNI.Location = new Point(79, 124);
             lblDNI.Name = "lblDNI";
-            lblDNI.Size = new Size(83, 46);
+            lblDNI.Size = new Size(34, 19);
             lblDNI.TabIndex = 1;
             lblDNI.Text = "DNI";
             // 
@@ -102,7 +102,7 @@
             // 
             txtDNI.Location = new Point(79, 173);
             txtDNI.Name = "txtDNI";
-            txtDNI.Size = new Size(250, 52);
+            txtDNI.Size = new Size(250, 25);
             txtDNI.TabIndex = 2;
             // 
             // lblRol
@@ -111,7 +111,7 @@
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblRol.Location = new Point(461, 123);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(232, 46);
+            lblRol.Size = new Size(98, 19);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol Asignado";
             // 
@@ -120,7 +120,7 @@
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRol.Location = new Point(461, 172);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(250, 53);
+            cmbRol.Size = new Size(250, 25);
             cmbRol.TabIndex = 4;
             // 
             // lblNombre
@@ -129,7 +129,7 @@
             lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblNombre.Location = new Point(79, 251);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(167, 46);
+            lblNombre.Size = new Size(71, 19);
             lblNombre.TabIndex = 5;
             lblNombre.Text = "Nombres";
             // 
@@ -137,7 +137,7 @@
             // 
             txtNombre.Location = new Point(79, 300);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(250, 52);
+            txtNombre.Size = new Size(250, 25);
             txtNombre.TabIndex = 6;
             // 
             // lblApellido
@@ -146,7 +146,7 @@
             lblApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblApellido.Location = new Point(461, 248);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(170, 46);
+            lblApellido.Size = new Size(72, 19);
             lblApellido.TabIndex = 7;
             lblApellido.Text = "Apellidos";
             // 
@@ -154,7 +154,7 @@
             // 
             txtApellido.Location = new Point(461, 297);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(250, 52);
+            txtApellido.Size = new Size(250, 25);
             txtApellido.TabIndex = 8;
             // 
             // lblCorreo
@@ -163,7 +163,7 @@
             lblCorreo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCorreo.Location = new Point(79, 386);
             lblCorreo.Name = "lblCorreo";
-            lblCorreo.Size = new Size(316, 46);
+            lblCorreo.Size = new Size(134, 19);
             lblCorreo.TabIndex = 9;
             lblCorreo.Text = "Correo Electrónico";
             // 
@@ -171,7 +171,7 @@
             // 
             txtCorreo.Location = new Point(79, 435);
             txtCorreo.Name = "txtCorreo";
-            txtCorreo.Size = new Size(250, 52);
+            txtCorreo.Size = new Size(250, 25);
             txtCorreo.TabIndex = 10;
             // 
             // lblLogin
@@ -180,7 +180,7 @@
             lblLogin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblLogin.Location = new Point(461, 386);
             lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(299, 46);
+            lblLogin.Size = new Size(127, 19);
             lblLogin.TabIndex = 11;
             lblLogin.Text = "Nombre de Login";
             // 
@@ -188,7 +188,7 @@
             // 
             txtLogin.Location = new Point(461, 435);
             txtLogin.Name = "txtLogin";
-            txtLogin.Size = new Size(250, 52);
+            txtLogin.Size = new Size(250, 25);
             txtLogin.TabIndex = 12;
             // 
             // lblPassword
@@ -197,7 +197,7 @@
             lblPassword.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblPassword.Location = new Point(79, 518);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(200, 46);
+            lblPassword.Size = new Size(84, 19);
             lblPassword.TabIndex = 13;
             lblPassword.Text = "Contraseña";
             // 
@@ -206,7 +206,7 @@
             txtPassword.Location = new Point(79, 567);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(250, 52);
+            txtPassword.Size = new Size(250, 25);
             txtPassword.TabIndex = 14;
             // 
             // chkActivo
@@ -216,7 +216,7 @@
             chkActivo.ForeColor = Color.FromArgb(20, 70, 120);
             chkActivo.Location = new Point(710, 529);
             chkActivo.Name = "chkActivo";
-            chkActivo.Size = new Size(454, 50);
+            chkActivo.Size = new Size(195, 23);
             chkActivo.TabIndex = 15;
             chkActivo.Text = "Habilitar Acceso (Activo)";
             // 

@@ -68,6 +68,7 @@ namespace CuentaClara_TrabajoCampo
 
                     }
                 }
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -131,11 +132,16 @@ namespace CuentaClara_TrabajoCampo
         {
             FormCrearUsuario fr = new FormCrearUsuario();
 
-            this.Hide(); 
+            this.Hide();
 
             fr.ShowDialog();
 
             this.Show();
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

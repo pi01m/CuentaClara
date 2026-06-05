@@ -69,7 +69,7 @@
             label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(67, 642);
             label1.Name = "label1";
-            label1.Size = new Size(483, 45);
+            label1.Size = new Size(193, 17);
             label1.TabIndex = 9;
             label1.Text = "¿No tiene una cuenta creada? ";
             // 
@@ -106,7 +106,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(231, 43);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(420, 89);
+            lblTitulo.Size = new Size(173, 37);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -116,7 +116,7 @@
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUsuario.Location = new Point(288, 188);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(322, 45);
+            lblUsuario.Size = new Size(128, 17);
             lblUsuario.TabIndex = 2;
             lblUsuario.Text = "Nombre de Usuario";
             // 
@@ -124,7 +124,7 @@
             // 
             txtUsuario.Location = new Point(90, 236);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(749, 52);
+            txtUsuario.Size = new Size(749, 25);
             txtUsuario.TabIndex = 3;
             // 
             // lblClave
@@ -133,7 +133,7 @@
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblClave.Location = new Point(354, 331);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(196, 45);
+            lblClave.Size = new Size(77, 17);
             lblClave.TabIndex = 4;
             lblClave.Text = "Contraseña";
             // 
@@ -142,7 +142,7 @@
             txtContrasena.Location = new Point(90, 379);
             txtContrasena.Name = "txtContrasena";
             txtContrasena.PasswordChar = '*';
-            txtContrasena.Size = new Size(749, 52);
+            txtContrasena.Size = new Size(749, 25);
             txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
@@ -173,6 +173,7 @@
             btnSalir.TabIndex = 7;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
+            btnSalir.Click += btnSalir_Click;
             // 
             // frmLogIn
             // 

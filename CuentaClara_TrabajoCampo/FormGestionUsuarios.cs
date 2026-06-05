@@ -39,7 +39,7 @@ namespace CuentaClara_TrabajoCampo
         private void CargarUsuarios()
         {
             dgvUsuarios.DataSource = null;
-          dgvUsuarios.DataSource = bll.ListarUsuarios();
+            dgvUsuarios.DataSource = bll.ListarUsuarios();
 
             lblTotalUsuarios.Text = dgvUsuarios.Rows.Count.ToString();
 
@@ -48,12 +48,28 @@ namespace CuentaClara_TrabajoCampo
         private void btnModificar_Click(object sender, EventArgs e)
         {
             FormModificarUsuario frm = new FormModificarUsuario();
-            
+
             this.Hide();
 
             frm.ShowDialog();
 
             this.Show();
+        }
+
+        private void btnDesbloquear_Click(object sender, EventArgs e)
+        {
+            frmDesbloqueo frm = new frmDesbloqueo();
+
+            this.Hide();
+
+            frm.ShowDialog();
+
+            this.Show();
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

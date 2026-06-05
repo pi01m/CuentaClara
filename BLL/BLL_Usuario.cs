@@ -35,6 +35,10 @@ namespace BLL
         {
             return _dalUsuario.ListarUsuarios();
         }
+        public DataTable ListarUsuariosBloqueados()
+        {
+            return _dalUsuario.ListarUsuariosBloqueados();
+        }
 
         public void AsignarPermisos( List<Servicio_Permiso> permisos,Servicio_Usuario usuario){
             foreach (Servicio_Permiso permiso in permisos)
@@ -103,6 +107,14 @@ namespace BLL
         public void ReiniciarIntentos(string login)
         {
             _dalUsuario.ReiniciarIntentos(login);
+        }
+
+        public void DesbloquearUsuario(string login)
+        {
+            _dalUsuario.ReiniciarIntentos(login);
+
+            _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login,"Administracion",1);
+                     
         }
 
         public bool IniciarSesion(string nombreUsuario, string hash)
@@ -184,7 +196,15 @@ namespace BLL
                 return false;
             }
         }
+        public bool ValidarAdministrador(  string contraseñaIngresada)
+  
+        {
+            Servicio_Usuario admin = SessionManager.GetInstancia() .GetUsuarioActual();
 
-        
+            string hash =_encriptadorServicio.CifrarContraseña( contraseñaIngresada);
+            return string.Equals(hash,admin.Password, StringComparison.OrdinalIgnoreCase);  
+  
+        }
+
     }
 }

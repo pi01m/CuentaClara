@@ -73,7 +73,7 @@ namespace CuentaClara_TrabajoCampo
             foreach (Servicio_Perfil permiso in usuarioSesion.Permisos.ListaPermisos)
             {
 
-                System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdPermiso} – {permiso.Nombre}");
+                System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdPerfil} – {permiso.Nombre}");
             }
         }
 

@@ -11,7 +11,7 @@ namespace BLL
     {
         private readonly BLL_BitacoraEvento _bitacoraServicio;
         private readonly DAL_Usuario _dalUsuario;
-        private readonly DAL_FamiliaRol _dalFamiliaPermiso;
+        private readonly DAL_Familia _dalFamiliaPermiso;
         private readonly Servicio_Cripto _encriptadorServicio;
         private readonly SessionManager _sm;
 
@@ -40,8 +40,8 @@ namespace BLL
             return _dalUsuario.ListarUsuariosActivos();
         }
 
-        public void AsignarPermisos( List<Servicio_Permiso> permisos,Servicio_Usuario usuario){
-            foreach (Servicio_Permiso permiso in permisos)
+        public void AsignarPermisos( List<Servicio_Perfil> permisos,Servicio_Usuario usuario){
+            foreach (Servicio_Perfil permiso in permisos)
             {
                 usuario.Permisos.AgregarPermiso(permiso);
             }

@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Servicio
 {
-    public abstract class Servicio_Permiso
+    public abstract class Servicio_Perfil
     {
-        public string IdPermiso { get; set; }
+        public string IdPerfil { get; set; }
         public string Nombre { get; set; }
 
-        protected Servicio_Permiso(string idPermiso, string nombre)
+        protected Servicio_Perfil(string idPermiso, string nombre)
         {
-            IdPermiso = idPermiso;
+            IdPerfil = idPermiso;
             Nombre = nombre;
         }
 

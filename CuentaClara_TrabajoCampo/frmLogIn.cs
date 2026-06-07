@@ -70,7 +70,7 @@ namespace CuentaClara_TrabajoCampo
             Servicio_Usuario usuarioSesion = SessionManager.GetInstancia().GetUsuarioActual();
             if (usuarioSesion == null) return;
 
-            foreach (Servicio_Permiso permiso in usuarioSesion.Permisos.ListaPermisos)
+            foreach (Servicio_Perfil permiso in usuarioSesion.Permisos.ListaPermisos)
             {
 
                 System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdPermiso} – {permiso.Nombre}");

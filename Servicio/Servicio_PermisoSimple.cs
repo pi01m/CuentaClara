@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Servicio
 {
-    public class Servicio_PermisoSimple : Servicio_Permiso
+    public class Servicio_PermisoSimple : Servicio_Perfil
     {
         public Servicio_PermisoSimple(string idPermiso, string nombre): base(idPermiso, nombre) { }
     }

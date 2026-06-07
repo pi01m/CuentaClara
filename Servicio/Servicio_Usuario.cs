@@ -14,7 +14,7 @@ namespace Servicio
         public string Login { get; set; }
         public string Nombre { get; set; }
         public string Password { get; set; }
-        public Servicio_FamiliaRol Permisos { get; set; } = new Servicio_FamiliaRol(string.Empty, string.Empty);
+        public Servicio_Familia Permisos { get; set; } = new Servicio_Familia(string.Empty, string.Empty);
 
         public string Rol { get; set; }
     }

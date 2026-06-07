@@ -118,6 +118,7 @@
             // cmbRol
             // 
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRol.Items.AddRange(new object[] { "Admin" });
             cmbRol.Location = new Point(461, 172);
             cmbRol.Name = "cmbRol";
             cmbRol.Size = new Size(250, 25);

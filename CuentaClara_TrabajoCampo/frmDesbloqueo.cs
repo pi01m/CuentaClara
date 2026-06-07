@@ -19,8 +19,8 @@ namespace CuentaClara_TrabajoCampo
 
         private void frmDesbloqueo_Load(object sender, EventArgs e)
         {
-            dataGridView1.AutoGenerateColumns = true;
-            dataGridView1.DataSource = bll.ListarUsuariosBloqueados();
+            //dataGridView1.AutoGenerateColumns = true;
+            //dataGridView1.DataSource = bll.ListarUsuariosBloqueados();
 
         }
 
@@ -33,26 +33,26 @@ namespace CuentaClara_TrabajoCampo
         {
           
                 
-            if (dataGridView1.SelectedRows.Count == 0) throw new Exception("Debe seleccionar un usuario para desbloquear.");
+            //if (dataGridView1.SelectedRows.Count == 0) throw new Exception("Debe seleccionar un usuario para desbloquear.");
 
-            string? login = dataGridView1.SelectedRows[0].Cells["Login"].Value.ToString();
-            bool autorizado = bll.ValidarAdministrador(txtContrasena.Text);
+            //string? login = dataGridView1.SelectedRows[0].Cells["Login"].Value.ToString();
+            //bool autorizado = bll.ValidarAdministrador(txtContrasena.Text);
        
 
-            if (!autorizado)
-            {
-                MessageBox.Show(
-                    "Contraseña de administrador incorrecta.");
+            //if (!autorizado)
+            //{
+            //    MessageBox.Show(
+            //        "Contraseña de administrador incorrecta.");
 
-                return;
-            }
+            //    return;
+            //}
 
-            bll.DesbloquearUsuario(login);
+            //bll.DesbloquearUsuario(login);
 
-            MessageBox.Show( "Usuario desbloqueado correctamente.");
-            txtContrasena.Clear();
-            dataGridView1.DataSource = null;
-            dataGridView1   .DataSource = bll.ListarUsuariosBloqueados();
+            //MessageBox.Show( "Usuario desbloqueado correctamente.");
+            //txtContrasena.Clear();
+            //dataGridView1.DataSource = null;
+            //dataGridView1   .DataSource = bll.ListarUsuariosBloqueados();
 
         }
     }

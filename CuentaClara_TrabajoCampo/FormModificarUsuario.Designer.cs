@@ -113,7 +113,7 @@
             dgvUsuarios.RowHeadersWidth = 102;
             dgvUsuarios.RowTemplate.Height = 32;
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsuarios.Size = new Size(879, 190);
+            dgvUsuarios.Size = new Size(945, 190);
             dgvUsuarios.TabIndex = 10;
             dgvUsuarios.CellClick += dgvUsuarios_CellClick;
             // 
@@ -201,6 +201,7 @@
             btnCancelar.TabIndex = 8;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnGuardar
             // 

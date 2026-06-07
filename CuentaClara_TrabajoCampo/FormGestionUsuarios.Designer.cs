@@ -31,6 +31,19 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panelContenedor = new Panel();
+            txtRol = new TextBox();
+            lblDNI = new Label();
+            txtDNI = new TextBox();
+            lblRol = new Label();
+            lblNombre = new Label();
+            txtNombre = new TextBox();
+            lblApellido = new Label();
+            txtApellido = new TextBox();
+            lblCorreo = new Label();
+            txtCorreo = new TextBox();
+            lblLogin = new Label();
+            txtLogin = new TextBox();
+            chkActivo = new CheckBox();
             lblTitulo = new Label();
             dgvUsuarios = new DataGridView();
             btnCrear = new Button();
@@ -40,13 +53,13 @@
             btnAplicar = new Button();
             btnCancelar = new Button();
             btnSalir = new Button();
-            chkUsuariosActivos = new CheckBox();
-            chkTodosUsuarios = new CheckBox();
             lblCantidadUsuarios = new Label();
             lblTotalUsuarios = new Label();
             lstMensajes = new ListBox();
             panelInferior = new Panel();
             lblUsuarioActivo = new Label();
+            radioBtnUserActivos = new RadioButton();
+            radioBtnTodosUser = new RadioButton();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
             panelInferior.SuspendLayout();
@@ -55,6 +68,21 @@
             // panelContenedor
             // 
             panelContenedor.BackColor = Color.White;
+            panelContenedor.Controls.Add(radioBtnTodosUser);
+            panelContenedor.Controls.Add(radioBtnUserActivos);
+            panelContenedor.Controls.Add(txtRol);
+            panelContenedor.Controls.Add(lblDNI);
+            panelContenedor.Controls.Add(txtDNI);
+            panelContenedor.Controls.Add(lblRol);
+            panelContenedor.Controls.Add(lblNombre);
+            panelContenedor.Controls.Add(txtNombre);
+            panelContenedor.Controls.Add(lblApellido);
+            panelContenedor.Controls.Add(txtApellido);
+            panelContenedor.Controls.Add(lblCorreo);
+            panelContenedor.Controls.Add(txtCorreo);
+            panelContenedor.Controls.Add(lblLogin);
+            panelContenedor.Controls.Add(txtLogin);
+            panelContenedor.Controls.Add(chkActivo);
             panelContenedor.Controls.Add(lblTitulo);
             panelContenedor.Controls.Add(dgvUsuarios);
             panelContenedor.Controls.Add(btnCrear);
@@ -64,15 +92,128 @@
             panelContenedor.Controls.Add(btnAplicar);
             panelContenedor.Controls.Add(btnCancelar);
             panelContenedor.Controls.Add(btnSalir);
-            panelContenedor.Controls.Add(chkUsuariosActivos);
-            panelContenedor.Controls.Add(chkTodosUsuarios);
             panelContenedor.Controls.Add(lblCantidadUsuarios);
             panelContenedor.Controls.Add(lblTotalUsuarios);
             panelContenedor.Controls.Add(lstMensajes);
             panelContenedor.Location = new Point(20, 20);
             panelContenedor.Name = "panelContenedor";
-            panelContenedor.Size = new Size(1240, 680);
+            panelContenedor.Size = new Size(1258, 736);
             panelContenedor.TabIndex = 0;
+            panelContenedor.Paint += panelContenedor_Paint;
+            // 
+            // txtRol
+            // 
+            txtRol.Location = new Point(185, 661);
+            txtRol.Name = "txtRol";
+            txtRol.Size = new Size(209, 23);
+            txtRol.TabIndex = 31;
+            // 
+            // lblDNI
+            // 
+            lblDNI.AutoSize = true;
+            lblDNI.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblDNI.Location = new Point(35, 447);
+            lblDNI.Name = "lblDNI";
+            lblDNI.Size = new Size(34, 19);
+            lblDNI.TabIndex = 16;
+            lblDNI.Text = "DNI";
+            // 
+            // txtDNI
+            // 
+            txtDNI.Location = new Point(185, 447);
+            txtDNI.Name = "txtDNI";
+            txtDNI.Size = new Size(209, 23);
+            txtDNI.TabIndex = 17;
+            // 
+            // lblRol
+            // 
+            lblRol.AutoSize = true;
+            lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblRol.Location = new Point(40, 665);
+            lblRol.Name = "lblRol";
+            lblRol.Size = new Size(98, 19);
+            lblRol.TabIndex = 18;
+            lblRol.Text = "Rol Asignado";
+            // 
+            // lblNombre
+            // 
+            lblNombre.AutoSize = true;
+            lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblNombre.Location = new Point(35, 486);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(71, 19);
+            lblNombre.TabIndex = 20;
+            lblNombre.Text = "Nombres";
+            // 
+            // txtNombre
+            // 
+            txtNombre.Location = new Point(185, 486);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(209, 23);
+            txtNombre.TabIndex = 21;
+            // 
+            // lblApellido
+            // 
+            lblApellido.AutoSize = true;
+            lblApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblApellido.Location = new Point(35, 525);
+            lblApellido.Name = "lblApellido";
+            lblApellido.Size = new Size(72, 19);
+            lblApellido.TabIndex = 22;
+            lblApellido.Text = "Apellidos";
+            // 
+            // txtApellido
+            // 
+            txtApellido.Location = new Point(185, 525);
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(209, 23);
+            txtApellido.TabIndex = 23;
+            // 
+            // lblCorreo
+            // 
+            lblCorreo.AutoSize = true;
+            lblCorreo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblCorreo.Location = new Point(37, 571);
+            lblCorreo.Name = "lblCorreo";
+            lblCorreo.Size = new Size(134, 19);
+            lblCorreo.TabIndex = 24;
+            lblCorreo.Text = "Correo Electrónico";
+            lblCorreo.Click += lblCorreo_Click;
+            // 
+            // txtCorreo
+            // 
+            txtCorreo.Location = new Point(185, 567);
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.Size = new Size(209, 23);
+            txtCorreo.TabIndex = 25;
+            // 
+            // lblLogin
+            // 
+            lblLogin.AutoSize = true;
+            lblLogin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblLogin.Location = new Point(40, 611);
+            lblLogin.Name = "lblLogin";
+            lblLogin.Size = new Size(127, 19);
+            lblLogin.TabIndex = 26;
+            lblLogin.Text = "Nombre de Login";
+            // 
+            // txtLogin
+            // 
+            txtLogin.Location = new Point(185, 616);
+            txtLogin.Name = "txtLogin";
+            txtLogin.Size = new Size(209, 23);
+            txtLogin.TabIndex = 27;
+            // 
+            // chkActivo
+            // 
+            chkActivo.AutoSize = true;
+            chkActivo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            chkActivo.ForeColor = Color.FromArgb(20, 70, 120);
+            chkActivo.Location = new Point(185, 694);
+            chkActivo.Name = "chkActivo";
+            chkActivo.Size = new Size(195, 23);
+            chkActivo.TabIndex = 30;
+            chkActivo.Text = "Habilitar Acceso (Activo)";
             // 
             // lblTitulo
             // 
@@ -122,8 +263,9 @@
             dgvUsuarios.RowHeadersWidth = 102;
             dgvUsuarios.RowTemplate.Height = 32;
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsuarios.Size = new Size(1165, 320);
+            dgvUsuarios.Size = new Size(974, 320);
             dgvUsuarios.TabIndex = 1;
+            dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
             // 
             // btnCrear
             // 
@@ -132,7 +274,7 @@
             btnCrear.FlatStyle = FlatStyle.Flat;
             btnCrear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCrear.ForeColor = Color.White;
-            btnCrear.Location = new Point(35, 565);
+            btnCrear.Location = new Point(1068, 133);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(140, 42);
             btnCrear.TabIndex = 2;
@@ -146,7 +288,7 @@
             btnDesbloquear.FlatStyle = FlatStyle.Flat;
             btnDesbloquear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnDesbloquear.ForeColor = Color.FromArgb(18, 87, 150);
-            btnDesbloquear.Location = new Point(190, 565);
+            btnDesbloquear.Location = new Point(1068, 204);
             btnDesbloquear.Name = "btnDesbloquear";
             btnDesbloquear.Size = new Size(140, 42);
             btnDesbloquear.TabIndex = 3;
@@ -160,7 +302,7 @@
             btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnModificar.Location = new Point(345, 565);
+            btnModificar.Location = new Point(1068, 274);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(140, 42);
             btnModificar.TabIndex = 4;
@@ -174,12 +316,13 @@
             btnActivarDesactivar.FlatStyle = FlatStyle.Flat;
             btnActivarDesactivar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnActivarDesactivar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnActivarDesactivar.Location = new Point(500, 565);
+            btnActivarDesactivar.Location = new Point(1068, 338);
             btnActivarDesactivar.Name = "btnActivarDesactivar";
-            btnActivarDesactivar.Size = new Size(180, 42);
+            btnActivarDesactivar.Size = new Size(140, 51);
             btnActivarDesactivar.TabIndex = 5;
             btnActivarDesactivar.Text = "Activar / Desactivar";
             btnActivarDesactivar.UseVisualStyleBackColor = false;
+            btnActivarDesactivar.Click += btnActivarDesactivar_Click;
             // 
             // btnAplicar
             // 
@@ -188,12 +331,13 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.White;
-            btnAplicar.Location = new Point(835, 565);
+            btnAplicar.Location = new Point(562, 665);
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(140, 42);
             btnAplicar.TabIndex = 6;
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
+            btnAplicar.Click += btnAplicar_Click;
             // 
             // btnCancelar
             // 
@@ -201,7 +345,7 @@
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancelar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCancelar.Location = new Point(990, 565);
+            btnCancelar.Location = new Point(825, 665);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(140, 42);
             btnCancelar.TabIndex = 7;
@@ -215,43 +359,20 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(1145, 565);
+            btnSalir.Location = new Point(1078, 665);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(90, 42);
+            btnSalir.Size = new Size(140, 42);
             btnSalir.TabIndex = 8;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
-            // 
-            // chkUsuariosActivos
-            // 
-            chkUsuariosActivos.AutoSize = true;
-            chkUsuariosActivos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            chkUsuariosActivos.ForeColor = Color.FromArgb(15, 45, 75);
-            chkUsuariosActivos.Location = new Point(40, 70);
-            chkUsuariosActivos.Name = "chkUsuariosActivos";
-            chkUsuariosActivos.Size = new Size(138, 23);
-            chkUsuariosActivos.TabIndex = 2;
-            chkUsuariosActivos.Text = "Usuarios Activos";
-            chkUsuariosActivos.UseVisualStyleBackColor = true;
-            // 
-            // chkTodosUsuarios
-            // 
-            chkTodosUsuarios.AutoSize = true;
-            chkTodosUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            chkTodosUsuarios.ForeColor = Color.FromArgb(15, 45, 75);
-            chkTodosUsuarios.Location = new Point(220, 70);
-            chkTodosUsuarios.Name = "chkTodosUsuarios";
-            chkTodosUsuarios.Size = new Size(129, 23);
-            chkTodosUsuarios.TabIndex = 3;
-            chkTodosUsuarios.Text = "Todos Usuarios";
-            chkTodosUsuarios.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
             // 
             // lblCantidadUsuarios
             // 
             lblCantidadUsuarios.AutoSize = true;
             lblCantidadUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCantidadUsuarios.ForeColor = Color.FromArgb(15, 45, 75);
-            lblCantidadUsuarios.Location = new Point(960, 73);
+            lblCantidadUsuarios.Location = new Point(781, 74);
             lblCantidadUsuarios.Name = "lblCantidadUsuarios";
             lblCantidadUsuarios.Size = new Size(128, 19);
             lblCantidadUsuarios.TabIndex = 4;
@@ -262,7 +383,7 @@
             lblTotalUsuarios.AutoSize = true;
             lblTotalUsuarios.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblTotalUsuarios.ForeColor = Color.FromArgb(18, 87, 150);
-            lblTotalUsuarios.Location = new Point(1105, 73);
+            lblTotalUsuarios.Location = new Point(940, 74);
             lblTotalUsuarios.Name = "lblTotalUsuarios";
             lblTotalUsuarios.Size = new Size(25, 19);
             lblTotalUsuarios.TabIndex = 5;
@@ -274,9 +395,9 @@
             lstMensajes.Font = new Font("Segoe UI", 9F);
             lstMensajes.FormattingEnabled = true;
             lstMensajes.ItemHeight = 15;
-            lstMensajes.Location = new Point(35, 445);
+            lstMensajes.Location = new Point(553, 457);
             lstMensajes.Name = "lstMensajes";
-            lstMensajes.Size = new Size(1165, 92);
+            lstMensajes.Size = new Size(665, 182);
             lstMensajes.TabIndex = 6;
             // 
             // panelInferior
@@ -284,9 +405,9 @@
             panelInferior.BackColor = Color.FromArgb(18, 87, 150);
             panelInferior.Controls.Add(lblUsuarioActivo);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 718);
+            panelInferior.Location = new Point(0, 775);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(1290, 40);
+            panelInferior.Size = new Size(1303, 40);
             panelInferior.TabIndex = 0;
             // 
             // lblUsuarioActivo
@@ -300,12 +421,38 @@
             lblUsuarioActivo.TabIndex = 0;
             lblUsuarioActivo.Text = "Usuario activo: Administrador";
             // 
+            // radioBtnUserActivos
+            // 
+            radioBtnUserActivos.AutoSize = true;
+            radioBtnUserActivos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            radioBtnUserActivos.ForeColor = Color.FromArgb(15, 45, 75);
+            radioBtnUserActivos.Location = new Point(39, 68);
+            radioBtnUserActivos.Name = "radioBtnUserActivos";
+            radioBtnUserActivos.Size = new Size(137, 23);
+            radioBtnUserActivos.TabIndex = 32;
+            radioBtnUserActivos.TabStop = true;
+            radioBtnUserActivos.Text = "Usuarios Activos";
+            radioBtnUserActivos.UseVisualStyleBackColor = true;
+            // 
+            // radioBtnTodosUser
+            // 
+            radioBtnTodosUser.AutoSize = true;
+            radioBtnTodosUser.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            radioBtnTodosUser.ForeColor = Color.FromArgb(15, 45, 75);
+            radioBtnTodosUser.Location = new Point(216, 68);
+            radioBtnTodosUser.Name = "radioBtnTodosUser";
+            radioBtnTodosUser.Size = new Size(128, 23);
+            radioBtnTodosUser.TabIndex = 33;
+            radioBtnTodosUser.TabStop = true;
+            radioBtnTodosUser.Text = "Todos Usuarios";
+            radioBtnTodosUser.UseVisualStyleBackColor = true;
+            // 
             // FormGestionUsuarios
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1290, 758);
+            ClientSize = new Size(1303, 815);
             Controls.Add(panelInferior);
             Controls.Add(panelContenedor);
             Font = new Font("Segoe UI", 9F);
@@ -336,9 +483,6 @@
         private System.Windows.Forms.Button btnCancelar;
         private System.Windows.Forms.Button btnSalir;
 
-        private System.Windows.Forms.CheckBox chkUsuariosActivos;
-        private System.Windows.Forms.CheckBox chkTodosUsuarios;
-
         private System.Windows.Forms.Label lblCantidadUsuarios;
         private System.Windows.Forms.Label lblTotalUsuarios;
 
@@ -346,5 +490,20 @@
 
         private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Label lblUsuarioActivo;
+        private Label lblDNI;
+        private TextBox txtDNI;
+        private Label lblRol;
+        private Label lblNombre;
+        private TextBox txtNombre;
+        private Label lblApellido;
+        private TextBox txtApellido;
+        private Label lblCorreo;
+        private TextBox txtCorreo;
+        private Label lblLogin;
+        private TextBox txtLogin;
+        private CheckBox chkActivo;
+        private TextBox txtRol;
+        private RadioButton radioBtnUserActivos;
+        private RadioButton radioBtnTodosUser;
     }
 }

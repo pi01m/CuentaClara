@@ -41,38 +41,23 @@ namespace CuentaClara_TrabajoCampo
 
             try
             {
+                bool loginExitoso =
+                    _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
-                bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
                 if (loginExitoso)
                 {
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();
+                    this.Close();
                 }
                 else
                 {
-                    int intentos = _bllUsuario.ObtenerIntentos(nombreUsuario);
-
-
-                    if (intentos >= 3)
-                    {
-                        MessageBox.Show("Usuario bloqueado. Contacte al administrador.");
-
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Usuario o contraseña incorrectos.");
-                        int restantes = 3 - intentos;
-
-                        MessageBox.Show($"Usuario o contraseña incorrectos.\n" + $"Intentos restantes: {restantes}");
-
-                    }
+                    MessageBox.Show("Usuario o contraseña incorrectos.");
                 }
-                this.Close();
             }
             catch (Exception ex)
             {
-                MostrarError("Error inesperado: " + ex.Message);
+                MessageBox.Show(ex.Message); // acá cae "usuario bloqueado"
             }
             finally
             {
@@ -123,10 +108,7 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-        private void panelLogin_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+    
 
         private void button1_Click(object sender, EventArgs e)
         {

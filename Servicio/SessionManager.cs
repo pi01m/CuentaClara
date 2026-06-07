@@ -30,5 +30,9 @@ namespace Servicio
                 return false;
             }
         }
+        public void CerrarSesion()
+        {
+            _usuarioActual = null;
+        }
     }
 }

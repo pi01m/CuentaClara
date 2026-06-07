@@ -25,7 +25,7 @@ namespace BLL
                 Modulo = modulo,
                 Criticidad = criticidad,
                 Fecha = DateTime.Now.Date,
-                Hora = DateTime.Now
+                Hora = DateTime.Now.ToString("HH:mm:ss")
             };
 
             return _dal.GuardarBitacora(bitacora);

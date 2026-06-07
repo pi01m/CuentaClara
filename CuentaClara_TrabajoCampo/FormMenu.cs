@@ -1,7 +1,12 @@
+using BLL;
+using Servicio;
+
 namespace CuentaClara_TrabajoCampo
 {
     public partial class FormMenu : Form
     {
+
+        private BLL_Usuario bllUsuario = new BLL_Usuario();
         public FormMenu()
         {
             InitializeComponent();
@@ -15,7 +20,7 @@ namespace CuentaClara_TrabajoCampo
         private void button1_Click(object sender, EventArgs e)
         {
             FormGestionUsuarios frm = new FormGestionUsuarios();
-          
+
             this.Hide();
 
             frm.ShowDialog();
@@ -23,14 +28,18 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-        private void panelMovimientos_Paint(object sender, PaintEventArgs e)
+       
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
+            bllUsuario.CerrarSesion();
 
-        }
+            this.Hide();
 
-        private void btnTransacciones_Click(object sender, EventArgs e)
-        {
+            frmLogIn login = new frmLogIn();
+            login.ShowDialog();
 
+            this.Close();
         }
     }
 }

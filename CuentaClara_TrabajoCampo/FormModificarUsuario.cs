@@ -16,7 +16,7 @@ namespace CuentaClara_TrabajoCampo
         {
             InitializeComponent();
             bllUsuario = new BLL_Usuario();
-            dgvUsuarios.MultiSelect= false;
+            dgvUsuarios.MultiSelect = false;
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
         }
@@ -25,31 +25,31 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (dgvUsuarios.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Seleccione un usuario");
+            //if (dgvUsuarios.SelectedRows.Count == 0)
+            //{
+            //    MessageBox.Show("Seleccione un usuario");
 
-                return;
-            }
+            //    return;
+            //}
 
-            string? dni = dgvUsuarios.SelectedRows[0].Cells["DNI"].Value.ToString();
+            //string? dni = dgvUsuarios.SelectedRows[0].Cells["DNI"].Value.ToString();
 
-            bool resultado = bllUsuario.ModificarUsuario(dni, txtNombre.Text, txtApellido.Text);
+            //bool resultado = bllUsuario.ModificarUsuario(dni, txtNombre.Text, txtApellido.Text, txtc);
 
-            if (resultado)
-            {
-                MessageBox.Show("Usuario modificado correctamente");
+            //if (resultado)
+            //{
+            //    MessageBox.Show("Usuario modificado correctamente");
 
-                dgvUsuarios.DataSource = bllUsuario.ListarUsuarios();
-            }
-            else
-            {
-                MessageBox.Show("No se pudo modificar el usuario");
-            }
+            //    dgvUsuarios.DataSource = bllUsuario.ListarUsuarios();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("No se pudo modificar el usuario");
+            //}
         }
 
-        
-        
+
+
 
         private void CargarGrilla()
         {
@@ -76,6 +76,11 @@ namespace CuentaClara_TrabajoCampo
                 txtNombre.Text = dgvUsuarios.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
                 txtApellido.Text = dgvUsuarios.Rows[e.RowIndex].Cells["Apellido"].Value.ToString();
             }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -35,9 +35,9 @@ namespace BLL
         {
             return _dalUsuario.ListarUsuarios();
         }
-        public DataTable ListarUsuariosBloqueados()
+        public DataTable ListarUsuariosActivos()
         {
-            return _dalUsuario.ListarUsuariosBloqueados();
+            return _dalUsuario.ListarUsuariosActivos();
         }
 
         public void AsignarPermisos( List<Servicio_Permiso> permisos,Servicio_Usuario usuario){
@@ -64,7 +64,7 @@ namespace BLL
             {
                 _dalUsuario.IncrementarIntentos(login);
 
-                _bitacoraServicio.RegistrarBitacora("Login Incorrecto",login,"Seguridad",2);
+                _bitacoraServicio.RegistrarBitacora("Login Incorrecto",login,"Seguridad",1);
                  return true;
             }
             catch
@@ -92,7 +92,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administracion",1);
+                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administracion",3);
      
                         
                 }
@@ -119,38 +119,81 @@ namespace BLL
 
         public bool IniciarSesion(string nombreUsuario, string hash)
         {
-            Servicio_Usuario usuario =_dalUsuario.AutenticarUsuario(nombreUsuario,hash);
+            // 1. VERIFICAR BLOQUEO ANTES DE TODO
+            int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
+
+            if (intentos >= 3)
+            {
+                _bitacoraServicio.RegistrarBitacora( "Intento de login bloqueado",nombreUsuario,
+                   
+                    
+                    "Seguridad",
+                    1
+                );
+
+                throw new Exception("Usuario bloqueado");
+            }
+
+            // 2. AUTENTICAR
+            Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
+               
 
             if (usuario == null)
             {
                 IncrementarIntentos(nombreUsuario);
-                return false;
+                int nuevosIntentos = intentos + 1;
+
+                throw new Exception(
+                    $"Contraseña incorrecta. Intentos restantes: {3 - nuevosIntentos}"
+                );
+                
             }
 
-           
-
+            // 3. VERIFICAR ESTADO
             if (!VerificarEstadoUsuario(usuario))
             {
-                _bitacoraServicio.RegistrarBitacora("Usuario Bloqueado o Inactivo",nombreUsuario,"Seguridad",3);
-                throw new Exception("Usuario bloqueado");
-           
+                _bitacoraServicio.RegistrarBitacora(
+                    "Usuario bloqueado o inactivo",
+                    nombreUsuario,
+                    "Seguridad",
+                    1
+                );
+
+                throw new Exception("Usuario bloqueado o inactivo");
             }
 
+            // 4. RESETEAR INTENTOS
             ReiniciarIntentos(nombreUsuario);
 
-            //BLL_FamiliaRol famRolBLL =
-            //    new BLL_FamiliaRol(_dalFamiliaPermiso);
-
-            //List<Servicio_Permiso> permisos =
-            //    famRolBLL.ListarPermisos(usuario);
-
-            //AsignarPermisos(permisos, usuario);
-
+            // 5. CREAR SESIÓN
             _sm.CrearSesion(usuario);
 
-            _bitacoraServicio.RegistrarBitacora("Login Correcto",usuario.Login,"Seguridad", 1); return true;
+            // 6. BITÁCORA LOGIN OK
+            _bitacoraServicio.RegistrarBitacora(
+                "Login correcto",
+                usuario.Login,
+                "Seguridad",
+                1
+            );
+
+            return true;
         }
 
+        public void CerrarSesion()
+        {
+            Servicio_Usuario usuario = _sm.GetUsuarioActual();
+
+            if (usuario != null)
+            {
+                
+                _bitacoraServicio.RegistrarBitacora("Cerrar Sesión",usuario.Login,"Seguridad",1
+
+                );
+
+                
+                _sm.CerrarSesion();
+            }
+        }
         public int ObtenerIntentos(string login)
         {
             return _dalUsuario.ObtenerIntentos(login);
@@ -169,8 +212,16 @@ namespace BLL
         {
             return _dalUsuario.ObtenerUsuario(dni);
         }
+        public bool CambiarEstadoUsuario(string dni, int activo)
+        {
+            _dalUsuario.CambiarEstadoUsuario(dni, activo);
 
-        public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido)
+            _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario",ObtenerUsuario(dni).Login, "Seguridad", 1); 
+
+            return true;
+        }
+
+        public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail)
         {
             try
             {
@@ -182,12 +233,13 @@ namespace BLL
 
                 usuario.Nombre = nuevoNombre;
                 usuario.Apellido = nuevoApellido;
+                usuario.email = nuevoEmail;
 
                 _dalUsuario.ModificarUsuario(usuario);
 
                 Servicio_Usuario admin =_sm.GetUsuarioActual();
 
-                _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administracion",1);
+                _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administracion",3);
 
                 return true;
             }

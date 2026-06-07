@@ -18,9 +18,73 @@ namespace CuentaClara_TrabajoCampo
             InitializeComponent();
             dgvUsuarios.MultiSelect = false;
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvUsuarios.ReadOnly = true;
+
+            dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
+            CargarUsuarios();
         }
 
+       
+           private void CargarUsuarios()
+        {
+            dgvUsuarios.DataSource = null;
+            dgvUsuarios.Rows.Clear();
+            dgvUsuarios.Columns.Clear();
 
+            dgvUsuarios.DataSource = bll.ListarUsuarios();
+
+            dgvUsuarios.Refresh();
+            dgvUsuarios.Update();
+        
+        }
+        private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
+        {
+            radioBtnTodosUser.Checked = true;
+
+            CargarUsuarios();
+
+            btnAplicar.Enabled = false;
+            btnCancelar.Enabled = false;
+            lblTotalUsuarios.Text = dgvUsuarios.Rows.Count.ToString();
+            BloquearCampos();
+
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Modo Consulta");
+        }
+
+        private void HabilitarCamposEdicion()
+        {
+            txtNombre.ReadOnly = false;
+            txtApellido.ReadOnly = false;
+            txtCorreo.ReadOnly = false;
+        }
+        private void RestaurarModoConsulta()
+        {
+            BloquearCampos();
+
+            btnAplicar.Enabled = false;
+            btnCancelar.Enabled = false;
+
+            btnCrear.Enabled = true;
+            btnModificar.Enabled = true;
+            btnDesbloquear.Enabled = true;
+            btnActivarDesactivar.Enabled = true;
+
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Modo Consulta");
+        }
+
+        private void BloquearCampos()
+        {
+            txtDNI.ReadOnly = true;
+            txtApellido.ReadOnly = true;
+            txtNombre.ReadOnly = true;
+            txtCorreo.ReadOnly = true;
+
+            txtLogin.ReadOnly = true;
+            chkActivo.Enabled = false;
+            txtRol.ReadOnly = true;
+        }
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
@@ -30,46 +94,138 @@ namespace CuentaClara_TrabajoCampo
 
         }
 
-        private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
-        {
-            CargarUsuarios();
-        }
-
-
-        private void CargarUsuarios()
-        {
-            dgvUsuarios.DataSource = null;
-            dgvUsuarios.DataSource = bll.ListarUsuarios();
-
-            lblTotalUsuarios.Text = dgvUsuarios.Rows.Count.ToString();
-
-        }
-
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            FormModificarUsuario frm = new FormModificarUsuario();
+            HabilitarCamposEdicion();
 
-            this.Hide();
+            btnAplicar.Enabled = true;
+            btnCancelar.Enabled = true;
 
-            frm.ShowDialog();
+            btnCrear.Enabled = false;
+            btnDesbloquear.Enabled = false;
+            btnActivarDesactivar.Enabled = false;
 
-            this.Show();
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Modo Modificar");
         }
 
         private void btnDesbloquear_Click(object sender, EventArgs e)
         {
-            frmDesbloqueo frm = new frmDesbloqueo();
+            btnAplicar.Enabled = true;
+            btnCancelar.Enabled = true;
 
-            this.Hide();
+            btnCrear.Enabled = false;
+            btnModificar.Enabled = false;
+            btnActivarDesactivar.Enabled = false;
 
-            frm.ShowDialog();
-
-            this.Show();
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Modo Desbloquear");
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            RestaurarModoConsulta();
+
+            CargarUsuarios();
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.CurrentRow == null) return;
+
+            txtDNI.Text = dgvUsuarios.CurrentRow.Cells["DNI"].Value.ToString();
+            txtApellido.Text = dgvUsuarios.CurrentRow.Cells["Apellido"].Value.ToString();
+            txtNombre.Text = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
+            txtCorreo.Text = dgvUsuarios.CurrentRow.Cells["email"].Value.ToString();
+            txtLogin.Text = dgvUsuarios.CurrentRow.Cells["Login"].Value.ToString();
+            txtRol.Text = dgvUsuarios.CurrentRow.Cells["Rol"].Value.ToString();
+            chkActivo.Checked = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Activo"].Value) == 1;
+
+
+
+        }
+
+        private void lblCorreo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        private void btnActivarDesactivar_Click(object sender, EventArgs e)
+        {
+            chkActivo.Enabled = true;
+
+            btnAplicar.Enabled = true;
+            btnCancelar.Enabled = true;
+
+            btnCrear.Enabled = false;
+            btnModificar.Enabled = false;
+            btnDesbloquear.Enabled = false;
+
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Modo Activar / Desactivar");
+        }
+
+        private void btnAplicar_Click(object sender, EventArgs e)
+        {
+            string modo = lstMensajes.Items[0].ToString();
+
+            if (modo == "Modo Modificar")
+            {
+                bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text);
+
+                MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
+
+
+            }
+
+            else if (modo == "Modo Desbloquear")
+            {
+                int intentos = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Bloqueo"].Value);
+
+
+                if (intentos < 3)
+                {
+                    MessageBox.Show("El usuario seleccionado no se encuentra bloqueado.");
+
+                    return;
+                }
+
+                bll.DesbloquearUsuario(txtLogin.Text);
+
+                MessageBox.Show("Usuario desbloqueado correctamente.");
+
+                CargarUsuarios();
+
+                RestaurarModoConsulta();
+            }
+
+            else if (modo == "Modo Activar / Desactivar")
+            {
+                int activo = chkActivo.Checked ? 1 : 0;
+
+                bll.CambiarEstadoUsuario(txtDNI.Text, activo);
+
+                MessageBox.Show("Estado actualizado correctamente.");
+
+            }
+
+            CargarUsuarios();
+
+            RestaurarModoConsulta();
+
+        }
+
+        private void panelContenedor_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
+

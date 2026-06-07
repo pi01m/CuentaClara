@@ -50,9 +50,9 @@ namespace DAL
                     email = row["email"].ToString(),
                     Login = row["Login"].ToString(),
                     Password = row["Password"].ToString(),
-                    
                     Activo = Convert.ToInt32(row["Activo"]),
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
+                    Rol = row.Table.Columns.Contains("Rol") && row["Rol"] != DBNull.Value ? row["Rol"].ToString() : null,
                     //IdFamiliaRol = new Servicio_FamiliaRol(row["IdFamiliaRol"].ToString(), "")
                 };
             }
@@ -64,16 +64,16 @@ namespace DAL
                 new SqlConnection(_connectionString))
             {
                 SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Usuario WHERE Login = @Login",
-                        conn);
+                    new SqlDataAdapter("SELECT * FROM Usuario WHERE Login = @Login",conn);
+                        
+                        
 
-                adapter.SelectCommand.Parameters.Add(
-                    new SqlParameter("@Login",
-                        SqlDbType.NVarChar, 100)
-                    {
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@Login",SqlDbType.NVarChar, 100){
                         Value = login
-                    });
+                    })
+                    
+                        
+                    ;
 
                 DataSet ds = new DataSet();
 
@@ -81,9 +81,9 @@ namespace DAL
 
                 if (ds.Tables["Usuario"].Rows.Count > 0)
                 {
-                    return Convert.ToInt32(
-                        ds.Tables["Usuario"]
-                        .Rows[0]["Bloqueo"]);
+                    return Convert.ToInt32(ds.Tables["Usuario"].Rows[0]["Bloqueo"]);
+                        
+                        
                 }
 
                 return 0;
@@ -94,17 +94,12 @@ namespace DAL
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Usuario WHERE Login = @Login",
-                        conn);
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Login = @Login",conn);
 
-                adapter.SelectCommand.Parameters.Add(
-                    new SqlParameter("@Login", SqlDbType.NVarChar, 100)
-                    {
-                        Value = login
-                    });
 
+                adapter.SelectCommand.Parameters.Add( new SqlParameter("@Login", SqlDbType.NVarChar, 100){
+                        Value = login});
+ 
                 DataSet ds = new DataSet();
 
                 adapter.Fill(ds, "Usuario");
@@ -113,11 +108,10 @@ namespace DAL
                 {
                     DataRow fila = ds.Tables["Usuario"].Rows[0];
 
-                    fila["Bloqueo"] =
-                        Convert.ToInt32(fila["Bloqueo"]) + 1;
+                    fila["Bloqueo"] =Convert.ToInt32(fila["Bloqueo"]) + 1;
+                        
 
-                    SqlCommandBuilder builder =
-                        new SqlCommandBuilder(adapter);
+                    SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
                     adapter.Update(ds, "Usuario");
                 }
@@ -156,6 +150,31 @@ namespace DAL
                 return true;
             }
         }
+        public bool CambiarEstadoUsuario(string login, int activo)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE DNI = @DNI",conn);
+                    
+                adapter.SelectCommand.Parameters.Add( new SqlParameter("@DNI", login));
+                DataSet ds = new DataSet();   
+                adapter.Fill(ds, "Usuario");      
+
+                if (ds.Tables["Usuario"].Rows.Count == 0)return false;
+                    
+
+                DataRow fila = ds.Tables["Usuario"].Rows[0];
+
+                fila["Activo"] = activo;
+
+                SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Usuario");
+
+                return true;
+            }
+        }
+
         public void ModificarUsuario(Servicio_Usuario usuario)
     
         {
@@ -175,11 +194,7 @@ namespace DAL
   
                 fila["Apellido"] = usuario.Apellido;
 
-                //fila["email"] = usuario.email;
-               
-
-                //fila["Activo"] = usuario.Activo;
-                   
+                fila["email"] = usuario.email;
 
                 SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
                  
@@ -189,12 +204,12 @@ namespace DAL
             }
         }
 
-        public DataTable ListarUsuariosBloqueados()
+        public DataTable ListarUsuariosActivos()
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
                
             {
-                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Bloqueo >= 3",conn);
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Bloque0 >= 3",conn);
 
                 DataTable tabla =new DataTable();
 
@@ -230,16 +245,14 @@ namespace DAL
         }
         public DataTable ListarUsuarios()
         {
-            using (SqlConnection conn =new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario",  conn);
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario", conn);
 
-                DataTable tabla = new DataTable();
-                   
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
 
-                adapter.Fill(tabla);
-
-                return tabla;
+                return ds.Tables[0].Copy(); 
             }
         }
 
@@ -249,11 +262,8 @@ namespace DAL
             {
                 SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Login = @Login",conn);
    
-                adapter.SelectCommand.Parameters.Add(
-                    new SqlParameter("@Login", SqlDbType.NVarChar, 100)
-                    {
-                        Value = login
-                    });
+                adapter.SelectCommand.Parameters.Add( new SqlParameter("@Login", SqlDbType.NVarChar, 100){
+                        Value = login    });
 
                 DataSet ds = new DataSet();
 
@@ -265,8 +275,8 @@ namespace DAL
 
                     fila["Bloqueo"] = 0;
 
-                    SqlCommandBuilder builder =
-                        new SqlCommandBuilder(adapter);
+                    SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
+                        
 
                     adapter.Update(ds, "Usuario");
                 }
@@ -299,6 +309,7 @@ namespace DAL
                 usuario.Password = fila["Password"].ToString();
                 usuario.Activo = Convert.ToInt32(fila["Activo"]);
                 usuario.Bloqueo = Convert.ToInt32(fila["Bloqueo"]);
+                //usuario.Rol = fila["Rol"].ToString();
 
                 return usuario;
             }

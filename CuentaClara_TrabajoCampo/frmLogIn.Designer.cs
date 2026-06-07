@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             panelLogin = new Panel();
-            label1 = new Label();
-            button1 = new Button();
             picLogo = new PictureBox();
             lblTitulo = new Label();
             lblUsuario = new Label();
@@ -48,8 +46,6 @@
             panelLogin.Anchor = AnchorStyles.None;
             panelLogin.BackColor = Color.White;
             panelLogin.BorderStyle = BorderStyle.FixedSingle;
-            panelLogin.Controls.Add(label1);
-            panelLogin.Controls.Add(button1);
             panelLogin.Controls.Add(picLogo);
             panelLogin.Controls.Add(lblTitulo);
             panelLogin.Controls.Add(lblUsuario);
@@ -62,31 +58,6 @@
             panelLogin.Name = "panelLogin";
             panelLogin.Size = new Size(888, 747);
             panelLogin.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(67, 642);
-            label1.Name = "label1";
-            label1.Size = new Size(193, 17);
-            label1.TabIndex = 9;
-            label1.Text = "¿No tiene una cuenta creada? ";
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.FromArgb(18, 87, 150);
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(562, 630);
-            button1.Name = "button1";
-            button1.Size = new Size(245, 68);
-            button1.TabIndex = 8;
-            button1.Text = "Registrarme";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
             // 
             // picLogo
             // 
@@ -114,7 +85,7 @@
             // 
             lblUsuario.AutoSize = true;
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.Location = new Point(288, 188);
+            lblUsuario.Location = new Point(90, 181);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(128, 17);
             lblUsuario.TabIndex = 2;
@@ -131,7 +102,7 @@
             // 
             lblClave.AutoSize = true;
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblClave.Location = new Point(354, 331);
+            lblClave.Location = new Point(90, 342);
             lblClave.Name = "lblClave";
             lblClave.Size = new Size(77, 17);
             lblClave.TabIndex = 4;
@@ -210,7 +181,5 @@
 
         private Button btnIngresar;
         private Button btnSalir;
-        private Label label1;
-        private Button button1;
     }
 }

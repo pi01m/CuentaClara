@@ -14,17 +14,17 @@ namespace CuentaClara_TrabajoCampo
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            FormGestionBitacora frm = new FormGestionBitacora();
+            this.Hide();
+            frm.ShowDialog();
+            frm.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FormGestionUsuarios frm = new FormGestionUsuarios();
-
             this.Hide();
-
             frm.ShowDialog();
-
             this.Show();
         }
 
@@ -33,9 +33,7 @@ namespace CuentaClara_TrabajoCampo
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             bllUsuario.CerrarSesion();
-
             this.Hide();
-
             frmLogIn login = new frmLogIn();
             login.ShowDialog();
 

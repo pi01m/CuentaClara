@@ -25,9 +25,9 @@ namespace BLL
 
             _encriptadorServicio = new Servicio_Cripto();
 
-            _bitacoraServicio =
-                new BLL_BitacoraEvento(
-                    new DAL_BitacoraEvento(connStr));
+            _bitacoraServicio = new BLL_BitacoraEvento();
+               
+                    
 
             _sm = SessionManager.GetInstancia();
         }
@@ -192,6 +192,10 @@ namespace BLL
         {
             return _dalUsuario.ObtenerUsuario(dni);
         }
+        public Servicio_Usuario ObtenerUsuarioPorLogin(string login)
+        {
+            return _dalUsuario.ObtenerUsuarioPorLogin(login);
+        }
         public bool CambiarEstadoUsuario(string dni, int activo)
         {
             _dalUsuario.CambiarEstadoUsuario(dni, activo);
@@ -236,6 +240,10 @@ namespace BLL
             string hash =_encriptadorServicio.CifrarContraseña( contraseñaIngresada);
             return string.Equals(hash,admin.Password, StringComparison.OrdinalIgnoreCase);  
   
+        }
+        public DataTable ListarLogins()
+        {
+            return _dalUsuario.ListarLogins();
         }
 
     }

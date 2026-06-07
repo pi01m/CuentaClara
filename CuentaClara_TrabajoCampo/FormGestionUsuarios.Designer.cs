@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             panelContenedor = new Panel();
+            radioBtnTodosUser = new RadioButton();
+            radioBtnUserActivos = new RadioButton();
             txtRol = new TextBox();
             lblDNI = new Label();
             txtDNI = new TextBox();
@@ -58,8 +60,6 @@
             lstMensajes = new ListBox();
             panelInferior = new Panel();
             lblUsuarioActivo = new Label();
-            radioBtnUserActivos = new RadioButton();
-            radioBtnTodosUser = new RadioButton();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
             panelInferior.SuspendLayout();
@@ -99,7 +99,35 @@
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1258, 736);
             panelContenedor.TabIndex = 0;
-            panelContenedor.Paint += panelContenedor_Paint;
+          
+            // 
+            // radioBtnTodosUser
+            // 
+            radioBtnTodosUser.AutoSize = true;
+            radioBtnTodosUser.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            radioBtnTodosUser.ForeColor = Color.FromArgb(15, 45, 75);
+            radioBtnTodosUser.Location = new Point(216, 68);
+            radioBtnTodosUser.Name = "radioBtnTodosUser";
+            radioBtnTodosUser.Size = new Size(128, 23);
+            radioBtnTodosUser.TabIndex = 33;
+            radioBtnTodosUser.TabStop = true;
+            radioBtnTodosUser.Text = "Todos Usuarios";
+            radioBtnTodosUser.UseVisualStyleBackColor = true;
+            radioBtnTodosUser.CheckedChanged += radioBtnTodosUser_CheckedChanged;
+            // 
+            // radioBtnUserActivos
+            // 
+            radioBtnUserActivos.AutoSize = true;
+            radioBtnUserActivos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            radioBtnUserActivos.ForeColor = Color.FromArgb(15, 45, 75);
+            radioBtnUserActivos.Location = new Point(39, 68);
+            radioBtnUserActivos.Name = "radioBtnUserActivos";
+            radioBtnUserActivos.Size = new Size(137, 23);
+            radioBtnUserActivos.TabIndex = 32;
+            radioBtnUserActivos.TabStop = true;
+            radioBtnUserActivos.Text = "Usuarios Activos";
+            radioBtnUserActivos.UseVisualStyleBackColor = true;
+            radioBtnUserActivos.CheckedChanged += radioBtnUserActivos_CheckedChanged;
             // 
             // txtRol
             // 
@@ -178,7 +206,7 @@
             lblCorreo.Size = new Size(134, 19);
             lblCorreo.TabIndex = 24;
             lblCorreo.Text = "Correo Electrónico";
-            lblCorreo.Click += lblCorreo_Click;
+           
             // 
             // txtCorreo
             // 
@@ -236,23 +264,23 @@
             dgvUsuarios.BorderStyle = BorderStyle.None;
             dgvUsuarios.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvUsuarios.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(18, 87, 150);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(18, 87, 150);
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvUsuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(18, 87, 150);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(18, 87, 150);
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvUsuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvUsuarios.ColumnHeadersHeight = 58;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 230, 240);
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvUsuarios.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(220, 230, 240);
+            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvUsuarios.DefaultCellStyle = dataGridViewCellStyle4;
             dgvUsuarios.EnableHeadersVisualStyles = false;
             dgvUsuarios.GridColor = Color.FromArgb(230, 230, 230);
             dgvUsuarios.Location = new Point(35, 105);
@@ -420,32 +448,6 @@
             lblUsuarioActivo.Size = new Size(171, 15);
             lblUsuarioActivo.TabIndex = 0;
             lblUsuarioActivo.Text = "Usuario activo: Administrador";
-            // 
-            // radioBtnUserActivos
-            // 
-            radioBtnUserActivos.AutoSize = true;
-            radioBtnUserActivos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            radioBtnUserActivos.ForeColor = Color.FromArgb(15, 45, 75);
-            radioBtnUserActivos.Location = new Point(39, 68);
-            radioBtnUserActivos.Name = "radioBtnUserActivos";
-            radioBtnUserActivos.Size = new Size(137, 23);
-            radioBtnUserActivos.TabIndex = 32;
-            radioBtnUserActivos.TabStop = true;
-            radioBtnUserActivos.Text = "Usuarios Activos";
-            radioBtnUserActivos.UseVisualStyleBackColor = true;
-            // 
-            // radioBtnTodosUser
-            // 
-            radioBtnTodosUser.AutoSize = true;
-            radioBtnTodosUser.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            radioBtnTodosUser.ForeColor = Color.FromArgb(15, 45, 75);
-            radioBtnTodosUser.Location = new Point(216, 68);
-            radioBtnTodosUser.Name = "radioBtnTodosUser";
-            radioBtnTodosUser.Size = new Size(128, 23);
-            radioBtnTodosUser.TabIndex = 33;
-            radioBtnTodosUser.TabStop = true;
-            radioBtnTodosUser.Text = "Todos Usuarios";
-            radioBtnTodosUser.UseVisualStyleBackColor = true;
             // 
             // FormGestionUsuarios
             // 

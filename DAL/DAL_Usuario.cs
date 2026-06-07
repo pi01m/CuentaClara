@@ -209,7 +209,7 @@ namespace DAL
             using (SqlConnection conn = new SqlConnection(_connectionString))
                
             {
-                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Bloque0 >= 3",conn);
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Usuario WHERE Activo = 1",conn);
 
                 DataTable tabla =new DataTable();
 
@@ -312,6 +312,49 @@ namespace DAL
                 //usuario.Rol = fila["Rol"].ToString();
 
                 return usuario;
+            }
+        }
+
+        public Servicio_Usuario ObtenerUsuarioPorLogin(string login)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter("SELECT * FROM Usuario WHERE Login = @Login", conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue("@Login", login);
+
+                DataTable tabla = new DataTable();
+                adapter.Fill(tabla);
+
+                if (tabla.Rows.Count == 0) return null;
+
+                DataRow row = tabla.Rows[0];
+
+                return new Servicio_Usuario
+                {
+                    Nombre = row["Nombre"].ToString(),
+                    Apellido = row["Apellido"].ToString(),
+                    DNI = row["DNI"].ToString(),
+                    email = row["email"].ToString(),
+                    Login = row["Login"].ToString(),
+                    Activo = Convert.ToInt32(row["Activo"]),
+                    Bloqueo = Convert.ToInt32(row["Bloqueo"])
+                };
+            }
+        }
+
+        public DataTable ListarLogins()
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter("SELECT DISTINCT Login FROM Usuario", conn);
+
+                DataTable tabla = new DataTable();
+                adapter.Fill(tabla);
+
+                return tabla;
             }
         }
     }

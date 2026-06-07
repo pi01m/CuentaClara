@@ -24,18 +24,20 @@ namespace CuentaClara_TrabajoCampo
             CargarUsuarios();
         }
 
-       
-           private void CargarUsuarios()
-        {
-            dgvUsuarios.DataSource = null;
-            dgvUsuarios.Rows.Clear();
-            dgvUsuarios.Columns.Clear();
 
-            dgvUsuarios.DataSource = bll.ListarUsuarios();
+        private void CargarUsuarios()
+        {
+            if (radioBtnTodosUser.Checked)
+            {
+                dgvUsuarios.DataSource = bll.ListarUsuarios();
+            }
+            else if (radioBtnUserActivos.Checked)
+            {
+                dgvUsuarios.DataSource = bll.ListarUsuariosActivos();
+            }
 
             dgvUsuarios.Refresh();
-            dgvUsuarios.Update();
-        
+
         }
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
@@ -150,12 +152,6 @@ namespace CuentaClara_TrabajoCampo
 
         }
 
-        private void lblCorreo_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
 
         private void btnActivarDesactivar_Click(object sender, EventArgs e)
         {
@@ -222,9 +218,16 @@ namespace CuentaClara_TrabajoCampo
 
         }
 
-        private void panelContenedor_Paint(object sender, PaintEventArgs e)
-        {
+       
 
+        private void radioBtnUserActivos_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarUsuarios();
+        }
+
+        private void radioBtnTodosUser_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarUsuarios();
         }
     }
 }

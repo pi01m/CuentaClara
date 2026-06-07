@@ -42,8 +42,6 @@
             txtCorreo = new TextBox();
             lblLogin = new Label();
             txtLogin = new TextBox();
-            lblPassword = new Label();
-            txtPassword = new TextBox();
             chkActivo = new CheckBox();
             btnCancelar = new Button();
             btnGuardar = new Button();
@@ -67,8 +65,6 @@
             panelPrincipal.Controls.Add(txtCorreo);
             panelPrincipal.Controls.Add(lblLogin);
             panelPrincipal.Controls.Add(txtLogin);
-            panelPrincipal.Controls.Add(lblPassword);
-            panelPrincipal.Controls.Add(txtPassword);
             panelPrincipal.Controls.Add(chkActivo);
             panelPrincipal.Controls.Add(btnCancelar);
             panelPrincipal.Controls.Add(btnGuardar);
@@ -192,30 +188,12 @@
             txtLogin.Size = new Size(250, 25);
             txtLogin.TabIndex = 12;
             // 
-            // lblPassword
-            // 
-            lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblPassword.Location = new Point(79, 518);
-            lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(84, 19);
-            lblPassword.TabIndex = 13;
-            lblPassword.Text = "Contraseña";
-            // 
-            // txtPassword
-            // 
-            txtPassword.Location = new Point(79, 567);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(250, 25);
-            txtPassword.TabIndex = 14;
-            // 
             // chkActivo
             // 
             chkActivo.AutoSize = true;
             chkActivo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             chkActivo.ForeColor = Color.FromArgb(20, 70, 120);
-            chkActivo.Location = new Point(710, 529);
+            chkActivo.Location = new Point(76, 519);
             chkActivo.Name = "chkActivo";
             chkActivo.Size = new Size(195, 23);
             chkActivo.TabIndex = 15;
@@ -288,9 +266,6 @@
 
         private Label lblLogin;
         private TextBox txtLogin;
-
-        private Label lblPassword;
-        private TextBox txtPassword;
 
         private Label lblRol;
         private ComboBox cmbRol;

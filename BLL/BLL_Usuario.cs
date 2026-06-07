@@ -119,62 +119,42 @@ namespace BLL
 
         public bool IniciarSesion(string nombreUsuario, string hash)
         {
-            // 1. VERIFICAR BLOQUEO ANTES DE TODO
+      
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
-
             if (intentos >= 3)
             {
-                _bitacoraServicio.RegistrarBitacora( "Intento de login bloqueado",nombreUsuario,
-                   
-                    
-                    "Seguridad",
-                    1
-                );
-
+                _bitacoraServicio.RegistrarBitacora( "Intento de login bloqueado",nombreUsuario,"Seguridad",1 );
                 throw new Exception("Usuario bloqueado");
             }
 
-            // 2. AUTENTICAR
+      
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
                
 
             if (usuario == null)
             {
                 IncrementarIntentos(nombreUsuario);
-                int nuevosIntentos = intentos + 1;
-
+               
+                int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
                 throw new Exception(
-                    $"Contraseña incorrecta. Intentos restantes: {3 - nuevosIntentos}"
+                    $"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}"
                 );
                 
             }
 
-            // 3. VERIFICAR ESTADO
+            
             if (!VerificarEstadoUsuario(usuario))
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Usuario bloqueado o inactivo",
-                    nombreUsuario,
-                    "Seguridad",
-                    1
-                );
+                _bitacoraServicio.RegistrarBitacora( "Usuario bloqueado o inactivo", nombreUsuario, "Seguridad",1);
 
                 throw new Exception("Usuario bloqueado o inactivo");
             }
 
-            // 4. RESETEAR INTENTOS
-            ReiniciarIntentos(nombreUsuario);
-
-            // 5. CREAR SESIÓN
+            
             _sm.CrearSesion(usuario);
 
-            // 6. BITÁCORA LOGIN OK
-            _bitacoraServicio.RegistrarBitacora(
-                "Login correcto",
-                usuario.Login,
-                "Seguridad",
-                1
-            );
+           
+            _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login,"Seguridad",1);
 
             return true;
         }

@@ -354,6 +354,7 @@
             btnImprimir.TabIndex = 21;
             btnImprimir.Text = "Imprimir";
             btnImprimir.UseVisualStyleBackColor = false;
+            btnImprimir.Click += btnImprimir_Click;
             // 
             // btnSalir
             // 

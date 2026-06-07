@@ -7,12 +7,17 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+
 namespace CuentaClara_TrabajoCampo
 {
     public partial class FormGestionBitacora : Form
     {
         private BLL_BitacoraEvento bll = new BLL_BitacoraEvento();
         private BLL_Usuario bllUsuario = new BLL_Usuario();
+        private BLL_PDF bllPdf = new BLL_PDF();
         public FormGestionBitacora()
         {
             InitializeComponent();
@@ -29,7 +34,8 @@ namespace CuentaClara_TrabajoCampo
         {
             dgvBitacora.DataSource = bll.ListarUltimos3Dias();
             lblTotalEventos.Text = dgvBitacora.Rows.Count.ToString();
-
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Se cargaron los eventos de los últimos 3 días.");
             if (dgvBitacora.Rows.Count > 0)
                 dgvBitacora.Rows[0].Selected = true;
         }
@@ -54,11 +60,6 @@ namespace CuentaClara_TrabajoCampo
             if (dgvBitacora.CurrentRow == null) return;
 
             string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
-            string criticidad = dgvBitacora.CurrentRow.Cells["Criticidad"].Value.ToString();
-            cboLogin.Text = login;
-            cboCriticidad.Text = criticidad;
-            cboEvento.Text = dgvBitacora.CurrentRow.Cells["Evento"].Value.ToString();
-            cboModulo.Text = dgvBitacora.CurrentRow.Cells["Modulo"].Value.ToString();
 
             Servicio_Usuario user = bllUsuario.ObtenerUsuarioPorLogin(login);
 
@@ -75,8 +76,15 @@ namespace CuentaClara_TrabajoCampo
 
             string.IsNullOrEmpty(cboCriticidad.Text) ? (int?)null : Convert.ToInt32(cboCriticidad.Text)
     );
-
             lblTotalEventos.Text = dgvBitacora.Rows.Count.ToString();
+
+            lstMensajes.Items.Clear();
+
+            if (dgvBitacora.Rows.Count > 0)
+                lstMensajes.Items.Add("Filtro aplicado correctamente. Registros encontrados: " + dgvBitacora.Rows.Count);
+            else
+                lstMensajes.Items.Add("No se encontraron registros para los filtros seleccionados.");
+
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
@@ -86,8 +94,43 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
+            cboLogin.SelectedIndex = -1;
+            cboModulo.SelectedIndex = -1;
+            cboEvento.SelectedIndex = -1;
+            cboCriticidad.SelectedIndex = -1;
+
+            dtpFechaInicio.Value = DateTime.Today;
+            dtpFechaFin.Value = DateTime.Today;
+
+            lstMensajes.Items.Clear();
+            lstMensajes.Items.Add("Filtros restablecidos.");
+
             CargarUltimos3Dias();
-            
+
         }
+
+        private void btnImprimir_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+
+            save.Filter = "PDF (*.pdf)|*.pdf";
+            save.FileName = "Bitacora.pdf";
+
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                string login =dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
+
+                DataTable tabla =(DataTable)dgvBitacora.DataSource;
+
+                bllPdf.ExportarBitacora(tabla, save.FileName, login);
+
+                MessageBox.Show("PDF generado correctamente.");
+            }
+        }
+
+        
+
+
+
     }
 }

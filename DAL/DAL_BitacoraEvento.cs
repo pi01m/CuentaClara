@@ -67,11 +67,7 @@ namespace DAL
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string sql = @"
-            SELECT * 
-            FROM Bitacora
-            WHERE Fecha >= DATEADD(DAY, -3, GETDATE())
-            ORDER BY Fecha DESC, Hora DESC";
+                string sql = @"SELECT * FROM Bitacora WHERE Fecha >= DATEADD(DAY, -3, GETDATE())  ORDER BY Fecha DESC, Hora DESC";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
 

@@ -28,7 +28,7 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-       
+
 
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
@@ -39,5 +39,7 @@ namespace CuentaClara_TrabajoCampo
 
             this.Close();
         }
+
+       
     }
 }

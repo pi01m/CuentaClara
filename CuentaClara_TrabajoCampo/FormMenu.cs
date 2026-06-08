@@ -1,4 +1,5 @@
 using BLL;
+using IU;
 using Servicio;
 
 namespace CuentaClara_TrabajoCampo
@@ -40,6 +41,12 @@ namespace CuentaClara_TrabajoCampo
             this.Close();
         }
 
-       
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormGestionPerfiles frm = new FormGestionPerfiles();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
     }
 }

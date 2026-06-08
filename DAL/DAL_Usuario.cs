@@ -52,7 +52,7 @@ namespace DAL
                     Password = row["Password"].ToString(),
                     Activo = Convert.ToInt32(row["Activo"]),
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
-                    Rol = row.Table.Columns.Contains("Rol") && row["Rol"] != DBNull.Value ? row["Rol"].ToString() : null,
+                    Rol = row.Table.Columns.Contains("IdRol") && row["IdRol"] != DBNull.Value ? row["IdRol"].ToString() : null,
                     //IdFamiliaRol = new Servicio_FamiliaRol(row["IdFamiliaRol"].ToString(), "")
                 };
             }
@@ -355,6 +355,29 @@ namespace DAL
                 adapter.Fill(tabla);
 
                 return tabla;
+            }
+        }
+        public bool AsignarRol(string dni, string idRol)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario_Rol", conn);
+
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Usuario_Rol");
+
+                DataRow fila = ds.Tables["Usuario_Rol"].NewRow();
+
+                fila["DNI"] = dni;
+                fila["IdRol"] = idRol;
+
+                ds.Tables["Usuario_Rol"].Rows.Add(fila);
+
+                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Usuario_Rol");
+
+                return true;
             }
         }
     }

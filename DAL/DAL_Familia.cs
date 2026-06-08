@@ -16,24 +16,21 @@ namespace DAL
             _connectionString = connectionString;
         }
 
-        public bool CrearFamilia(string nombre)
+        public bool CrearFamilia(Servicio_Familia familia)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter("SELECT * FROM Familia WHERE 1 = 0", conn);
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia", conn);
 
                 DataSet ds = new DataSet();
-
                 adapter.Fill(ds, "Familia");
 
-                DataTable tabla = ds.Tables["Familia"];
+                DataRow fila = ds.Tables["Familia"].NewRow();
 
-                DataRow fila = tabla.NewRow();
+                fila["IdFamilia"] = familia.IdRol;
+                fila["Nombre"] = familia.Nombre;
 
-                fila["Nombre"] = nombre;
-
-                tabla.Rows.Add(fila);
+                ds.Tables["Familia"].Rows.Add(fila);
 
                 SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
@@ -42,42 +39,59 @@ namespace DAL
                 return true;
             }
         }
-
-        public bool EliminarFamilia(int idFamilia)
+        public bool ModificarFamilia(Servicio_Familia familia)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Familia WHERE IdFamilia = @Id",conn);
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia WHERE IdFamilia = @IdFamilia", conn);
+                adapter.SelectCommand.Parameters.AddWithValue("@IdFamilia", familia.IdRol);
 
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Familia");
+
+                if (ds.Tables["Familia"].Rows.Count == 0)
+                    return false;
+
+                DataRow fila = ds.Tables["Familia"].Rows[0];
+
+                fila["Nombre"] = familia.Nombre;
+
+                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+                adapter.Update(ds, "Familia");
+
+                return true;
+            }
+        }
+        public bool EliminarFamilia(string idFamilia)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia WHERE IdFamilia = @IdFamilia", conn);
                 adapter.SelectCommand.Parameters.AddWithValue("@Id", idFamilia);
 
                 DataSet ds = new DataSet();
-
                 adapter.Fill(ds, "Familia");
 
-                if (ds.Tables["Familia"].Rows.Count == 0) return false;
-                   
+                if (ds.Tables["Familia"].Rows.Count == 0)
+                    return false;
 
-                ds.Tables["Familia"].Rows[0].Delete();
+                DataRow fila = ds.Tables["Familia"].Rows[0];
+                fila.Delete();
 
                 SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-
                 adapter.Update(ds, "Familia");
 
                 return true;
             }
         }
+
         public DataTable ListarFamilias()
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Familia",
-                        conn);
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia", conn);
 
                 DataTable tabla = new DataTable();
-
                 adapter.Fill(tabla);
 
                 return tabla;

@@ -19,5 +19,10 @@ namespace CuentaClara_TrabajoCampo
         {
 
         }
+
+        private void FormCambiarClave_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

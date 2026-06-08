@@ -4,19 +4,19 @@ using System.Text;
 
 namespace Servicio
 {
-    public class Servicio_Familia : Servicio_Perfil
+    public class Servicio_Familia : Servicio_Rol
     {
-        private readonly List<Servicio_Perfil> _listaPermisos = new List<Servicio_Perfil>();
+        private readonly List<Servicio_Rol> _listaPermisos = new List<Servicio_Rol>();
 
-        public List<Servicio_Perfil> ListaPermisos => _listaPermisos;
+        public List<Servicio_Rol> ListaPermisos => _listaPermisos;
 
         public Servicio_Familia(string idFamilia, string nombre): base(idFamilia, nombre) { }
 
-        public void AgregarPermiso(Servicio_Perfil permiso) => _listaPermisos.Add(permiso);
-        public void EliminarPermiso(Servicio_Perfil permiso) => _listaPermisos.Remove(permiso);
-        public List<Servicio_Perfil> ObtenerHijos() => _listaPermisos;
+        public void AgregarRol(Servicio_Rol permiso) => _listaPermisos.Add(permiso);
+        public void EliminarRol(Servicio_Rol permiso) => _listaPermisos.Remove(permiso);
+        public List<Servicio_Rol> ObtenerHijos() => _listaPermisos;
 
-        public Servicio_Perfil BuscarPermiso(string nombre) =>_listaPermisos.Find(p => string.Equals(p.Nombre, nombre, System.StringComparison.OrdinalIgnoreCase));
+        public Servicio_Rol BuscarPermiso(string nombre) =>_listaPermisos.Find(p => string.Equals(p.Nombre, nombre, System.StringComparison.OrdinalIgnoreCase));
 
     }
 }

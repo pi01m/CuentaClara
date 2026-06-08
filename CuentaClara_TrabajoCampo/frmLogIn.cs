@@ -70,10 +70,10 @@ namespace CuentaClara_TrabajoCampo
             Servicio_Usuario usuarioSesion = SessionManager.GetInstancia().GetUsuarioActual();
             if (usuarioSesion == null) return;
 
-            foreach (Servicio_Perfil permiso in usuarioSesion.Permisos.ListaPermisos)
+            foreach (Servicio_Rol permiso in usuarioSesion.Permisos.ListaPermisos)
             {
 
-                System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdPerfil} – {permiso.Nombre}");
+                System.Diagnostics.Debug.WriteLine($"Permiso cargado: {permiso.IdRol} – {permiso.Nombre}");
             }
         }
 
@@ -84,18 +84,12 @@ namespace CuentaClara_TrabajoCampo
             return true;
         }
 
-        private void MensajeErrorAutenticacion()
-        {
-            MostrarError("Usuario o contraseña incorrectos. Verifique sus credenciales.");
-        }
+      
 
         private void MostrarError(string mensaje)
         {
             MessageBox.Show(mensaje);
         }
-
-
-
 
         private void MostrarPantallaPrincipal()
         {
@@ -109,17 +103,6 @@ namespace CuentaClara_TrabajoCampo
         }
 
     
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FormCrearUsuario fr = new FormCrearUsuario();
-
-            this.Hide();
-
-            fr.ShowDialog();
-
-            this.Show();
-        }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {

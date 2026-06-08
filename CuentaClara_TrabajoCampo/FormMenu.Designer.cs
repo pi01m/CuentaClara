@@ -31,6 +31,7 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panelMenu = new Panel();
+            button3 = new Button();
             btnCerrarSesion = new Button();
             button2 = new Button();
             button1 = new Button();
@@ -68,6 +69,7 @@
             // panelMenu
             // 
             panelMenu.BackColor = Color.White;
+            panelMenu.Controls.Add(button3);
             panelMenu.Controls.Add(btnCerrarSesion);
             panelMenu.Controls.Add(button2);
             panelMenu.Controls.Add(button1);
@@ -83,6 +85,21 @@
             panelMenu.Name = "panelMenu";
             panelMenu.Size = new Size(208, 1307);
             panelMenu.TabIndex = 2;
+            // 
+            // button3
+            // 
+            button3.BackColor = Color.White;
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            button3.Location = new Point(12, 664);
+            button3.Name = "button3";
+            button3.Size = new Size(173, 49);
+            button3.TabIndex = 11;
+            button3.Text = "Gestión Perfiles";
+            button3.TextAlign = ContentAlignment.MiddleLeft;
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
             // 
             // btnCerrarSesion
             // 
@@ -285,7 +302,6 @@
             lblHistorial.Size = new Size(368, 30);
             lblHistorial.TabIndex = 0;
             lblHistorial.Text = "Historial Reciente de Movimientos";
-   
             // 
             // dgvMovimientos
             // 
@@ -380,7 +396,6 @@
             lblSaldoGeneral.Size = new Size(400, 32);
             lblSaldoGeneral.TabIndex = 1;
             lblSaldoGeneral.Text = "Saldo Líquido General del Hogar: \r\n";
-         
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -469,5 +484,6 @@
         private Button button2;
         private Button button1;
         private Button btnCerrarSesion;
+        private Button button3;
     }
 }

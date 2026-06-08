@@ -40,11 +40,15 @@ namespace BLL
             return _dalUsuario.ListarUsuariosActivos();
         }
 
-        public void AsignarPermisos( List<Servicio_Perfil> permisos,Servicio_Usuario usuario){
-            foreach (Servicio_Perfil permiso in permisos)
+        public void AsignarPermisos( List<Servicio_Rol> permisos,Servicio_Usuario usuario){
+            foreach (Servicio_Rol permiso in permisos)
             {
-                usuario.Permisos.AgregarPermiso(permiso);
+                usuario.Permisos.AgregarRol(permiso);
             }
+        }
+        public bool AsignarRol(string dni, string idRol)
+        {
+            return _dalUsuario.AsignarRol(dni, idRol);
         }
 
         public bool CargarCredenciales(string nombreUsuario,string contraseña){

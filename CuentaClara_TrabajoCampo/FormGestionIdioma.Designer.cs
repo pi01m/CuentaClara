@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             lblTitulo = new Label();
             lblSeccionIdioma = new Label();
             cboIdiomas = new ComboBox();
@@ -43,8 +43,10 @@
             btnNuevoIdioma = new Button();
             btnAgregarEtiqueta = new Button();
             btnModificarEtiqueta = new Button();
-            btnCerrar = new Button();
-            btnLimpiar = new Button();
+            btnSalir = new Button();
+            btnAplicar = new Button();
+            listBox1 = new ListBox();
+            btnCancelar = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvEtiquetas).BeginInit();
             panelInferior.SuspendLayout();
             SuspendLayout();
@@ -91,24 +93,24 @@
             dgvEtiquetas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEtiquetas.BackgroundColor = Color.FromArgb(12, 74, 144);
             dgvEtiquetas.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(12, 74, 144);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvEtiquetas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(12, 74, 144);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvEtiquetas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvEtiquetas.ColumnHeadersHeight = 30;
             dgvEtiquetas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.5F);
-            dataGridViewCellStyle2.ForeColor = Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 230, 242);
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvEtiquetas.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle4.ForeColor = Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(220, 230, 242);
+            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvEtiquetas.DefaultCellStyle = dataGridViewCellStyle4;
             dgvEtiquetas.EnableHeadersVisualStyles = false;
             dgvEtiquetas.Location = new Point(110, 426);
             dgvEtiquetas.Margin = new Padding(8, 9, 8, 9);
@@ -197,6 +199,7 @@
             btnNuevoIdioma.TabIndex = 8;
             btnNuevoIdioma.Text = "Nuevo Idioma";
             btnNuevoIdioma.UseVisualStyleBackColor = false;
+            btnNuevoIdioma.Click += btnNuevoIdioma_Click;
             // 
             // btnAgregarEtiqueta
             // 
@@ -226,33 +229,57 @@
             btnModificarEtiqueta.Text = "Modificar Etiqueta";
             btnModificarEtiqueta.UseVisualStyleBackColor = false;
             // 
-            // btnCerrar
+            // btnSalir
             // 
-            btnCerrar.BackColor = Color.White;
-            btnCerrar.FlatStyle = FlatStyle.Flat;
-            btnCerrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnCerrar.ForeColor = Color.FromArgb(12, 74, 144);
-            btnCerrar.Location = new Point(1587, 1640);
-            btnCerrar.Margin = new Padding(8, 9, 8, 9);
-            btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(312, 120);
-            btnCerrar.TabIndex = 12;
-            btnCerrar.Text = "Salir";
-            btnCerrar.UseVisualStyleBackColor = false;
+            btnSalir.BackColor = Color.White;
+            btnSalir.FlatStyle = FlatStyle.Flat;
+            btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSalir.ForeColor = Color.FromArgb(12, 74, 144);
+            btnSalir.Location = new Point(2365, 1643);
+            btnSalir.Margin = new Padding(8, 9, 8, 9);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(312, 120);
+            btnSalir.TabIndex = 12;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = false;
             // 
-            // btnLimpiar
+            // btnAplicar
             // 
-            btnLimpiar.BackColor = Color.White;
-            btnLimpiar.FlatStyle = FlatStyle.Flat;
-            btnLimpiar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnLimpiar.ForeColor = Color.FromArgb(12, 74, 144);
-            btnLimpiar.Location = new Point(1218, 1640);
-            btnLimpiar.Margin = new Padding(8, 9, 8, 9);
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(312, 120);
-            btnLimpiar.TabIndex = 11;
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.UseVisualStyleBackColor = false;
+            btnAplicar.BackColor = Color.White;
+            btnAplicar.FlatStyle = FlatStyle.Flat;
+            btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAplicar.ForeColor = Color.FromArgb(12, 74, 144);
+            btnAplicar.Location = new Point(1218, 1640);
+            btnAplicar.Margin = new Padding(8, 9, 8, 9);
+            btnAplicar.Name = "btnAplicar";
+            btnAplicar.Size = new Size(312, 120);
+            btnAplicar.TabIndex = 11;
+            btnAplicar.Text = "Aplicar";
+            btnAplicar.UseVisualStyleBackColor = false;
+            btnAplicar.Click += btnAplicar_Click;
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 41;
+            listBox1.Location = new Point(1203, 1381);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(1032, 209);
+            listBox1.TabIndex = 14;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = Color.White;
+            btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnCancelar.ForeColor = Color.FromArgb(12, 74, 144);
+            btnCancelar.Location = new Point(1566, 1640);
+            btnCancelar.Margin = new Padding(8, 9, 8, 9);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(312, 120);
+            btnCancelar.TabIndex = 15;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = false;
             // 
             // FormGestionIdioma
             // 
@@ -260,9 +287,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(2788, 2018);
+            Controls.Add(btnCancelar);
+            Controls.Add(listBox1);
             Controls.Add(panelInferior);
-            Controls.Add(btnCerrar);
-            Controls.Add(btnLimpiar);
+            Controls.Add(btnSalir);
+            Controls.Add(btnAplicar);
             Controls.Add(btnModificarEtiqueta);
             Controls.Add(btnAgregarEtiqueta);
             Controls.Add(btnNuevoIdioma);
@@ -280,6 +309,7 @@
             Name = "FormGestionIdioma";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Gestión de Idioma";
+            Load += FormGestionIdioma_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEtiquetas).EndInit();
             panelInferior.ResumeLayout(false);
             panelInferior.PerformLayout();
@@ -299,9 +329,11 @@
         private System.Windows.Forms.Button btnNuevoIdioma;
         private System.Windows.Forms.Button btnAgregarEtiqueta;
         private System.Windows.Forms.Button btnModificarEtiqueta;
-        private System.Windows.Forms.Button btnLimpiar;
-        private System.Windows.Forms.Button btnCerrar;
+        private System.Windows.Forms.Button btnAplicar;
+        private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Label lblUsuarioLogueado;
+        private ListBox listBox1;
+        private Button btnCancelar;
     }
 }

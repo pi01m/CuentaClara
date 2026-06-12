@@ -11,6 +11,26 @@ namespace CuentaClara_TrabajoCampo
         public FormMenu()
         {
             InitializeComponent();
+            if (SessionManager.GetInstancia().GetUsuarioActual().Rol == "Admin")
+            {
+                btnInicio.Enabled = false;
+                btnCategorias.Enabled = false;
+                btnGraficos.Enabled = false;
+                btnNuevoEgreso.Enabled = false;
+                btnNuevoIngreso.Enabled = false;
+                btnVencimientos.Enabled = false;
+                btnTransacciones.Enabled = false;
+                btnSaldos.Enabled = false;
+
+                btnInicio.Visible = false;
+                btnCategorias.Visible = false;
+                btnGraficos.Visible = false;
+                btnNuevoEgreso.Visible = false;
+                btnNuevoIngreso.Visible = false;
+                btnVencimientos.Visible = false;
+                btnTransacciones.Visible = false;
+                btnSaldos.Visible = false;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -48,5 +68,40 @@ namespace CuentaClara_TrabajoCampo
             frm.ShowDialog();
             this.Show();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FormCambiarClave frm = new FormCambiarClave();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void FormMenu_Load(object sender, EventArgs e)
+        {
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+
+            if (usuarioActual != null && usuarioActual.Rol == "Admin")
+            {
+                btnInicio.Enabled = false;
+                btnCategorias.Enabled = false;
+                btnGraficos.Enabled = false;
+                btnNuevoEgreso.Enabled = false;
+                btnNuevoIngreso.Enabled = false;
+                btnVencimientos.Enabled = false;
+                btnTransacciones.Enabled = false;
+                btnSaldos.Enabled = false;
+
+                btnInicio.Visible = false;
+                btnCategorias.Visible = false;
+                btnGraficos.Visible = false;
+                btnNuevoEgreso.Visible = false;
+                btnNuevoIngreso.Visible = false;
+                btnVencimientos.Visible = false;
+                btnTransacciones.Visible = false;
+                btnSaldos.Visible = false;
+            }
     }
-}
+    }
+  }
+

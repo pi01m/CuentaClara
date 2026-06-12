@@ -18,6 +18,7 @@ namespace Servicio
         public Servicio_Usuario GetUsuarioActual() => _usuarioActual;
         public void SetUsuarioActual(Servicio_Usuario u) => _usuarioActual = u;
 
+
         public bool CrearSesion(Servicio_Usuario usuario)
         {
             try

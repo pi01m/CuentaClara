@@ -145,7 +145,7 @@ namespace CuentaClara_TrabajoCampo
             txtNombre.Text = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
             txtCorreo.Text = dgvUsuarios.CurrentRow.Cells["email"].Value.ToString();
             txtLogin.Text = dgvUsuarios.CurrentRow.Cells["Login"].Value.ToString();
-            txtRol.Text = dgvUsuarios.CurrentRow.Cells["Rol"].Value.ToString();
+            txtRol.Text = dgvUsuarios.CurrentRow.Cells["IdRol"].Value.ToString();
             chkActivo.Checked = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Activo"].Value) == 1;
 
 
@@ -218,7 +218,7 @@ namespace CuentaClara_TrabajoCampo
 
         }
 
-       
+
 
         private void radioBtnUserActivos_CheckedChanged(object sender, EventArgs e)
         {
@@ -228,6 +228,11 @@ namespace CuentaClara_TrabajoCampo
         private void radioBtnTodosUser_CheckedChanged(object sender, EventArgs e)
         {
             CargarUsuarios();
+        }
+
+        private void panelContenedor_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DAL
 
         public DAL_FamiliaPermiso(string connectionString)
         {
-            connectionString = _connectionString;
+            _connectionString = connectionString;
         }
 
         public bool AsignarPermiso(string idFam, string idPermiso)
@@ -58,5 +58,72 @@ namespace DAL
                 return tabla;
             }
         }
+
+        #region
+
+        public void EliminarPorFamilia(string idFamilia)
+        { 
+            using (SqlConnection conn =
+            new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia_Permiso WHERE IdFamilia=@IdFamilia",
+                conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdFamilia",
+                    idFamilia);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Familia_Permiso");
+
+                foreach (DataRow fila in ds.Tables["Familia_Permiso"].Rows)
+                {
+                    fila.Delete();
+                }
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Familia_Permiso");
+            }
+
+        }
+
+        public bool ExistePermiso(
+    string idFamilia,
+    string idPermiso)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        @"SELECT *
+                  FROM Familia_Permiso
+                  WHERE IdFamilia=@IdFamilia
+                  AND IdPermiso=@IdPermiso",
+                        conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdFamilia",
+                    idFamilia);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdPermiso",
+                    idPermiso);
+
+                DataTable tabla = new DataTable();
+
+                adapter.Fill(tabla);
+
+                return tabla.Rows.Count > 0;
+            }
+        }
+
+        
+        #endregion
     }
 }

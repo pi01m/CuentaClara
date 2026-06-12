@@ -52,7 +52,7 @@ namespace DAL
                     Password = row["Password"].ToString(),
                     Activo = Convert.ToInt32(row["Activo"]),
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
-                    Rol = row.Table.Columns.Contains("IdRol") && row["IdRol"] != DBNull.Value ? row["IdRol"].ToString() : null,
+                    IdRol = row.Table.Columns.Contains("IdRol") && row["IdRol"] != DBNull.Value ? row["IdRol"].ToString() : null,
                     //IdFamiliaRol = new Servicio_FamiliaRol(row["IdFamiliaRol"].ToString(), "")
                 };
             }
@@ -139,7 +139,7 @@ namespace DAL
                 fila["Password"] = usuario.Password;
                 fila["Activo"] = usuario.Activo;
                 fila["Bloqueo"] = usuario.Bloqueo;
-
+                fila["IdRol"] = usuario.IdRol;
                 ds.Tables["Usuario"].Rows.Add(fila);
 
                 SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
@@ -302,7 +302,7 @@ namespace DAL
                 Servicio_Usuario usuario = new Servicio_Usuario();
 
                 usuario.Nombre = fila["Nombre"].ToString();
-                usuario.Apellido = fila["Apellido"].ToString();
+                 usuario.Apellido = fila["Apellido"].ToString();
                 usuario.DNI = fila["DNI"].ToString();
                 usuario.email = fila["email"].ToString();
                 usuario.Login = fila["Login"].ToString();
@@ -376,6 +376,32 @@ namespace DAL
                 SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
                 adapter.Update(ds, "Usuario_Rol");
+
+                return true;
+            }
+        }
+
+        public bool ActualizarClave(string login, string nuevoHash)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                
+                string query = "SELECT * FROM Usuario WHERE Login = @Login";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@Login", login));
+
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Usuario");
+
+                if (ds.Tables["Usuario"].Rows.Count == 0) return false;
+
+                DataRow fila = ds.Tables["Usuario"].Rows[0];
+                fila["Password"] = nuevoHash; 
+
+                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Usuario");
 
                 return true;
             }

@@ -56,5 +56,93 @@ namespace DAL
                 return tabla;
             }
         }
+
+        #region nuevo
+         
+        public void EliminarPorFamilia(string idFamilia)
+        {
+            using (SqlConnection conn =
+            new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia_Rol WHERE IdFamilia=@IdFamilia",
+                conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdFamilia",
+                    idFamilia);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Familia_Rol");
+
+                foreach (DataRow fila in ds.Tables["Familia_Rol"].Rows)
+                {
+                    fila.Delete();
+                }
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Familia_Rol");
+            }
+
+        }
+
+        public bool TienePermisoPorFamilia( string idRol, string idPermiso)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                    @"SELECT *
+              FROM Familia_Rol fr
+              INNER JOIN Familia_Permiso fp
+              ON fr.IdFamilia = fp.IdFamilia
+              WHERE fr.IdRol = @IdRol
+              AND fp.IdPermiso = @IdPermiso",
+                    conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdRol",
+                    idRol);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdPermiso",
+                    idPermiso);
+
+                DataTable tabla = new DataTable();
+
+                adapter.Fill(tabla);
+
+                return tabla.Rows.Count > 0;
+            }
+        }
+
+        public bool ExisteFamiliaEnRol(string idRol, string idFamilia)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter(
+                    @"SELECT *
+              FROM Familia_Rol
+              WHERE IdRol = @Rol
+              AND IdFamilia = @Fam",
+                    conn);
+
+                da.SelectCommand.Parameters.AddWithValue("@Rol", idRol);
+                da.SelectCommand.Parameters.AddWithValue("@Fam", idFamilia);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                return dt.Rows.Count > 0;
+            }
+        }
+
+       
+        #endregion
     }
 }

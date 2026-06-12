@@ -51,6 +51,7 @@ namespace IU
             // 
             // panelPrincipal
             // 
+            panelPrincipal.Anchor = AnchorStyles.None;
             panelPrincipal.BackColor = Color.White;
             panelPrincipal.BorderStyle = BorderStyle.FixedSingle;
             panelPrincipal.Controls.Add(button2);
@@ -69,18 +70,19 @@ namespace IU
             panelPrincipal.Controls.Add(dgvEstructura);
             panelPrincipal.Location = new Point(20, 20);
             panelPrincipal.Name = "panelPrincipal";
-            panelPrincipal.Size = new Size(900, 656);
+            panelPrincipal.Size = new Size(1320, 1055);
             panelPrincipal.TabIndex = 0;
             // 
             // button2
             // 
+            button2.Anchor = AnchorStyles.None;
             button2.BackColor = Color.FromArgb(18, 87, 150);
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             button2.ForeColor = Color.White;
-            button2.Location = new Point(210, 218);
+            button2.Location = new Point(311, 411);
             button2.Name = "button2";
-            button2.Size = new Size(170, 40);
+            button2.Size = new Size(206, 124);
             button2.TabIndex = 13;
             button2.Text = "Modificar Permiso";
             button2.UseVisualStyleBackColor = false;
@@ -88,91 +90,100 @@ namespace IU
             // 
             // button1
             // 
+            button1.Anchor = AnchorStyles.None;
             button1.BackColor = Color.FromArgb(18, 87, 150);
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             button1.ForeColor = Color.White;
-            button1.Location = new Point(25, 218);
+            button1.Location = new Point(78, 423);
             button1.Name = "button1";
-            button1.Size = new Size(170, 40);
+            button1.Size = new Size(197, 112);
             button1.TabIndex = 12;
             button1.Text = "Eliminar Permiso";
             button1.UseVisualStyleBackColor = false;
             // 
             // lblTitulo
             // 
+            lblTitulo.Anchor = AnchorStyles.None;
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(25, 20);
+            lblTitulo.Location = new Point(76, 20);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(228, 32);
+            lblTitulo.Size = new Size(559, 81);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Gestión de Perfiles";
             // 
             // lblFamilia
             // 
+            lblFamilia.Anchor = AnchorStyles.None;
             lblFamilia.AutoSize = true;
             lblFamilia.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblFamilia.Location = new Point(25, 80);
+            lblFamilia.Location = new Point(76, 151);
             lblFamilia.Name = "lblFamilia";
-            lblFamilia.Size = new Size(57, 19);
+            lblFamilia.Size = new Size(134, 46);
             lblFamilia.TabIndex = 1;
             lblFamilia.Text = "Familia";
             // 
             // cmbFamilia
             // 
+            cmbFamilia.Anchor = AnchorStyles.None;
             cmbFamilia.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFamilia.Location = new Point(25, 110);
+            cmbFamilia.Location = new Point(76, 211);
             cmbFamilia.Name = "cmbFamilia";
-            cmbFamilia.Size = new Size(250, 23);
+            cmbFamilia.Size = new Size(250, 49);
             cmbFamilia.TabIndex = 2;
             // 
             // lblRol
             // 
+            lblRol.Anchor = AnchorStyles.None;
             lblRol.AutoSize = true;
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblRol.Location = new Point(300, 80);
+            lblRol.Location = new Point(367, 151);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(31, 19);
+            lblRol.Size = new Size(72, 46);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol";
             // 
             // cmbRol
             // 
+            cmbRol.Anchor = AnchorStyles.None;
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRol.Location = new Point(300, 110);
+            cmbRol.Location = new Point(367, 211);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(250, 23);
+            cmbRol.Size = new Size(250, 49);
             cmbRol.TabIndex = 4;
             // 
             // lblPermiso
             // 
+            lblPermiso.Anchor = AnchorStyles.None;
             lblPermiso.AutoSize = true;
             lblPermiso.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblPermiso.Location = new Point(575, 80);
+            lblPermiso.Location = new Point(662, 151);
             lblPermiso.Name = "lblPermiso";
-            lblPermiso.Size = new Size(64, 19);
+            lblPermiso.Size = new Size(149, 46);
             lblPermiso.TabIndex = 5;
             lblPermiso.Text = "Permiso";
             // 
             // cmbPermiso
             // 
+            cmbPermiso.Anchor = AnchorStyles.None;
             cmbPermiso.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPermiso.Location = new Point(575, 110);
+            cmbPermiso.Location = new Point(662, 211);
             cmbPermiso.Name = "cmbPermiso";
-            cmbPermiso.Size = new Size(250, 23);
+            cmbPermiso.Size = new Size(250, 49);
             cmbPermiso.TabIndex = 6;
             // 
             // btnAsignarRol
             // 
+            btnAsignarRol.Anchor = AnchorStyles.None;
             btnAsignarRol.BackColor = Color.FromArgb(18, 87, 150);
             btnAsignarRol.FlatStyle = FlatStyle.Flat;
             btnAsignarRol.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAsignarRol.ForeColor = Color.White;
-            btnAsignarRol.Location = new Point(25, 150);
+            btnAsignarRol.Location = new Point(78, 314);
             btnAsignarRol.Name = "btnAsignarRol";
-            btnAsignarRol.Size = new Size(170, 40);
+            btnAsignarRol.Size = new Size(197, 72);
             btnAsignarRol.TabIndex = 7;
             btnAsignarRol.Text = "Asignar Rol";
             btnAsignarRol.UseVisualStyleBackColor = false;
@@ -180,13 +191,14 @@ namespace IU
             // 
             // btnAsignarPermiso
             // 
+            btnAsignarPermiso.Anchor = AnchorStyles.None;
             btnAsignarPermiso.BackColor = Color.FromArgb(18, 87, 150);
             btnAsignarPermiso.FlatStyle = FlatStyle.Flat;
             btnAsignarPermiso.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAsignarPermiso.ForeColor = Color.White;
-            btnAsignarPermiso.Location = new Point(210, 150);
+            btnAsignarPermiso.Location = new Point(311, 284);
             btnAsignarPermiso.Name = "btnAsignarPermiso";
-            btnAsignarPermiso.Size = new Size(170, 40);
+            btnAsignarPermiso.Size = new Size(206, 102);
             btnAsignarPermiso.TabIndex = 8;
             btnAsignarPermiso.Text = "Asignar Permiso";
             btnAsignarPermiso.UseVisualStyleBackColor = false;
@@ -194,13 +206,14 @@ namespace IU
             // 
             // btnCrearFamilia
             // 
+            btnCrearFamilia.Anchor = AnchorStyles.None;
             btnCrearFamilia.BackColor = Color.White;
             btnCrearFamilia.FlatStyle = FlatStyle.Flat;
             btnCrearFamilia.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnCrearFamilia.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCrearFamilia.Location = new Point(395, 150);
+            btnCrearFamilia.Location = new Point(565, 330);
             btnCrearFamilia.Name = "btnCrearFamilia";
-            btnCrearFamilia.Size = new Size(170, 40);
+            btnCrearFamilia.Size = new Size(270, 56);
             btnCrearFamilia.TabIndex = 9;
             btnCrearFamilia.Text = "Crear Familia";
             btnCrearFamilia.UseVisualStyleBackColor = false;
@@ -208,31 +221,35 @@ namespace IU
             // 
             // btnCancelar
             // 
+            btnCancelar.Anchor = AnchorStyles.None;
             btnCancelar.BackColor = Color.White;
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnCancelar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCancelar.Location = new Point(575, 150);
+            btnCancelar.Location = new Point(600, 423);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(170, 40);
+            btnCancelar.Size = new Size(235, 58);
             btnCancelar.TabIndex = 10;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
             // 
             // dgvEstructura
             // 
+            dgvEstructura.Anchor = AnchorStyles.None;
             dgvEstructura.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEstructura.BackgroundColor = Color.White;
-            dgvEstructura.Location = new Point(25, 280);
+            dgvEstructura.ColumnHeadersHeight = 58;
+            dgvEstructura.Location = new Point(76, 541);
             dgvEstructura.Name = "dgvEstructura";
-            dgvEstructura.Size = new Size(850, 202);
+            dgvEstructura.RowHeadersWidth = 102;
+            dgvEstructura.Size = new Size(1148, 463);
             dgvEstructura.TabIndex = 11;
             // 
             // FormGestionPerfiles
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(940, 701);
+            ClientSize = new Size(1670, 1112);
             Controls.Add(panelPrincipal);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;

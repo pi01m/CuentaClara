@@ -15,7 +15,7 @@ namespace DAL
 
         public DAL_Rol(string connectionString)
         {
-            connectionString = _connectionString;
+          _connectionString= connectionString;
         }
 
         public bool CrearRol(Servicio_Rol rol)
@@ -52,6 +52,26 @@ namespace DAL
                 adapter.Fill(tabla);
 
                 return tabla;
+            }
+        }
+
+        public DataTable ObtenerFamiliasPorRol(string idRol)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string sql = @"
+            SELECT f.IdFamilia, f.Nombre
+            FROM Familia f
+            INNER JOIN Familia_Rol fr ON fr.IdFamilia = f.IdFamilia
+            WHERE fr.IdRol = @IdRol";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
+                adapter.SelectCommand.Parameters.AddWithValue("@IdRol", idRol);
+
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                return dt;
             }
         }
     }

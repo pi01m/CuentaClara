@@ -98,5 +98,135 @@ namespace DAL
             }
         }
 
+        #region NUEVO
+
+
+        public bool ExisteNombre(string nombre)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Familia",
+                        conn);
+
+                DataTable tabla = new DataTable();
+
+                adapter.Fill(tabla);
+
+                foreach (DataRow fila in tabla.Rows)
+                {
+                    if (fila["Nombre"].ToString()
+                        .ToUpper() == nombre.ToUpper())
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public bool Guardar(Servicio_Familia familia)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Familia",
+                        conn);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Familia");
+
+                DataRow fila =
+                    ds.Tables["Familia"].NewRow();
+
+                fila["IdFamilia"] = familia.IdRol;
+                fila["Nombre"] = familia.Nombre;
+
+                ds.Tables["Familia"].Rows.Add(fila);
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Familia");
+
+                return true;
+            }
+        }
+
+        public bool Eliminar(string idFamilia)
+        {
+            using (SqlConnection conn =
+            new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia WHERE IdFamilia = @IdFamilia",
+                conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdFamilia",
+                    idFamilia);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Familia");
+
+                if (ds.Tables["Familia"].Rows.Count == 0)
+                    return false;
+
+                ds.Tables["Familia"].Rows[0].Delete();
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Familia");
+
+                return true;
+            }
+
+        }
+
+        public bool Modificar(Servicio_Familia familia)
+        {
+            using (SqlConnection conn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Familia WHERE IdFamilia = @IdFamilia",
+                        conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue(
+                    "@IdFamilia",
+                    familia.IdRol);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Familia");
+
+                if (ds.Tables["Familia"].Rows.Count == 0)
+                    return false;
+
+                DataRow fila =
+                    ds.Tables["Familia"].Rows[0];
+
+                fila["Nombre"] = familia.Nombre;
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Familia");
+
+                return true;
+            }
+        }
+        #endregion
+
     }
 }

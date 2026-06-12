@@ -17,7 +17,7 @@ namespace CuentaClara_TrabajoCampo
             InitializeComponent();
         }
 
-      
+
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -28,11 +28,12 @@ namespace CuentaClara_TrabajoCampo
             usuario.Apellido = txtApellido.Text;
             usuario.DNI = txtDNI.Text;
             usuario.email = txtCorreo.Text;
+            txtLogin.Text = txtNombre.Text + txtDNI.Text;
             usuario.Login = txtLogin.Text;
             usuario.Rol = cmbRol.SelectedItem.ToString();
             usuario.Activo = chkActivo.Checked ? 1 : 0;
 
-           
+
             BLL_Usuario bll = new BLL_Usuario();
 
 
@@ -51,6 +52,11 @@ namespace CuentaClara_TrabajoCampo
         }
 
         private void FormCrearUsuario_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkActivo_CheckedChanged(object sender, EventArgs e)
         {
 
         }

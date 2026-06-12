@@ -15,7 +15,7 @@ namespace DAL
 
         public DAL_Permiso(string connectionString)
         {
-            connectionString = _connectionString;
+            _connectionString = connectionString;
         }
 
         public bool CrearPermiso(Servicio_Permiso permiso)
@@ -29,7 +29,7 @@ namespace DAL
 
                 DataRow fila = ds.Tables["Permiso"].NewRow();
 
-                fila["IdRol"] = permiso.IdRol; 
+                fila["IdPermiso"] = permiso.IdRol; 
                 fila["Nombre"] = permiso.Nombre;
 
                 ds.Tables["Permiso"].Rows.Add(fila);

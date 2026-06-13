@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BLL;
+using Servicio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using BLL;
 
 namespace CuentaClara_TrabajoCampo
 {
@@ -42,7 +43,8 @@ namespace CuentaClara_TrabajoCampo
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
             radioBtnTodosUser.Checked = true;
-
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
             CargarUsuarios();
 
             btnAplicar.Enabled = false;

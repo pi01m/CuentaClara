@@ -39,51 +39,7 @@ namespace DAL
                 return true;
             }
         }
-        public bool ModificarFamilia(Servicio_Familia familia)
-        {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia WHERE IdFamilia = @IdFamilia", conn);
-                adapter.SelectCommand.Parameters.AddWithValue("@IdFamilia", familia.IdRol);
 
-                DataSet ds = new DataSet();
-                adapter.Fill(ds, "Familia");
-
-                if (ds.Tables["Familia"].Rows.Count == 0)
-                    return false;
-
-                DataRow fila = ds.Tables["Familia"].Rows[0];
-
-                fila["Nombre"] = familia.Nombre;
-
-                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-                adapter.Update(ds, "Familia");
-
-                return true;
-            }
-        }
-        public bool EliminarFamilia(string idFamilia)
-        {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia WHERE IdFamilia = @IdFamilia", conn);
-                adapter.SelectCommand.Parameters.AddWithValue("@Id", idFamilia);
-
-                DataSet ds = new DataSet();
-                adapter.Fill(ds, "Familia");
-
-                if (ds.Tables["Familia"].Rows.Count == 0)
-                    return false;
-
-                DataRow fila = ds.Tables["Familia"].Rows[0];
-                fila.Delete();
-
-                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-                adapter.Update(ds, "Familia");
-
-                return true;
-            }
-        }
 
         public DataTable ListarFamilias()
         {
@@ -128,37 +84,119 @@ namespace DAL
             }
         }
 
-        public bool Guardar(Servicio_Familia familia)
+        public bool Guardar(
+             string idFamilia,
+             string nombre)
         {
-            using (SqlConnection conn =
-                new SqlConnection(_connectionString))
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia",
+                _connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Familia",
-                        conn);
-
                 DataSet ds = new DataSet();
 
-                adapter.Fill(ds, "Familia");
+                da.Fill(ds, "Familia");
 
-                DataRow fila =
+                DataRow row =
                     ds.Tables["Familia"].NewRow();
 
-                fila["IdFamilia"] = familia.IdRol;
-                fila["Nombre"] = familia.Nombre;
+                row["IdFamilia"] = idFamilia;
+                row["Nombre"] = nombre;
 
-                ds.Tables["Familia"].Rows.Add(fila);
+                ds.Tables["Familia"]
+                    .Rows.Add(row);
 
-                SqlCommandBuilder builder =
-                    new SqlCommandBuilder(adapter);
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
 
-                adapter.Update(ds, "Familia");
+                da.Update(ds, "Familia");
 
                 return true;
             }
         }
 
+        public bool AsignarPermiso(
+           string idFamilia,
+           string idPermiso)
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia_Permiso",
+                _connectionString))
+            {
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Familia_Permiso");
+
+                DataRow row =
+                    ds.Tables["Familia_Permiso"]
+                    .NewRow();
+
+                row["IdFamilia_Permiso"] =
+                    Guid.NewGuid().ToString();
+
+                row["IdFamilia"] = idFamilia;
+                row["IdPermiso"] = idPermiso;
+
+                ds.Tables["Familia_Permiso"]
+                    .Rows.Add(row);
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Familia_Permiso");
+
+                return true;
+            }
+        }
+
+        public bool AsignarSubFamilia(
+            string padre,
+            string hija)
+        {
+            using (SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Familia", _connectionString))
+            {
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Familia_Familia");
+
+                DataRow row = ds.Tables["Familia_Familia"].NewRow();
+
+               
+                row["IdFamilia"] = padre;
+
+             
+                row["IdFamilia_Familia"] = hija;
+
+                ds.Tables["Familia_Familia"].Rows.Add(row);
+
+                SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                da.Update(ds, "Familia_Familia");
+
+                return true;
+            }
+        }
+        public DataTable ObtenerSubFamilias(
+            string idFamilia)
+        {
+            using (SqlDataAdapter da = new SqlDataAdapter(
+        @"SELECT f.*
+          FROM Familia f
+          INNER JOIN Familia_Familia ff
+             ON f.IdFamilia = ff.IdFamilia_Familia
+          WHERE ff.IdFamilia = @Familia",
+        _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Familia",
+                    idFamilia);
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+
+                return dt;
+            }
+        }
         public bool Eliminar(string idFamilia)
         {
             using (SqlConnection conn =
@@ -226,6 +264,7 @@ namespace DAL
                 return true;
             }
         }
+
         #endregion
 
     }

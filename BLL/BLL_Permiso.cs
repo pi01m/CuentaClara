@@ -22,11 +22,17 @@ namespace BLL
         public void CrearPermiso(Servicio_Permiso permiso)
         {
             if (string.IsNullOrWhiteSpace(permiso.Nombre))
-                throw new Exception("Nombre de permiso requerido");
+                throw new Exception("Ingrese un nombre.");
 
-            dal.CrearPermiso(permiso);
+            dal.CrearPermiso( permiso.IdRol,permiso.Nombre);
+                
+               
         }
-
+        
+        public DataTable ObtenerPermisosPorRol(string idUsuario)
+        {
+            return dal.ObtenerPermisosPorRol(idUsuario);
+        }
         public DataTable ListarPermisos()
         {
             return dal.ListarPermisos();

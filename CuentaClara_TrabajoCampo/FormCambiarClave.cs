@@ -21,6 +21,8 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormCambiarClave_Load_1(object sender, EventArgs e)
         {
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
             _bllUsuario = new BLL_Usuario();
             _bllBitacoraEvento = new BLL_BitacoraEvento();
         }

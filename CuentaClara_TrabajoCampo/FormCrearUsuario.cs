@@ -30,7 +30,7 @@ namespace CuentaClara_TrabajoCampo
             usuario.email = txtCorreo.Text;
             txtLogin.Text = txtNombre.Text + txtDNI.Text;
             usuario.Login = txtLogin.Text;
-            usuario.Rol = cmbRol.SelectedItem.ToString();
+            usuario.IdRol = cmbRol.SelectedItem.ToString();
             usuario.Activo = chkActivo.Checked ? 1 : 0;
 
 
@@ -57,6 +57,11 @@ namespace CuentaClara_TrabajoCampo
         }
 
         private void chkActivo_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelPrincipal_Paint(object sender, PaintEventArgs e)
         {
 
         }

@@ -18,29 +18,33 @@ namespace DAL
           _connectionString= connectionString;
         }
 
-        public bool CrearRol(Servicio_Rol rol)
+        public bool CrearRol(string idRol, string nombre)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Rol",
+                _connectionString))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Rol", conn);
-
                 DataSet ds = new DataSet();
-                adapter.Fill(ds, "Rol");
+                da.Fill(ds, "Rol");
 
-                DataRow fila = ds.Tables["Rol"].NewRow();
+                DataRow row =
+                    ds.Tables["Rol"].NewRow();
 
-                fila["IdRol"] = rol.IdRol;
-                fila["Nombre"] = rol.Nombre;
+                row["IdRol"] = idRol;
+                row["Nombre"] = nombre;
 
-                ds.Tables["Rol"].Rows.Add(fila);
+                ds.Tables["Rol"].Rows.Add(row);
 
-                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
 
-                adapter.Update(ds, "Rol");
+                da.Update(ds, "Rol");
 
                 return true;
             }
         }
+
 
         public DataTable ListarRoles()
         {
@@ -55,21 +59,207 @@ namespace DAL
             }
         }
 
-        public DataTable ObtenerFamiliasPorRol(string idRol)
+        public bool ExisteFamilia(
+             string idRol,
+             string idFamilia)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                @"SELECT *
+                  FROM Familia_Rol
+                  WHERE IdRol=@Rol
+                  AND IdFamilia=@Familia",
+                _connectionString))
             {
-                string sql = @"
-            SELECT f.IdFamilia, f.Nombre
-            FROM Familia f
-            INNER JOIN Familia_Rol fr ON fr.IdFamilia = f.IdFamilia
-            WHERE fr.IdRol = @IdRol";
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Rol",
+                    idRol);
 
-                SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
-                adapter.SelectCommand.Parameters.AddWithValue("@IdRol", idRol);
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Familia",
+                    idFamilia);
+
+                DataTable dt =
+                    new DataTable();
+
+                da.Fill(dt);
+
+                return dt.Rows.Count > 0;
+            }
+        }
+
+
+        public bool GuardarRol(Servicio_Rol rol)
+        {
+            using (SqlConnection cn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                    "SELECT * FROM Rol",
+                    cn);
+
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Rol");
+
+                DataRow fila =
+                    ds.Tables["Rol"].NewRow();
+
+                fila["IdRol"] = rol.IdRol;
+                fila["Nombre"] = rol.Nombre;
+
+                ds.Tables["Rol"].Rows.Add(fila);
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Rol");
+
+                return true;
+            }
+        }
+
+        // ROL_PERMISO
+
+        public bool ExistePermiso(string idRol, string idPermiso)
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                @"SELECT *
+              FROM Rol_Permiso
+              WHERE IdRol=@Rol
+              AND IdPermiso=@Permiso",
+                _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Rol", idRol);
+
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Permiso", idPermiso);
 
                 DataTable dt = new DataTable();
-                adapter.Fill(dt);
+
+                da.Fill(dt);
+
+                return dt.Rows.Count > 0;
+            }
+        }
+
+        public void AsignarPermiso(
+            string idRol,
+            string idPermiso)
+        {
+            using (SqlConnection cn =
+                new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                    "SELECT * FROM Rol_Permiso",
+                    cn);
+
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Rol_Permiso");
+
+                DataRow fila =
+                    ds.Tables["Rol_Permiso"].NewRow();
+
+                fila["IdRol_Permiso"] =
+                    Guid.NewGuid().ToString();
+
+                fila["IdRol"] = idRol;
+                fila["IdPermiso"] = idPermiso;
+
+                ds.Tables["Rol_Permiso"].Rows.Add(fila);
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Rol_Permiso");
+            }
+        }
+
+        // FAMILIA_ROL
+
+        public void AsignarFamilia(
+            string idRol,
+            string idFamilia)
+        {
+            using (SqlConnection cn =
+                new SqlConnection(      ))
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                    "SELECT * FROM Familia_Rol",
+                    cn);
+
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Familia_Rol");
+
+                DataRow fila =
+                    ds.Tables["Familia_Rol"].NewRow();
+
+                fila["IdFamilia_Rol"] =
+                    Guid.NewGuid().ToString();
+
+                fila["IdRol"] = idRol;
+                fila["IdFamilia"] = idFamilia;
+
+                ds.Tables["Familia_Rol"].Rows.Add(fila);
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Familia_Rol");
+            }
+        }
+
+        public bool ExisteFamiliaEnRol(
+            string idRol,
+            string idFamilia)
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                @"SELECT *
+              FROM Familia_Rol
+              WHERE IdRol=@Rol
+              AND IdFamilia=@Familia",
+                _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Rol", idRol);
+
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Familia", idFamilia);
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+
+                return dt.Rows.Count > 0;
+            }
+        }
+
+        public DataTable ObtenerFamiliasPorRol(string idRol)
+            
+        {
+            using (SqlDataAdapter da = new SqlDataAdapter(
+               
+                @"SELECT f.*
+              FROM Familia f
+              INNER JOIN Familia_Rol fr
+              ON fr.IdFamilia=f.IdFamilia
+              WHERE fr.IdRol=@Rol",
+                _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@Rol", idRol);
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
 
                 return dt;
             }

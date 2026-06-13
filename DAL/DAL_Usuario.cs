@@ -21,10 +21,10 @@ namespace DAL
         {
             const string sql =
                 "SELECT Nombre, Apellido, DNI, email, Login, Password, " +
-                "       Activo, Bloqueo " +
-                "FROM   Usuario " +
-                "WHERE  Login    = @Login " +
-                "AND    Password = @Password";
+                "       Activo, Bloqueo, IdRol " +
+                "FROM Usuario " +
+                "WHERE Login = @Login " +
+                "AND Password = @Password";
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -339,7 +339,8 @@ namespace DAL
                     email = row["email"].ToString(),
                     Login = row["Login"].ToString(),
                     Activo = Convert.ToInt32(row["Activo"]),
-                    Bloqueo = Convert.ToInt32(row["Bloqueo"])
+                    Bloqueo = Convert.ToInt32(row["Bloqueo"]),
+                    IdRol = row["IdRol"].ToString()
                 };
             }
         }

@@ -11,7 +11,7 @@ namespace CuentaClara_TrabajoCampo
         public FormMenu()
         {
             InitializeComponent();
-            if (SessionManager.GetInstancia().GetUsuarioActual().Rol == "Admin")
+            if (SessionManager.GetInstancia().GetUsuarioActual().IdRol == "Admin")
             {
                 btnInicio.Enabled = false;
                 btnCategorias.Enabled = false;
@@ -63,7 +63,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormGestionPerfiles frm = new FormGestionPerfiles();
+            FormGestionPerfil frm = new FormGestionPerfil();
             this.Hide();
             frm.ShowDialog();
             this.Show();
@@ -76,12 +76,9 @@ namespace CuentaClara_TrabajoCampo
             frm.ShowDialog();
             this.Show();
         }
-
-        private void FormMenu_Load(object sender, EventArgs e)
+        private void Bloquear(Servicio_Usuario usuarioActual)
         {
-            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-
-            if (usuarioActual != null && usuarioActual.Rol == "Admin")
+            if (usuarioActual != null && usuarioActual.IdRol == "Admin")
             {
                 btnInicio.Enabled = false;
                 btnCategorias.Enabled = false;
@@ -92,16 +89,40 @@ namespace CuentaClara_TrabajoCampo
                 btnTransacciones.Enabled = false;
                 btnSaldos.Enabled = false;
 
-                btnInicio.Visible = false;
-                btnCategorias.Visible = false;
-                btnGraficos.Visible = false;
-                btnNuevoEgreso.Visible = false;
-                btnNuevoIngreso.Visible = false;
-                btnVencimientos.Visible = false;
-                btnTransacciones.Visible = false;
-                btnSaldos.Visible = false;
+                btnInicio.Visible = true;
+                btnCategorias.Visible = true;
+                btnGraficos.Visible = true;
+                btnNuevoEgreso.Visible = true;
+                btnNuevoIngreso.Visible = true;
+                btnVencimientos.Visible = true;
+                btnTransacciones.Visible = true;
+                btnSaldos.Visible = true;
             }
+            else if (usuarioActual.IdRol != "Admin")
+            {
+                button1.Enabled = false;
+                button2.Enabled = false;
+                button3.Enabled = false;
+
+                button3.Visible = true;
+                button1.Visible = true;
+                button2.Visible = true;
+            }
+
+        }
+        private void FormMenu_Load(object sender, EventArgs e)
+        {
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
+            
+            Bloquear(usuarioActual);
+            
+        }
+
+        private void panelMenu_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
-    }
-  }
+}
 

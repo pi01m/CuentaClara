@@ -44,6 +44,8 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
             CargarUltimos3Dias();
             CargarLogins();
 

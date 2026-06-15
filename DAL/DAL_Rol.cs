@@ -179,15 +179,56 @@ namespace DAL
                 da.Update(ds, "Rol_Permiso");
             }
         }
+        public void DesasignarPermiso(string idRol, string idPermiso)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Rol_Permiso WHERE IdRol = @IdRol AND IdPermiso = @IdPermiso", cn);
+                da.SelectCommand.Parameters.AddWithValue("@IdRol", idRol);
+                da.SelectCommand.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Rol_Permiso");
+
+                if (ds.Tables["Rol_Permiso"].Rows.Count > 0)
+                {
+                    ds.Tables["Rol_Permiso"].Rows[0].Delete();
+
+                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    da.Update(ds, "Rol_Permiso");
+                }
+            }
+        }
 
         // FAMILIA_ROL
 
+
+        public void DesasignarFamilia(string idRol, string idFamilia)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Rol WHERE IdRol = @IdRol AND IdFamilia = @IdFamilia", cn);
+                da.SelectCommand.Parameters.AddWithValue("@IdRol", idRol);
+                da.SelectCommand.Parameters.AddWithValue("@IdFamilia", idFamilia);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Familia_Rol");
+
+                if (ds.Tables["Familia_Rol"].Rows.Count > 0)
+                {
+                    ds.Tables["Familia_Rol"].Rows[0].Delete();
+
+                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    da.Update(ds, "Familia_Rol");
+                }
+            }
+        }
         public void AsignarFamilia(
             string idRol,
             string idFamilia)
         {
             using (SqlConnection cn =
-                new SqlConnection(      ))
+                new SqlConnection(_connectionString))
             {
                 SqlDataAdapter da =
                     new SqlDataAdapter(

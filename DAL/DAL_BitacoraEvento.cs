@@ -103,8 +103,8 @@ namespace DAL
 
                 if (!string.IsNullOrEmpty(evento))
                 {
-                    sql.Append("AND Evento = @Evento ");
-                    cmd.Parameters.AddWithValue("@Evento", evento);
+                    sql.Append("AND Evento LIKE @Evento ");
+                    cmd.Parameters.AddWithValue("@Evento", "%" + evento + "%");
                 }
 
                 if (criticidad.HasValue)

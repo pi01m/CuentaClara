@@ -112,6 +112,55 @@ namespace CuentaClara_TrabajoCampo
             }
 
         }
+
+        public void ActualizarIdioma()
+        {
+            AplicarIdioma();
+
+        }
+
+        private void AplicarIdioma()
+        {
+            var idioma = SessionManager.GetInstancia().GetIdiomaActual();
+            if (idioma == null) return;
+
+            TraducirControles(this.Controls, idioma);
+
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas
+                        .FirstOrDefault(x => x.Clave == clave);
+
+                    if (etiqueta != null)
+                        c.Text = etiqueta.Texto;
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();

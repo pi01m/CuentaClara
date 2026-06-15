@@ -56,9 +56,10 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitulo.ForeColor = Color.FromArgb(12, 74, 144);
-            lblTitulo.Location = new Point(41, 29);
+            lblTitulo.Location = new Point(100, 79);
+            lblTitulo.Margin = new Padding(7, 0, 7, 0);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(288, 41);
+            lblTitulo.Size = new Size(710, 99);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Gestión de Idiomas";
             // 
@@ -67,9 +68,10 @@
             lblSeccionIdioma.AutoSize = true;
             lblSeccionIdioma.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblSeccionIdioma.ForeColor = Color.FromArgb(12, 74, 144);
-            lblSeccionIdioma.Location = new Point(44, 104);
+            lblSeccionIdioma.Location = new Point(107, 284);
+            lblSeccionIdioma.Margin = new Padding(7, 0, 7, 0);
             lblSeccionIdioma.Name = "lblSeccionIdioma";
-            lblSeccionIdioma.Size = new Size(154, 20);
+            lblSeccionIdioma.Size = new Size(390, 50);
             lblSeccionIdioma.TabIndex = 1;
             lblSeccionIdioma.Text = "Seleccione el Idioma:";
             // 
@@ -78,10 +80,12 @@
             cboIdiomas.DropDownStyle = ComboBoxStyle.DropDownList;
             cboIdiomas.Font = new Font("Segoe UI", 11F);
             cboIdiomas.FormattingEnabled = true;
-            cboIdiomas.Location = new Point(239, 100);
+            cboIdiomas.Location = new Point(580, 273);
+            cboIdiomas.Margin = new Padding(7, 8, 7, 8);
             cboIdiomas.Name = "cboIdiomas";
-            cboIdiomas.Size = new Size(256, 28);
+            cboIdiomas.Size = new Size(616, 58);
             cboIdiomas.TabIndex = 2;
+            cboIdiomas.SelectedIndexChanged += cboIdiomas_SelectedIndexChanged;
             // 
             // dgvEtiquetas
             // 
@@ -109,50 +113,55 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvEtiquetas.DefaultCellStyle = dataGridViewCellStyle2;
             dgvEtiquetas.EnableHeadersVisualStyles = false;
-            dgvEtiquetas.Location = new Point(45, 156);
+            dgvEtiquetas.Location = new Point(109, 441);
+            dgvEtiquetas.Margin = new Padding(7, 8, 7, 8);
             dgvEtiquetas.MultiSelect = false;
             dgvEtiquetas.Name = "dgvEtiquetas";
             dgvEtiquetas.ReadOnly = true;
             dgvEtiquetas.RowHeadersVisible = false;
             dgvEtiquetas.RowHeadersWidth = 102;
             dgvEtiquetas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEtiquetas.Size = new Size(875, 323);
+            dgvEtiquetas.Size = new Size(2125, 883);
             dgvEtiquetas.TabIndex = 3;
             // 
             // lblClave
             // 
             lblClave.AutoSize = true;
             lblClave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblClave.Location = new Point(41, 513);
+            lblClave.Location = new Point(100, 1402);
+            lblClave.Margin = new Padding(7, 0, 7, 0);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(50, 19);
+            lblClave.Size = new Size(114, 46);
             lblClave.TabIndex = 4;
             lblClave.Text = "Clave:";
             // 
             // txtClave
             // 
             txtClave.Font = new Font("Segoe UI", 10F);
-            txtClave.Location = new Point(45, 539);
+            txtClave.Location = new Point(109, 1473);
+            txtClave.Margin = new Padding(7, 8, 7, 8);
             txtClave.Name = "txtClave";
-            txtClave.Size = new Size(349, 25);
+            txtClave.Size = new Size(842, 52);
             txtClave.TabIndex = 5;
             // 
             // lblTexto
             // 
             lblTexto.AutoSize = true;
             lblTexto.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTexto.Location = new Point(41, 588);
+            lblTexto.Location = new Point(100, 1607);
+            lblTexto.Margin = new Padding(7, 0, 7, 0);
             lblTexto.Name = "lblTexto";
-            lblTexto.Size = new Size(50, 19);
+            lblTexto.Size = new Size(117, 46);
             lblTexto.TabIndex = 6;
             lblTexto.Text = "Texto:";
             // 
             // txtTexto
             // 
             txtTexto.Font = new Font("Segoe UI", 10F);
-            txtTexto.Location = new Point(45, 614);
+            txtTexto.Location = new Point(109, 1678);
+            txtTexto.Margin = new Padding(7, 8, 7, 8);
             txtTexto.Name = "txtTexto";
-            txtTexto.Size = new Size(349, 25);
+            txtTexto.Size = new Size(842, 52);
             txtTexto.TabIndex = 7;
             // 
             // panelInferior
@@ -160,9 +169,10 @@
             panelInferior.BackColor = Color.FromArgb(12, 74, 144);
             panelInferior.Controls.Add(lblUsuarioLogueado);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 704);
+            panelInferior.Location = new Point(0, 1924);
+            panelInferior.Margin = new Padding(7, 8, 7, 8);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(1161, 46);
+            panelInferior.Size = new Size(2820, 126);
             panelInferior.TabIndex = 13;
             // 
             // lblUsuarioLogueado
@@ -170,9 +180,10 @@
             lblUsuarioLogueado.AutoSize = true;
             lblUsuarioLogueado.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblUsuarioLogueado.ForeColor = Color.White;
-            lblUsuarioLogueado.Location = new Point(17, 12);
+            lblUsuarioLogueado.Location = new Point(41, 33);
+            lblUsuarioLogueado.Margin = new Padding(7, 0, 7, 0);
             lblUsuarioLogueado.Name = "lblUsuarioLogueado";
-            lblUsuarioLogueado.Size = new Size(210, 19);
+            lblUsuarioLogueado.Size = new Size(500, 46);
             lblUsuarioLogueado.TabIndex = 0;
             lblUsuarioLogueado.Text = "Usuario activo: Administrador";
             // 
@@ -182,9 +193,10 @@
             btnNuevoIdioma.FlatStyle = FlatStyle.Flat;
             btnNuevoIdioma.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnNuevoIdioma.ForeColor = Color.White;
-            btnNuevoIdioma.Location = new Point(945, 156);
+            btnNuevoIdioma.Location = new Point(2295, 426);
+            btnNuevoIdioma.Margin = new Padding(7, 8, 7, 8);
             btnNuevoIdioma.Name = "btnNuevoIdioma";
-            btnNuevoIdioma.Size = new Size(163, 52);
+            btnNuevoIdioma.Size = new Size(396, 142);
             btnNuevoIdioma.TabIndex = 8;
             btnNuevoIdioma.Text = "Nuevo Idioma";
             btnNuevoIdioma.UseVisualStyleBackColor = false;
@@ -196,12 +208,14 @@
             btnAgregarEtiqueta.FlatStyle = FlatStyle.Flat;
             btnAgregarEtiqueta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAgregarEtiqueta.ForeColor = Color.FromArgb(12, 74, 144);
-            btnAgregarEtiqueta.Location = new Point(945, 231);
+            btnAgregarEtiqueta.Location = new Point(2295, 631);
+            btnAgregarEtiqueta.Margin = new Padding(7, 8, 7, 8);
             btnAgregarEtiqueta.Name = "btnAgregarEtiqueta";
-            btnAgregarEtiqueta.Size = new Size(163, 52);
+            btnAgregarEtiqueta.Size = new Size(396, 142);
             btnAgregarEtiqueta.TabIndex = 9;
             btnAgregarEtiqueta.Text = "Agregar Etiqueta";
             btnAgregarEtiqueta.UseVisualStyleBackColor = false;
+            btnAgregarEtiqueta.Click += btnAgregarEtiqueta_Click;
             // 
             // btnModificarEtiqueta
             // 
@@ -209,12 +223,14 @@
             btnModificarEtiqueta.FlatStyle = FlatStyle.Flat;
             btnModificarEtiqueta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificarEtiqueta.ForeColor = Color.FromArgb(12, 74, 144);
-            btnModificarEtiqueta.Location = new Point(945, 306);
+            btnModificarEtiqueta.Location = new Point(2295, 836);
+            btnModificarEtiqueta.Margin = new Padding(7, 8, 7, 8);
             btnModificarEtiqueta.Name = "btnModificarEtiqueta";
-            btnModificarEtiqueta.Size = new Size(163, 52);
+            btnModificarEtiqueta.Size = new Size(396, 142);
             btnModificarEtiqueta.TabIndex = 10;
             btnModificarEtiqueta.Text = "Modificar Etiqueta";
             btnModificarEtiqueta.UseVisualStyleBackColor = false;
+            btnModificarEtiqueta.Click += btnModificarEtiqueta_Click;
             // 
             // btnSalir
             // 
@@ -222,9 +238,10 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(12, 74, 144);
-            btnSalir.Location = new Point(974, 601);
+            btnSalir.Location = new Point(2365, 1643);
+            btnSalir.Margin = new Padding(7, 8, 7, 8);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(128, 44);
+            btnSalir.Size = new Size(311, 120);
             btnSalir.TabIndex = 12;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
@@ -235,9 +252,10 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.FromArgb(12, 74, 144);
-            btnAplicar.Location = new Point(502, 600);
+            btnAplicar.Location = new Point(1219, 1640);
+            btnAplicar.Margin = new Padding(7, 8, 7, 8);
             btnAplicar.Name = "btnAplicar";
-            btnAplicar.Size = new Size(128, 44);
+            btnAplicar.Size = new Size(311, 120);
             btnAplicar.TabIndex = 11;
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
@@ -246,11 +264,11 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(495, 505);
-            listBox1.Margin = new Padding(1, 1, 1, 1);
+            listBox1.ItemHeight = 41;
+            listBox1.Location = new Point(1202, 1380);
+            listBox1.Margin = new Padding(2, 3, 2, 3);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(427, 79);
+            listBox1.Size = new Size(1031, 209);
             listBox1.TabIndex = 14;
             // 
             // btnCancelar
@@ -259,19 +277,20 @@
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancelar.ForeColor = Color.FromArgb(12, 74, 144);
-            btnCancelar.Location = new Point(645, 600);
+            btnCancelar.Location = new Point(1566, 1640);
+            btnCancelar.Margin = new Padding(7, 8, 7, 8);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(128, 44);
+            btnCancelar.Size = new Size(311, 120);
             btnCancelar.TabIndex = 15;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
             // 
             // FormGestionIdioma
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1161, 750);
+            ClientSize = new Size(2820, 2050);
             Controls.Add(btnCancelar);
             Controls.Add(listBox1);
             Controls.Add(panelInferior);
@@ -289,6 +308,7 @@
             Controls.Add(lblSeccionIdioma);
             Controls.Add(lblTitulo);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(7, 8, 7, 8);
             MaximizeBox = false;
             Name = "FormGestionIdioma";
             StartPosition = FormStartPosition.CenterScreen;

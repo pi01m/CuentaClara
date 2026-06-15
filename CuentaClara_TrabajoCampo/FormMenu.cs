@@ -4,13 +4,15 @@ using Servicio;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class FormMenu : Form
+    public partial class FormMenu : Form, IObserverIdioma
     {
 
         private BLL_Usuario bllUsuario = new BLL_Usuario();
         public FormMenu()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
+
             if (SessionManager.GetInstancia().GetUsuarioActual().IdRol == "Admin")
             {
                 btnInicio.Enabled = false;
@@ -113,15 +115,78 @@ namespace CuentaClara_TrabajoCampo
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
-            
+            //lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
+
+            lblUsuarioValor.Text = $"{usuarioActual.Login} - {usuarioActual.IdRol}";
+
             Bloquear(usuarioActual);
+            AplicarIdioma();
             
         }
+
+       
 
         private void panelMenu_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        public void ActualizarIdioma()
+        {
+            AplicarIdioma();
+           
+        }
+
+        private void AplicarIdioma()
+        {
+            var idioma = SessionManager.GetInstancia().GetIdiomaActual();
+            if (idioma == null) return;
+
+            TraducirControles(this.Controls, idioma);
+
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas
+                        .FirstOrDefault(x => x.Clave == clave);
+
+                    if (etiqueta != null)
+                        c.Text = etiqueta.Texto;
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
+        private void btnInicio_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormMenu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
         }
     }
 }

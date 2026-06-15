@@ -15,6 +15,7 @@ namespace CuentaClara_TrabajoCampo
     public partial class frmLogIn : Form
     {
         private readonly BLL_Usuario _bllUsuario;
+        private BLL_Idioma bllIdioma;
         public frmLogIn()
         {
             InitializeComponent(); _bllUsuario = new BLL_Usuario();
@@ -22,7 +23,10 @@ namespace CuentaClara_TrabajoCampo
 
         private void frmLogIn_Load_1(object sender, EventArgs e)
         {
+            bllIdioma = new BLL_Idioma();
 
+            comboBox1.DataSource = bllIdioma.ListarIdiomas();
+            comboBox1.DisplayMember = "Nombre";
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -41,11 +45,11 @@ namespace CuentaClara_TrabajoCampo
 
             try
             {
-                bool loginExitoso =
-                    _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
+                bool loginExitoso =_bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
                 if (loginExitoso)
                 {
+                    bllIdioma.CambiarIdioma(comboBox1.Text);
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();
                     this.Close();

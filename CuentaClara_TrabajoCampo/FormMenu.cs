@@ -4,13 +4,15 @@ using Servicio;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class FormMenu : Form
+    public partial class FormMenu : Form, IObserverIdioma
     {
 
         private BLL_Usuario bllUsuario = new BLL_Usuario();
         public FormMenu()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
+
             if (SessionManager.GetInstancia().GetUsuarioActual().IdRol == "Admin")
             {
                 btnInicio.Enabled = false;

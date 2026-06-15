@@ -74,8 +74,8 @@
             groupBox1.Location = new Point(719, 95);
             groupBox1.Margin = new Padding(1);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(1);
-            groupBox1.Size = new Size(158, 43);
+            groupBox1.Padding = new Padding(2, 3, 2, 3);
+            groupBox1.Size = new Size(384, 118);
             groupBox1.TabIndex = 32;
             groupBox1.TabStop = false;
             // 
@@ -86,7 +86,7 @@
             radioBtn_Familia.Location = new Point(76, 11);
             radioBtn_Familia.Margin = new Padding(1);
             radioBtn_Familia.Name = "radioBtn_Familia";
-            radioBtn_Familia.Size = new Size(81, 23);
+            radioBtn_Familia.Size = new Size(193, 50);
             radioBtn_Familia.TabIndex = 17;
             radioBtn_Familia.TabStop = true;
             radioBtn_Familia.Text = "FAMILIA";
@@ -100,7 +100,7 @@
             radioBtn_Rol.Location = new Point(6, 11);
             radioBtn_Rol.Margin = new Padding(1);
             radioBtn_Rol.Name = "radioBtn_Rol";
-            radioBtn_Rol.Size = new Size(49, 23);
+            radioBtn_Rol.Size = new Size(109, 50);
             radioBtn_Rol.TabIndex = 0;
             radioBtn_Rol.TabStop = true;
             radioBtn_Rol.Text = "Rol";
@@ -115,7 +115,7 @@
             listBox1.Location = new Point(26, 528);
             listBox1.Margin = new Padding(1);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(835, 109);
+            listBox1.Size = new Size(2022, 291);
             listBox1.TabIndex = 31;
             // 
             // btnModificar
@@ -160,7 +160,7 @@
             lblTitulo.Location = new Point(26, 40);
             lblTitulo.Margin = new Padding(1, 0, 1, 0);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(228, 32);
+            lblTitulo.Size = new Size(559, 81);
             lblTitulo.TabIndex = 19;
             lblTitulo.Text = "Gestión de Perfiles";
             // 
@@ -173,7 +173,7 @@
             lblRol.Location = new Point(34, 96);
             lblRol.Margin = new Padding(1, 0, 1, 0);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(31, 19);
+            lblRol.Size = new Size(72, 46);
             lblRol.TabIndex = 21;
             lblRol.Text = "Rol";
             // 
@@ -184,7 +184,7 @@
             cmbRol.Location = new Point(34, 125);
             cmbRol.Margin = new Padding(1);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(105, 23);
+            cmbRol.Size = new Size(249, 49);
             cmbRol.TabIndex = 22;
             // 
             // lblPermiso
@@ -196,7 +196,7 @@
             lblPermiso.Location = new Point(177, 96);
             lblPermiso.Margin = new Padding(1, 0, 1, 0);
             lblPermiso.Name = "lblPermiso";
-            lblPermiso.Size = new Size(64, 19);
+            lblPermiso.Size = new Size(149, 46);
             lblPermiso.TabIndex = 23;
             lblPermiso.Text = "Permiso";
             // 
@@ -207,7 +207,7 @@
             cmbPermiso.Location = new Point(177, 125);
             cmbPermiso.Margin = new Padding(1);
             cmbPermiso.Name = "cmbPermiso";
-            cmbPermiso.Size = new Size(105, 23);
+            cmbPermiso.Size = new Size(249, 49);
             cmbPermiso.TabIndex = 24;
             // 
             // btnAsignarPermiso
@@ -268,7 +268,7 @@
             btnAplicar.Location = new Point(26, 648);
             btnAplicar.Margin = new Padding(1);
             btnAplicar.Name = "btnAplicar";
-            btnAplicar.Size = new Size(107, 43);
+            btnAplicar.Size = new Size(260, 118);
             btnAplicar.TabIndex = 28;
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
@@ -281,7 +281,7 @@
             cmbFamilia.Location = new Point(34, 187);
             cmbFamilia.Margin = new Padding(1);
             cmbFamilia.Name = "cmbFamilia";
-            cmbFamilia.Size = new Size(105, 23);
+            cmbFamilia.Size = new Size(249, 49);
             cmbFamilia.TabIndex = 35;
             // 
             // cmbFamiliaHija
@@ -291,7 +291,7 @@
             cmbFamiliaHija.Location = new Point(177, 187);
             cmbFamiliaHija.Margin = new Padding(1);
             cmbFamiliaHija.Name = "cmbFamiliaHija";
-            cmbFamiliaHija.Size = new Size(105, 23);
+            cmbFamiliaHija.Size = new Size(249, 49);
             cmbFamiliaHija.TabIndex = 36;
             // 
             // button1
@@ -319,7 +319,7 @@
             label1.Location = new Point(34, 158);
             label1.Margin = new Padding(1, 0, 1, 0);
             label1.Name = "label1";
-            label1.Size = new Size(57, 19);
+            label1.Size = new Size(134, 46);
             label1.TabIndex = 38;
             label1.Text = "Familia";
             // 
@@ -332,7 +332,7 @@
             label2.Location = new Point(177, 158);
             label2.Margin = new Padding(1, 0, 1, 0);
             label2.Name = "label2";
-            label2.Size = new Size(90, 19);
+            label2.Size = new Size(212, 46);
             label2.TabIndex = 39;
             label2.Text = "Familia-Hija";
             // 
@@ -383,7 +383,7 @@
             // 
             // FormGestionPerfil
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
             ClientSize = new Size(937, 722);
@@ -403,7 +403,7 @@
             Controls.Add(btnAplicar);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(1);
+            Margin = new Padding(2, 3, 2, 3);
             MaximizeBox = false;
             Name = "FormGestionPerfil";
             StartPosition = FormStartPosition.CenterScreen;

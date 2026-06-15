@@ -100,8 +100,17 @@ namespace BLL
             return dal.ObtenerFamiliasPorRol(
                 idRol);
         }
+        public void DesasignarPermiso(string idRol, string idPermiso)
+        {
+            
+            dal.DesasignarPermiso(idRol, idPermiso);
+        }
 
-  
-       
+        public void DesasignarFamilia(string idRol, string idFamilia)
+        {
+            dal.DesasignarFamilia(idRol, idFamilia);
+        }
+
+
     }
 }

@@ -90,9 +90,9 @@
             panelContenedor.Controls.Add(btnSalir);
             panelContenedor.Controls.Add(lblCantidadEventos);
             panelContenedor.Controls.Add(lblTotalEventos);
-            panelContenedor.Location = new Point(10, 10);
+            panelContenedor.Location = new Point(12, 12);
             panelContenedor.Name = "panelContenedor";
-            panelContenedor.Size = new Size(1080, 620);
+            panelContenedor.Size = new Size(1102, 620);
             panelContenedor.TabIndex = 1;
             panelContenedor.Paint += panelContenedor_Paint;
             // 
@@ -276,10 +276,10 @@
             // 
             cboEvento.DropDownStyle = ComboBoxStyle.DropDownList;
             cboEvento.Font = new Font("Segoe UI", 10F);
-            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Imprimir", "Cambio Clave" });
+            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Imprimir", "Cambio Clave", "Asignación familia a rol", "Asignación familia a familia", "Asignación permiso a rol", "Asignación permiso a familia", "Modificacion Familia", "Baja Familia", "Alta Familia", "Desasignación en Perfiles" });
             cboEvento.Location = new Point(780, 435);
             cboEvento.Name = "cboEvento";
-            cboEvento.Size = new Size(120, 25);
+            cboEvento.Size = new Size(144, 25);
             cboEvento.TabIndex = 15;
             // 
             // lblCriticidad
@@ -287,7 +287,7 @@
             lblCriticidad.AutoSize = true;
             lblCriticidad.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCriticidad.ForeColor = Color.FromArgb(15, 45, 75);
-            lblCriticidad.Location = new Point(930, 410);
+            lblCriticidad.Location = new Point(953, 410);
             lblCriticidad.Name = "lblCriticidad";
             lblCriticidad.Size = new Size(74, 19);
             lblCriticidad.TabIndex = 16;
@@ -298,7 +298,7 @@
             cboCriticidad.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCriticidad.Font = new Font("Segoe UI", 10F);
             cboCriticidad.Items.AddRange(new object[] { "1", "2", "3", "4", "5" });
-            cboCriticidad.Location = new Point(930, 435);
+            cboCriticidad.Location = new Point(953, 435);
             cboCriticidad.Name = "cboCriticidad";
             cboCriticidad.Size = new Size(120, 25);
             cboCriticidad.TabIndex = 17;
@@ -310,7 +310,7 @@
             lstMensajes.ItemHeight = 15;
             lstMensajes.Location = new Point(30, 466);
             lstMensajes.Name = "lstMensajes";
-            lstMensajes.Size = new Size(1030, 47);
+            lstMensajes.Size = new Size(1043, 47);
             lstMensajes.TabIndex = 18;
             // 
             // btnLimpiar
@@ -399,7 +399,7 @@
             panelInferior.Dock = DockStyle.Bottom;
             panelInferior.Location = new Point(0, 653);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(1125, 35);
+            panelInferior.Size = new Size(1143, 35);
             panelInferior.TabIndex = 0;
             // 
             // lblUsuarioActivo
@@ -418,7 +418,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1125, 688);
+            ClientSize = new Size(1143, 688);
             Controls.Add(panelInferior);
             Controls.Add(panelContenedor);
             Font = new Font("Segoe UI", 9F);

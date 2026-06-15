@@ -96,7 +96,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administracion",3);
+                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administración",3);
      
                         
                 }
@@ -117,7 +117,7 @@ namespace BLL
         {
             _dalUsuario.ReiniciarIntentos(login);
 
-            _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login,"Administracion",1);
+            _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login,"Administración",1);
                      
         }
 
@@ -227,7 +227,7 @@ namespace BLL
 
                 Servicio_Usuario admin =_sm.GetUsuarioActual();
 
-                _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administracion",3);
+                _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administración",3);
 
                 return true;
             }
@@ -267,7 +267,7 @@ namespace BLL
             string nuevoHash = _encriptadorServicio.CifrarContraseña(claveNueva);
 
             bool actualizacionExitosa = _dalUsuario.ActualizarClave(usuarioActual.Login, nuevoHash);
-            _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuarioActual.Login, "Administracion", 3);
+            _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuarioActual.Login, "Administración", 3);
             return actualizacionExitosa;
         }
     }

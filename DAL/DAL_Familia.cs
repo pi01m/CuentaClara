@@ -161,11 +161,12 @@ namespace DAL
 
                 DataRow row = ds.Tables["Familia_Familia"].NewRow();
 
-               
-                row["IdFamilia"] = padre;
+                // Generamos un nuevo ID único para esta relación (La Clave Primaria)
+                row["IdFamilia_Familia"] = Guid.NewGuid().ToString();
 
-             
-                row["IdFamilia_Familia"] = hija;
+                // Usamos tus nuevas columnas
+                row["IdFamiliaPadre"] = padre;
+                row["IdFamiliaHija"] = hija;
 
                 ds.Tables["Familia_Familia"].Rows.Add(row);
 
@@ -182,21 +183,61 @@ namespace DAL
         @"SELECT f.*
           FROM Familia f
           INNER JOIN Familia_Familia ff
-             ON f.IdFamilia = ff.IdFamilia_Familia
-          WHERE ff.IdFamilia = @Familia",
+             ON f.IdFamilia = ff.IdFamiliaHija
+          WHERE ff.IdFamiliaPadre = @Familia",
         _connectionString))
             {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Familia",
-                    idFamilia);
+                da.SelectCommand.Parameters.AddWithValue("@Familia", idFamilia);
 
                 DataTable dt = new DataTable();
-
                 da.Fill(dt);
 
                 return dt;
             }
         }
+        public void DesasignarPermiso(string idFamilia, string idPermiso)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Permiso WHERE IdFamilia = @IdFamilia AND IdPermiso = @IdPermiso", cn);
+                da.SelectCommand.Parameters.AddWithValue("@IdFamilia", idFamilia);
+                da.SelectCommand.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Familia_Permiso");
+
+                if (ds.Tables["Familia_Permiso"].Rows.Count > 0)
+                {
+                    ds.Tables["Familia_Permiso"].Rows[0].Delete();
+
+                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    da.Update(ds, "Familia_Permiso");
+                }
+            }
+        }
+
+        public void DesasignarSubFamilia(string idPadre, string idHija)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+              
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Familia WHERE IdFamiliaPadre = @IdPadre AND IdFamiliaHija = @IdHija", cn);
+                da.SelectCommand.Parameters.AddWithValue("@IdPadre", idPadre);
+                da.SelectCommand.Parameters.AddWithValue("@IdHija", idHija);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Familia_Familia");
+
+                if (ds.Tables["Familia_Familia"].Rows.Count > 0)
+                {
+                    ds.Tables["Familia_Familia"].Rows[0].Delete();
+
+                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    da.Update(ds, "Familia_Familia");
+                }
+            }
+        }
+
         public bool Eliminar(string idFamilia)
         {
             using (SqlConnection conn =

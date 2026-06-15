@@ -262,115 +262,16 @@ namespace BLL
         {
             return dal.ExisteNombre(nombre);
         }
+
+        public void DesasignarPermiso(string idFamilia, string idPermiso)
+        {
+            dal.DesasignarPermiso(idFamilia, idPermiso);
+        }
+
+        public void DesasignarSubFamilia(string padre, string hija)
+        {
+            dal.DesasignarSubFamilia(padre, hija);
+        }
     } }
-    /////////////////////////////////////////////////////////////////////////////////////////////7
-    #region nuevo 
-
    
-
-        //public void Guardar(Servicio_Familia familia)
-        //{
-        //    if (string.IsNullOrWhiteSpace(familia.Nombre))
-        //        throw new Exception("Nombre requerido");
-
-        //    dal.Guardar(familia);
-        //}
-
-        //public void Eliminar(string idFamilia)
-        //{
-        //    if (string.IsNullOrWhiteSpace(idFamilia))
-        //        throw new Exception("Debe seleccionar una familia.");
-
-        //    dalFR.EliminarPorFamilia(idFamilia);
-
-        //    dalFP.EliminarPorFamilia(idFamilia);
-
-        //    dalFF.EliminarPorFamilia(idFamilia);
-
-        //    bool resultado = dal.Eliminar(idFamilia);
-
-        //    if (!resultado)
-        //        throw new Exception("No se encontró la familia.");
-        //}
-        //public void Modificar(Servicio_Familia familia)
-        //{
-        //    if (string.IsNullOrWhiteSpace(familia.Nombre))
-        //        throw new Exception("Nombre requerido.");
-
-        //    dal.Modificar(familia);
-        //}
-
-        //public bool TienePermiso( string idFamilia,string idPermiso)
-        //{
-        //    if (dalFP.ExistePermiso(
-        //idFamilia,
-        //idPermiso))
-        //    {
-        //        return true;
-        //    }
-
-        //    if (dalFF.TienePermisoEnSubFamilias(
-        //        idFamilia,
-        //        idPermiso))
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-        //public void AsignarPermiso(string idFamilia,string idPermiso)
-        //{   
-        //    if (string.IsNullOrWhiteSpace(idFamilia))throw new Exception("Seleccione una familia.");
-
-
-        //    if (string.IsNullOrWhiteSpace(idPermiso))  throw new Exception("Seleccione un permiso.");
-
-
-        //    if (dalFP.ExistePermiso(idFamilia,idPermiso))
-        //    {
-        //        throw new Exception( "La familia ya posee ese permiso.");
-
-        //    }
-
-        //    dalFP.AsignarPermiso(idFamilia,idPermiso);
-        //}
-
-
-
-
-        //public void AsignarSubFamilia(string idPadre, string idHija)
-        //{
-        //    if (string.IsNullOrWhiteSpace(idPadre))
-        //        throw new Exception("Seleccione familia padre.");
-
-        //    if (string.IsNullOrWhiteSpace(idHija))
-        //        throw new Exception("Seleccione familia hija.");
-
-        //    if (idPadre == idHija)
-        //        throw new Exception("Una familia no puede asignarse a sí misma.");
-
-
-
-        //    // evitar duplicado
-        //    if (dalFF.ExisteRelacion(idPadre, idHija))
-        //        throw new Exception("Esta relación ya existe.");
-
-        //    // evitar ciclos (muy importante)
-        //    if (dalFF.CreaCiclo(idPadre, idHija))
-        //        throw new Exception("No se puede crear una relación circular.");
-
-        //    dalFF.AsignarSubFamilia(idPadre, idHija);
-        //}
-
-
-        //public DataTable ObtenerSubFamilias(string idFamilia)
-        //{
-        //    return dalFF.ObtenerSubFamilias(idFamilia);
-        //}
-        //public DataTable ObtenerFamilias()
-        //{
-        //    return dal.ListarFamilias();
-        //}
-        #endregion
     

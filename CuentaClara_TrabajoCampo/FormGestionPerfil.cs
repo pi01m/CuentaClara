@@ -51,12 +51,12 @@ namespace IU
 
         private void CargarCombos()
         {
-           
+
             cmbPermiso.DataSource = bllPermiso.ListarPermisos();
             cmbPermiso.DisplayMember = "Nombre";
             cmbPermiso.ValueMember = "IdPermiso";
 
-    
+
             DataTable familias = bllFamilia.ObtenerFamilias();
 
             cmbFamilia.DataSource = familias;
@@ -67,13 +67,13 @@ namespace IU
             cmbFamiliaHija.DisplayMember = "Nombre";
             cmbFamiliaHija.ValueMember = "IdFamilia";
 
-      
+
             cmbRol.DataSource = bllRol.ObtenerRoles();
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
         }
 
-   
+
         private void DibujarComposite(TreeNode nodoPadre, Servicio_Familia familiaArmada)
         {
             if (familiaArmada != null && familiaArmada.ObtenerHijos() != null)
@@ -94,7 +94,7 @@ namespace IU
             }
         }
 
-    
+
         private void MostrarArbol()
         {
             treeView1.Nodes.Clear();
@@ -446,7 +446,7 @@ namespace IU
             radioBtn_Rol.Checked = false;
             radioBtn_Familia.Checked = false;
 
-            
+
             btnAsignarPermiso.Enabled = false;
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
@@ -478,7 +478,7 @@ namespace IU
             btnAsignarFamilia.Enabled = false;
             btnAsignarPermiso.Enabled = false;
             btnEliminar.Enabled = false;
-           
+
             button1.Enabled = false;
 
             cmbFamilia.Enabled = true;
@@ -629,7 +629,7 @@ namespace IU
             btnAsignarPermiso.Enabled = false;
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
-            
+
             cmbRol.Enabled = false;
             cmbFamilia.Enabled = false;
             cmbPermiso.Enabled = false;
@@ -657,13 +657,13 @@ namespace IU
                 case "ASIGNAR_FAMILIA":
                     AsignarFamilia();
                     break;
-                case "DESASIGNAR":            
-                    DesasignarElemento();     
+                case "DESASIGNAR":
+                    DesasignarElemento();
                     break;
             }
 
             CargarCombos();
-            MostrarArbol(); 
+            MostrarArbol();
         }
         private void LimpiarModo()
         {
@@ -688,6 +688,11 @@ namespace IU
         private void button2_Click(object sender, EventArgs e)
         {
             LimpiarModo();
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+           Close();
         }
     }
 }

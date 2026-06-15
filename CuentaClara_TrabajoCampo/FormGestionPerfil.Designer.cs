@@ -71,7 +71,7 @@
             groupBox1.BackColor = Color.White;
             groupBox1.Controls.Add(radioBtn_Familia);
             groupBox1.Controls.Add(radioBtn_Rol);
-            groupBox1.Location = new Point(709, 106);
+            groupBox1.Location = new Point(719, 95);
             groupBox1.Margin = new Padding(1);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(1);
@@ -112,7 +112,7 @@
             listBox1.Anchor = AnchorStyles.None;
             listBox1.FormattingEnabled = true;
             listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(32, 528);
+            listBox1.Location = new Point(26, 528);
             listBox1.Margin = new Padding(1);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(835, 109);
@@ -125,7 +125,7 @@
             btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificar.ForeColor = Color.White;
-            btnModificar.Location = new Point(727, 327);
+            btnModificar.Location = new Point(721, 327);
             btnModificar.Margin = new Padding(1);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(167, 43);
@@ -141,7 +141,7 @@
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEliminar.ForeColor = Color.White;
-            btnEliminar.Location = new Point(705, 382);
+            btnEliminar.Location = new Point(710, 382);
             btnEliminar.Margin = new Padding(1);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(167, 43);
@@ -157,7 +157,7 @@
             lblTitulo.BackColor = Color.White;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(32, 40);
+            lblTitulo.Location = new Point(26, 40);
             lblTitulo.Margin = new Padding(1, 0, 1, 0);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(228, 32);
@@ -170,7 +170,7 @@
             lblRol.AutoSize = true;
             lblRol.BackColor = Color.White;
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblRol.Location = new Point(40, 96);
+            lblRol.Location = new Point(34, 96);
             lblRol.Margin = new Padding(1, 0, 1, 0);
             lblRol.Name = "lblRol";
             lblRol.Size = new Size(31, 19);
@@ -181,7 +181,7 @@
             // 
             cmbRol.Anchor = AnchorStyles.None;
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRol.Location = new Point(40, 125);
+            cmbRol.Location = new Point(34, 125);
             cmbRol.Margin = new Padding(1);
             cmbRol.Name = "cmbRol";
             cmbRol.Size = new Size(105, 23);
@@ -193,7 +193,7 @@
             lblPermiso.AutoSize = true;
             lblPermiso.BackColor = Color.White;
             lblPermiso.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblPermiso.Location = new Point(183, 96);
+            lblPermiso.Location = new Point(177, 96);
             lblPermiso.Margin = new Padding(1, 0, 1, 0);
             lblPermiso.Name = "lblPermiso";
             lblPermiso.Size = new Size(64, 19);
@@ -204,7 +204,7 @@
             // 
             cmbPermiso.Anchor = AnchorStyles.None;
             cmbPermiso.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPermiso.Location = new Point(183, 125);
+            cmbPermiso.Location = new Point(177, 125);
             cmbPermiso.Margin = new Padding(1);
             cmbPermiso.Name = "cmbPermiso";
             cmbPermiso.Size = new Size(105, 23);
@@ -217,7 +217,7 @@
             btnAsignarPermiso.FlatStyle = FlatStyle.Flat;
             btnAsignarPermiso.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAsignarPermiso.ForeColor = Color.White;
-            btnAsignarPermiso.Location = new Point(312, 95);
+            btnAsignarPermiso.Location = new Point(317, 95);
             btnAsignarPermiso.Margin = new Padding(1);
             btnAsignarPermiso.Name = "btnAsignarPermiso";
             btnAsignarPermiso.Size = new Size(158, 43);
@@ -233,7 +233,7 @@
             btnAsignarFamilia.FlatStyle = FlatStyle.Flat;
             btnAsignarFamilia.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAsignarFamilia.ForeColor = Color.White;
-            btnAsignarFamilia.Location = new Point(506, 95);
+            btnAsignarFamilia.Location = new Point(511, 95);
             btnAsignarFamilia.Margin = new Padding(1);
             btnAsignarFamilia.Name = "btnAsignarFamilia";
             btnAsignarFamilia.Size = new Size(158, 42);
@@ -249,7 +249,7 @@
             btnCrear.FlatStyle = FlatStyle.Flat;
             btnCrear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCrear.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCrear.Location = new Point(727, 266);
+            btnCrear.Location = new Point(721, 266);
             btnCrear.Margin = new Padding(1);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(167, 43);
@@ -265,7 +265,7 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnAplicar.Location = new Point(32, 648);
+            btnAplicar.Location = new Point(26, 648);
             btnAplicar.Margin = new Padding(1);
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(107, 43);
@@ -278,7 +278,7 @@
             // 
             cmbFamilia.Anchor = AnchorStyles.None;
             cmbFamilia.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFamilia.Location = new Point(40, 187);
+            cmbFamilia.Location = new Point(34, 187);
             cmbFamilia.Margin = new Padding(1);
             cmbFamilia.Name = "cmbFamilia";
             cmbFamilia.Size = new Size(105, 23);
@@ -288,7 +288,7 @@
             // 
             cmbFamiliaHija.Anchor = AnchorStyles.None;
             cmbFamiliaHija.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFamiliaHija.Location = new Point(183, 187);
+            cmbFamiliaHija.Location = new Point(177, 187);
             cmbFamiliaHija.Margin = new Padding(1);
             cmbFamiliaHija.Name = "cmbFamiliaHija";
             cmbFamiliaHija.Size = new Size(105, 23);
@@ -301,7 +301,7 @@
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button1.ForeColor = Color.White;
-            button1.Location = new Point(417, 156);
+            button1.Location = new Point(422, 156);
             button1.Margin = new Padding(1);
             button1.Name = "button1";
             button1.Size = new Size(158, 43);
@@ -316,7 +316,7 @@
             label1.AutoSize = true;
             label1.BackColor = Color.White;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label1.Location = new Point(40, 158);
+            label1.Location = new Point(34, 158);
             label1.Margin = new Padding(1, 0, 1, 0);
             label1.Name = "label1";
             label1.Size = new Size(57, 19);
@@ -329,7 +329,7 @@
             label2.AutoSize = true;
             label2.BackColor = Color.White;
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label2.Location = new Point(183, 158);
+            label2.Location = new Point(177, 158);
             label2.Margin = new Padding(1, 0, 1, 0);
             label2.Name = "label2";
             label2.Size = new Size(90, 19);
@@ -343,7 +343,7 @@
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button2.ForeColor = Color.FromArgb(18, 87, 150);
-            button2.Location = new Point(153, 648);
+            button2.Location = new Point(147, 648);
             button2.Margin = new Padding(1);
             button2.Name = "button2";
             button2.Size = new Size(107, 43);
@@ -360,10 +360,11 @@
             panel1.Controls.Add(button1);
             panel1.Controls.Add(btnAsignarFamilia);
             panel1.Controls.Add(btnAsignarPermiso);
+            panel1.Controls.Add(groupBox1);
             panel1.Controls.Add(btnEliminar);
-            panel1.Location = new Point(22, 11);
+            panel1.Location = new Point(12, 11);
             panel1.Name = "panel1";
-            panel1.Size = new Size(902, 699);
+            panel1.Size = new Size(912, 699);
             panel1.TabIndex = 41;
             // 
             // btnSalir
@@ -372,25 +373,25 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(705, 23);
+            btnSalir.Location = new Point(737, 23);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(140, 38);
             btnSalir.TabIndex = 23;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
+            btnSalir.Click += btnSalir_Click;
             // 
             // FormGestionPerfil
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(949, 722);
+            ClientSize = new Size(937, 722);
             Controls.Add(button2);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(cmbFamilia);
             Controls.Add(cmbFamiliaHija);
-            Controls.Add(groupBox1);
             Controls.Add(listBox1);
             Controls.Add(btnModificar);
             Controls.Add(lblTitulo);

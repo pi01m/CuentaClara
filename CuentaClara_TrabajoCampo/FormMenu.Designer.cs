@@ -290,6 +290,7 @@
             lblUsuario.Size = new Size(373, 21);
             lblUsuario.TabIndex = 0;
             lblUsuario.Text = "Usuario Activo: Devora (Rol: Usuario Operativo)";
+            lblUsuario.Click += lblUsuario_Click;
             // 
             // lblBD
             // 

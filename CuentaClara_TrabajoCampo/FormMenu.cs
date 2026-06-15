@@ -113,16 +113,17 @@ namespace CuentaClara_TrabajoCampo
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
+            BLL_Rol bllRol = new BLL_Rol();
+
             
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+           
+            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+
             Bloquear(usuarioActual);
-            
         }
 
-        private void panelMenu_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+       
     }
 }
 

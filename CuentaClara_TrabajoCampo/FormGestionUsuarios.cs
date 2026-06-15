@@ -44,7 +44,12 @@ namespace CuentaClara_TrabajoCampo
         {
             radioBtnTodosUser.Checked = true;
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
+            BLL_Rol bllRol = new BLL_Rol();
+
+
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
             CargarUsuarios();
 
             btnAplicar.Enabled = false;

@@ -58,29 +58,37 @@ namespace DAL
                 return tabla;
             }
         }
-
-        public bool ExisteFamilia(
-             string idRol,
-             string idFamilia)
+        public string ObtenerNombreRol(string idRol)
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                @"SELECT *
-                  FROM Familia_Rol
-                  WHERE IdRol=@Rol
-                  AND IdFamilia=@Familia",
-                _connectionString))
+            using (SqlConnection cn = new SqlConnection(_connectionString))
             {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Rol",
-                    idRol);
+                
+                SqlDataAdapter da = new SqlDataAdapter("SELECT Nombre FROM Rol WHERE IdRol = @IdRol", cn);
+                da.SelectCommand.Parameters.AddWithValue("@IdRol", idRol);
 
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Familia",
-                    idFamilia);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-                DataTable dt =
-                    new DataTable();
+                
+                if (dt.Rows.Count > 0)
+                {
+                    return dt.Rows[0]["Nombre"].ToString();
+                }
+
+                return "Rol Sin Nombre";
+            }
+        }
+        public bool ExisteFamilia(string idRol,string idFamilia)
+    
+        {
+            using (SqlDataAdapter da = new SqlDataAdapter(@"SELECT * FROM Familia_Rol WHERE IdRol=@Rol AND IdFamilia=@Familia",_connectionString))
+  
+            {
+                da.SelectCommand.Parameters.AddWithValue("@Rol",idRol);
+
+                da.SelectCommand.Parameters.AddWithValue("@Familia",idFamilia);
+
+                DataTable dt =new DataTable();
 
                 da.Fill(dt);
 
@@ -89,36 +97,33 @@ namespace DAL
         }
 
 
-        public bool GuardarRol(Servicio_Rol rol)
-        {
-            using (SqlConnection cn =
-                new SqlConnection(_connectionString))
-            {
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                    "SELECT * FROM Rol",
-                    cn);
+        //public bool GuardarRol(Servicio_Rol rol)
+        //{
+        //    using (SqlConnection cn =new SqlConnection(_connectionString))
+                
+        //    {
+        //        SqlDataAdapter da =new SqlDataAdapter("SELECT * FROM Rol",cn);
 
-                DataSet ds = new DataSet();
+        //        DataSet ds = new DataSet();
 
-                da.Fill(ds, "Rol");
+        //        da.Fill(ds, "Rol");
 
-                DataRow fila =
-                    ds.Tables["Rol"].NewRow();
+        //        DataRow fila =
+        //            ds.Tables["Rol"].NewRow();
 
-                fila["IdRol"] = rol.IdRol;
-                fila["Nombre"] = rol.Nombre;
+        //        fila["IdRol"] = rol.IdRol;
+        //        fila["Nombre"] = rol.Nombre;
 
-                ds.Tables["Rol"].Rows.Add(fila);
+        //        ds.Tables["Rol"].Rows.Add(fila);
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+        //        SqlCommandBuilder cb =
+        //            new SqlCommandBuilder(da);
 
-                da.Update(ds, "Rol");
+        //        da.Update(ds, "Rol");
 
-                return true;
-            }
-        }
+        //        return true;
+        //    }
+        //}
 
         // ROL_PERMISO
 

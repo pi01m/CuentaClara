@@ -53,6 +53,11 @@ namespace BLL
                 idPermiso);
         }
 
+        public string ObtenerNombreRol(string idRol)
+        {
+            return dal.ObtenerNombreRol(idRol);
+        }
+
         public bool TienePermiso(
             string idRol,
             string idPermiso)

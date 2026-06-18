@@ -71,7 +71,7 @@
             groupBox1.BackColor = Color.White;
             groupBox1.Controls.Add(radioBtn_Familia);
             groupBox1.Controls.Add(radioBtn_Rol);
-            groupBox1.Location = new Point(765, 94);
+            groupBox1.Location = new Point(763, 112);
             groupBox1.Margin = new Padding(1);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2, 3, 2, 3);
@@ -112,7 +112,7 @@
             listBox1.Anchor = AnchorStyles.None;
             listBox1.FormattingEnabled = true;
             listBox1.ItemHeight = 41;
-            listBox1.Location = new Point(88, 516);
+            listBox1.Location = new Point(86, 534);
             listBox1.Margin = new Padding(1);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(2022, 291);
@@ -125,7 +125,7 @@
             btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificar.ForeColor = Color.White;
-            btnModificar.Location = new Point(783, 315);
+            btnModificar.Location = new Point(781, 333);
             btnModificar.Margin = new Padding(1);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(167, 43);
@@ -157,7 +157,7 @@
             lblTitulo.BackColor = Color.White;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(88, 28);
+            lblTitulo.Location = new Point(86, 46);
             lblTitulo.Margin = new Padding(1, 0, 1, 0);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(559, 81);
@@ -170,7 +170,7 @@
             lblRol.AutoSize = true;
             lblRol.BackColor = Color.White;
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblRol.Location = new Point(96, 84);
+            lblRol.Location = new Point(94, 102);
             lblRol.Margin = new Padding(1, 0, 1, 0);
             lblRol.Name = "lblRol";
             lblRol.Size = new Size(72, 46);
@@ -181,7 +181,7 @@
             // 
             cmbRol.Anchor = AnchorStyles.None;
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRol.Location = new Point(96, 113);
+            cmbRol.Location = new Point(94, 131);
             cmbRol.Margin = new Padding(1);
             cmbRol.Name = "cmbRol";
             cmbRol.Size = new Size(249, 49);
@@ -193,7 +193,7 @@
             lblPermiso.AutoSize = true;
             lblPermiso.BackColor = Color.White;
             lblPermiso.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblPermiso.Location = new Point(239, 84);
+            lblPermiso.Location = new Point(237, 102);
             lblPermiso.Margin = new Padding(1, 0, 1, 0);
             lblPermiso.Name = "lblPermiso";
             lblPermiso.Size = new Size(149, 46);
@@ -204,7 +204,7 @@
             // 
             cmbPermiso.Anchor = AnchorStyles.None;
             cmbPermiso.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPermiso.Location = new Point(239, 113);
+            cmbPermiso.Location = new Point(237, 131);
             cmbPermiso.Margin = new Padding(1);
             cmbPermiso.Name = "cmbPermiso";
             cmbPermiso.Size = new Size(249, 49);
@@ -249,7 +249,7 @@
             btnCrear.FlatStyle = FlatStyle.Flat;
             btnCrear.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCrear.ForeColor = Color.FromArgb(18, 87, 150);
-            btnCrear.Location = new Point(783, 254);
+            btnCrear.Location = new Point(781, 272);
             btnCrear.Margin = new Padding(1);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(167, 43);
@@ -265,7 +265,7 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnAplicar.Location = new Point(88, 636);
+            btnAplicar.Location = new Point(86, 654);
             btnAplicar.Margin = new Padding(1);
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(260, 118);
@@ -278,7 +278,7 @@
             // 
             cmbFamilia.Anchor = AnchorStyles.None;
             cmbFamilia.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFamilia.Location = new Point(96, 175);
+            cmbFamilia.Location = new Point(94, 193);
             cmbFamilia.Margin = new Padding(1);
             cmbFamilia.Name = "cmbFamilia";
             cmbFamilia.Size = new Size(249, 49);
@@ -288,7 +288,7 @@
             // 
             cmbFamiliaHija.Anchor = AnchorStyles.None;
             cmbFamiliaHija.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFamiliaHija.Location = new Point(239, 175);
+            cmbFamiliaHija.Location = new Point(237, 193);
             cmbFamiliaHija.Margin = new Padding(1);
             cmbFamiliaHija.Name = "cmbFamiliaHija";
             cmbFamiliaHija.Size = new Size(249, 49);
@@ -316,7 +316,7 @@
             label1.AutoSize = true;
             label1.BackColor = Color.White;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label1.Location = new Point(96, 146);
+            label1.Location = new Point(94, 164);
             label1.Margin = new Padding(1, 0, 1, 0);
             label1.Name = "label1";
             label1.Size = new Size(134, 46);
@@ -329,7 +329,7 @@
             label2.AutoSize = true;
             label2.BackColor = Color.White;
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label2.Location = new Point(239, 146);
+            label2.Location = new Point(237, 164);
             label2.Margin = new Padding(1, 0, 1, 0);
             label2.Name = "label2";
             label2.Size = new Size(212, 46);
@@ -343,7 +343,7 @@
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button2.ForeColor = Color.FromArgb(18, 87, 150);
-            button2.Location = new Point(209, 636);
+            button2.Location = new Point(207, 654);
             button2.Margin = new Padding(1);
             button2.Name = "button2";
             button2.Size = new Size(107, 43);
@@ -384,7 +384,7 @@
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1061, 698);
+            ClientSize = new Size(1056, 734);
             Controls.Add(button2);
             Controls.Add(label2);
             Controls.Add(label1);

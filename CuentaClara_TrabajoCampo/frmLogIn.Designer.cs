@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelLogin = new Panel();
+            comboBox1 = new ComboBox();
             picLogo = new PictureBox();
             lblTitulo = new Label();
             lblUsuario = new Label();
@@ -37,7 +38,6 @@
             txtContrasena = new TextBox();
             btnIngresar = new Button();
             btnSalir = new Button();
-            comboBox1 = new ComboBox();
             panelLogin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
@@ -56,10 +56,18 @@
             panelLogin.Controls.Add(txtContrasena);
             panelLogin.Controls.Add(btnIngresar);
             panelLogin.Controls.Add(btnSalir);
-            panelLogin.Location = new Point(112, 74);
+            panelLogin.Location = new Point(29, 39);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(991, 609);
+            panelLogin.Size = new Size(430, 443);
             panelLogin.TabIndex = 0;
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(184, 260);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(188, 25);
+            comboBox1.TabIndex = 8;
             // 
             // picLogo
             // 
@@ -67,7 +75,7 @@
             picLogo.BorderStyle = BorderStyle.FixedSingle;
             picLogo.Location = new Point(32, 16);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(80, 64);
+            picLogo.Size = new Size(58, 46);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 0;
             picLogo.TabStop = false;
@@ -77,9 +85,9 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(131, 43);
+            lblTitulo.Location = new Point(108, 25);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(420, 89);
+            lblTitulo.Size = new Size(173, 37);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -87,35 +95,35 @@
             // 
             lblUsuario.AutoSize = true;
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.Location = new Point(140, 144);
+            lblUsuario.Location = new Point(32, 126);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(322, 45);
+            lblUsuario.Size = new Size(128, 17);
             lblUsuario.TabIndex = 2;
             lblUsuario.Text = "Nombre de Usuario";
             // 
             // txtUsuario
             // 
-            txtUsuario.Location = new Point(140, 192);
+            txtUsuario.Location = new Point(184, 123);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(385, 52);
+            txtUsuario.Size = new Size(185, 25);
             txtUsuario.TabIndex = 3;
             // 
             // lblClave
             // 
             lblClave.AutoSize = true;
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblClave.Location = new Point(140, 276);
+            lblClave.Location = new Point(32, 199);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(196, 45);
+            lblClave.Size = new Size(77, 17);
             lblClave.TabIndex = 4;
             lblClave.Text = "Contraseña";
             // 
             // txtContrasena
             // 
-            txtContrasena.Location = new Point(140, 324);
+            txtContrasena.Location = new Point(184, 191);
             txtContrasena.Name = "txtContrasena";
             txtContrasena.PasswordChar = '*';
-            txtContrasena.Size = new Size(385, 52);
+            txtContrasena.Size = new Size(185, 25);
             txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
@@ -125,9 +133,9 @@
             btnIngresar.FlatStyle = FlatStyle.Flat;
             btnIngresar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(387, 428);
+            btnIngresar.Location = new Point(241, 334);
             btnIngresar.Name = "btnIngresar";
-            btnIngresar.Size = new Size(200, 70);
+            btnIngresar.Size = new Size(128, 46);
             btnIngresar.TabIndex = 6;
             btnIngresar.Text = "Ingresar";
             btnIngresar.UseVisualStyleBackColor = false;
@@ -140,28 +148,20 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(140, 428);
+            btnSalir.Location = new Point(32, 334);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(172, 70);
+            btnSalir.Size = new Size(128, 46);
             btnSalir.TabIndex = 7;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(631, 191);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(302, 53);
-            comboBox1.TabIndex = 8;
-            // 
             // frmLogIn
             // 
-            AutoScaleDimensions = new SizeF(18F, 45F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1154, 778);
+            ClientSize = new Size(498, 525);
             Controls.Add(panelLogin);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedSingle;

@@ -261,7 +261,140 @@ namespace DAL
                 da.Update(ds, "Familia_Rol");
             }
         }
+        public bool ExisteNombre(string nombre)
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Rol",
+                _connectionString))
+            {
+                DataTable dt = new DataTable();
 
+                da.Fill(dt);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    if (fila["Nombre"].ToString().ToUpper() ==
+                        nombre.ToUpper())
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public bool ModificarRol( string idRol,string nuevoNombre)
+   
+    
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Rol WHERE IdRol=@IdRol",
+                _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@IdRol",
+                    idRol);
+
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Rol");
+
+                if (ds.Tables["Rol"].Rows.Count == 0)
+                    return false;
+
+                ds.Tables["Rol"].Rows[0]["Nombre"] =
+                    nuevoNombre;
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Rol");
+
+                return true;
+            }
+        }
+
+        public bool EliminarRol(string idRol)
+        {
+            EliminarRelacionesRol(idRol);
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Rol WHERE IdRol=@IdRol",
+                _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue(
+                    "@IdRol",
+                    idRol);
+
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Rol");
+
+                if (ds.Tables["Rol"].Rows.Count == 0)
+                    return false;
+
+                ds.Tables["Rol"].Rows[0].Delete();
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Rol");
+
+                return true;
+            }
+        }
+
+        public void EliminarRelacionesRol(string idRol)
+        {
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Rol_Permiso",
+                _connectionString))
+            {
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Rol_Permiso");
+
+                foreach (DataRow fila in ds.Tables["Rol_Permiso"].Rows)
+                {
+                    if (fila["IdRol"].ToString() == idRol)
+                    {
+                        fila.Delete();
+                    }
+                }
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Rol_Permiso");
+            }
+
+            using (SqlDataAdapter da =
+                new SqlDataAdapter(
+                "SELECT * FROM Familia_Rol",
+                _connectionString))
+            {
+                DataSet ds = new DataSet();
+
+                da.Fill(ds, "Familia_Rol");
+
+                foreach (DataRow fila in ds.Tables["Familia_Rol"].Rows)
+                {
+                    if (fila["IdRol"].ToString() == idRol)
+                    {
+                        fila.Delete();
+                    }
+                }
+
+                SqlCommandBuilder cb =
+                    new SqlCommandBuilder(da);
+
+                da.Update(ds, "Familia_Rol");
+            }
+        }
         public bool ExisteFamiliaEnRol(
             string idRol,
             string idFamilia)

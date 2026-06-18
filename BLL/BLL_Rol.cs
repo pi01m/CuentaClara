@@ -116,6 +116,34 @@ namespace BLL
             dal.DesasignarFamilia(idRol, idFamilia);
         }
 
+        public void ModificarPerfil(string idRol, string nombre)
+        {
+            if (string.IsNullOrWhiteSpace(idRol))
+                throw new Exception("Seleccione un perfil.");
+
+            if (string.IsNullOrWhiteSpace(nombre))
+                throw new Exception("Ingrese un nombre.");
+
+            dal.ModificarRol(idRol, nombre);
+        }
+
+        public void EliminarPerfil(string idRol)
+        {
+            if (string.IsNullOrWhiteSpace(idRol))
+                throw new Exception("Seleccione un perfil.");
+
+            // Primero elimino relaciones
+            dal.EliminarRelacionesRol(idRol);
+
+            // Después elimino el perfil
+            dal.EliminarRol(idRol);
+        }
+
+        public bool ExisteNombre(string nombre)
+        {
+            return dal.ExisteNombre(nombre);
+        }
+
 
     }
 }

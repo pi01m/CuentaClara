@@ -413,6 +413,109 @@ namespace IU
             }
         }
 
+        private void CrearPerfil()
+        {
+            try
+            {
+                string nombre =
+                    Microsoft.VisualBasic.Interaction.InputBox(
+                        "Ingrese nombre del perfil",
+                        "Nuevo Perfil");
+
+                if (string.IsNullOrWhiteSpace(nombre))
+                    return;
+
+                Servicio_Familia perfil =
+                    new Servicio_Familia(
+                        Guid.NewGuid().ToString(),
+                        nombre);
+
+                bllRol.CrearRol(perfil);
+
+                MessageBox.Show(
+                    "Perfil creado correctamente.");
+
+                MostrarArbol();
+                CargarCombos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ModificarPerfil()
+        {
+            try
+            {
+                if (tipoNodoSeleccionado != "ROL")
+                {
+                    MessageBox.Show(
+                        "Seleccione un Perfil [ROL]");
+                    return;
+                }
+
+                string nuevoNombre =
+                    Microsoft.VisualBasic.Interaction.InputBox(
+                        "Nuevo nombre del perfil",
+                        "Modificar Perfil",
+                        nombreNodoSeleccionado);
+
+                if (string.IsNullOrWhiteSpace(nuevoNombre))
+                    return;
+
+                bllRol.ModificarPerfil(
+                    idNodoSeleccionado,
+                    nuevoNombre);
+
+                MessageBox.Show(
+                    "Perfil modificado correctamente.");
+
+                MostrarArbol();
+                CargarCombos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void EliminarPerfil()
+        {
+            try
+            {
+                if (tipoNodoSeleccionado != "ROL")
+                {
+                    MessageBox.Show(
+                        "Seleccione un Perfil [ROL]");
+                    return;
+                }
+
+                DialogResult r =
+                    MessageBox.Show(
+                        "¿Eliminar perfil?",
+                        "Confirmación",
+                        MessageBoxButtons.YesNo);
+
+                if (r == DialogResult.No)
+                    return;
+
+                bllRol.EliminarPerfil(
+                    idNodoSeleccionado);
+
+                MessageBox.Show(
+                    "Perfil eliminado correctamente.");
+
+                MostrarArbol();
+                CargarCombos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
 
         // EVENTOS DE BOTONES DE MODO
         private void btnAsignarPermiso_Click_1(object sender, EventArgs e)
@@ -519,7 +622,7 @@ namespace IU
         {
             modoActual = "CREAR";
             listBox1.Items.Clear();
-            listBox1.Items.Add("Modo CREAR FAMILIA");
+            listBox1.Items.Add("Modo CREAR");
             listBox1.Items.Add("1. Presione Aplicar.");
             listBox1.Items.Add("2. Ingrese el nombre en la ventana emergente.");
 
@@ -534,8 +637,8 @@ namespace IU
             btnModificar.Enabled = false;
             button1.Enabled = false;
 
-            cmbRol.Enabled = false;
-            cmbFamilia.Enabled = false;
+            radioBtn_Rol.Enabled = true;
+            radioBtn_Familia.Enabled = true;
             cmbPermiso.Enabled = false;
             cmbFamiliaHija.Enabled = false;
             btnAplicar.Enabled = true;
@@ -548,8 +651,10 @@ namespace IU
             if (modoActual == "CREAR" && radioBtn_Rol.Checked)
             {
                 listBox1.Items.Clear();
-                listBox1.Items.Add("Modo crear ROL");
-                listBox1.Items.Add("Los roles son predefinidos.");
+                listBox1.Items.Add("Modo crear PERFIL");
+
+                listBox1.Items.Add("Presione Aplicar.");
+                    
             }
             if (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked)
             {
@@ -643,13 +748,22 @@ namespace IU
             switch (modoActual)
             {
                 case "CREAR":
-                    CrearFamilia();
+                    if (radioBtn_Rol.Checked)
+                        CrearPerfil();
+                    else
+                        CrearFamilia();
                     break;
                 case "MODIFICAR":
-                    ModificarFamilia();
+                    if (tipoNodoSeleccionado == "ROL")
+                        ModificarPerfil();
+                    else
+                        ModificarFamilia();
                     break;
                 case "ELIMINAR":
-                    EliminarFamilia();
+                    if (tipoNodoSeleccionado == "ROL")
+                        EliminarPerfil();
+                    else
+                        EliminarFamilia();
                     break;
                 case "ASIGNAR_PERMISO":
                     AsignarPermiso();

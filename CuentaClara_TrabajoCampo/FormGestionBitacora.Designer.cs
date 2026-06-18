@@ -255,7 +255,7 @@
             // 
             cboModulo.DropDownStyle = ComboBoxStyle.DropDownList;
             cboModulo.Font = new Font("Segoe UI", 10F);
-            cboModulo.Items.AddRange(new object[] { "Administracion", "Seguridad" });
+            cboModulo.Items.AddRange(new object[] { "Administración", "Seguridad" });
             cboModulo.Location = new Point(630, 435);
             cboModulo.Name = "cboModulo";
             cboModulo.Size = new Size(120, 25);

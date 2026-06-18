@@ -45,7 +45,11 @@ namespace CuentaClara_TrabajoCampo
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
+            BLL_Rol bllRol = new BLL_Rol();
+
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
             CargarUltimos3Dias();
             CargarLogins();
 
@@ -91,7 +95,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)

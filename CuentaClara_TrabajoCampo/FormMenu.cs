@@ -112,29 +112,11 @@ namespace CuentaClara_TrabajoCampo
             }
 
         }
-        private void FormMenu_Load(object sender, EventArgs e)
-        {
-            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            //lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {usuarioActual.IdRol}";
-
-            lblUsuarioValor.Text = $"{usuarioActual.Login} - {usuarioActual.IdRol}";
-
-            Bloquear(usuarioActual);
-            AplicarIdioma();
-            
-        }
-
-       
-
-        private void panelMenu_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         public void ActualizarIdioma()
         {
             AplicarIdioma();
-           
+
         }
 
         private void AplicarIdioma()
@@ -179,15 +161,20 @@ namespace CuentaClara_TrabajoCampo
             }
         }
 
-        private void btnInicio_Click(object sender, EventArgs e)
+        private void FormMenu_Load(object sender, EventArgs e)
         {
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            BLL_Rol bllRol = new BLL_Rol();
 
+            
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+           
+            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+
+            Bloquear(usuarioActual);
         }
 
-        private void FormMenu_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            GestorIdioma.GetInstancia().Desuscribir(this);
-        }
+       
     }
 }
 

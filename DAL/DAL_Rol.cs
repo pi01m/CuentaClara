@@ -97,35 +97,6 @@ namespace DAL
         }
 
 
-        //public bool GuardarRol(Servicio_Rol rol)
-        //{
-        //    using (SqlConnection cn =new SqlConnection(_connectionString))
-                
-        //    {
-        //        SqlDataAdapter da =new SqlDataAdapter("SELECT * FROM Rol",cn);
-
-        //        DataSet ds = new DataSet();
-
-        //        da.Fill(ds, "Rol");
-
-        //        DataRow fila =
-        //            ds.Tables["Rol"].NewRow();
-
-        //        fila["IdRol"] = rol.IdRol;
-        //        fila["Nombre"] = rol.Nombre;
-
-        //        ds.Tables["Rol"].Rows.Add(fila);
-
-        //        SqlCommandBuilder cb =
-        //            new SqlCommandBuilder(da);
-
-        //        da.Update(ds, "Rol");
-
-        //        return true;
-        //    }
-        //}
-
-        // ROL_PERMISO
 
         public bool ExistePermiso(string idRol, string idPermiso)
         {
@@ -263,10 +234,8 @@ namespace DAL
         }
         public bool ExisteNombre(string nombre)
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Rol",
-                _connectionString))
+            using (SqlDataAdapter da =new SqlDataAdapter( "SELECT * FROM Rol",_connectionString))
+
             {
                 DataTable dt = new DataTable();
 
@@ -274,8 +243,7 @@ namespace DAL
 
                 foreach (DataRow fila in dt.Rows)
                 {
-                    if (fila["Nombre"].ToString().ToUpper() ==
-                        nombre.ToUpper())
+                    if (fila["Nombre"].ToString().ToUpper() ==nombre.ToUpper())    
                     {
                         return true;
                     }
@@ -289,14 +257,12 @@ namespace DAL
    
     
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Rol WHERE IdRol=@IdRol",
-                _connectionString))
+            using (SqlDataAdapter da =new SqlDataAdapter(  "SELECT * FROM Rol WHERE IdRol=@IdRol",_connectionString))
+
             {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@IdRol",
-                    idRol);
+                da.SelectCommand.Parameters.AddWithValue("@IdRol",idRol);
+                    
+                    
 
                 DataSet ds = new DataSet();
 
@@ -305,11 +271,11 @@ namespace DAL
                 if (ds.Tables["Rol"].Rows.Count == 0)
                     return false;
 
-                ds.Tables["Rol"].Rows[0]["Nombre"] =
-                    nuevoNombre;
+                ds.Tables["Rol"].Rows[0]["Nombre"] =nuevoNombre;
+                    
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb =new SqlCommandBuilder(da);
+                    
 
                 da.Update(ds, "Rol");
 
@@ -319,15 +285,10 @@ namespace DAL
 
         public bool EliminarRol(string idRol)
         {
-            EliminarRelacionesRol(idRol);
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Rol WHERE IdRol=@IdRol",
-                _connectionString))
+            EliminarRelacionesRol(idRol);using (SqlDataAdapter da =new SqlDataAdapter( "SELECT * FROM Rol WHERE IdRol=@IdRol",_connectionString))
+  
             {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@IdRol",
-                    idRol);
+                da.SelectCommand.Parameters.AddWithValue( "@IdRol", idRol);
 
                 DataSet ds = new DataSet();
 
@@ -338,8 +299,8 @@ namespace DAL
 
                 ds.Tables["Rol"].Rows[0].Delete();
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb =new SqlCommandBuilder(da);
+                    
 
                 da.Update(ds, "Rol");
 
@@ -349,10 +310,8 @@ namespace DAL
 
         public void EliminarRelacionesRol(string idRol)
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Rol_Permiso",
-                _connectionString))
+            using (SqlDataAdapter da =new SqlDataAdapter("SELECT * FROM Rol_Permiso",_connectionString))
+
             {
                 DataSet ds = new DataSet();
 
@@ -420,7 +379,24 @@ namespace DAL
                 return dt.Rows.Count > 0;
             }
         }
+        public void CrearPerfilCompleto(
+    string idRol,
+    string nombre,
+    List<string> familias,
+    List<string> permisos)
+        {
+            CrearRol(idRol, nombre);
 
+            foreach (string idFamilia in familias)
+            {
+                AsignarFamilia(idRol, idFamilia);
+            }
+
+            foreach (string idPermiso in permisos)
+            {
+                AsignarPermiso(idRol, idPermiso);
+            }
+        }
         public DataTable ObtenerFamiliasPorRol(string idRol)
             
         {

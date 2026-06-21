@@ -59,22 +59,21 @@ namespace DAL
 
         public bool ExisteNombre(string nombre)
         {
-            using (SqlConnection conn =
-                new SqlConnection(_connectionString))
+            using (SqlConnection conn =new SqlConnection(_connectionString))
+                
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(
-                        "SELECT * FROM Familia",
-                        conn);
-
+                SqlDataAdapter adapter =new SqlDataAdapter( "SELECT * FROM Familia",conn);
+ 
                 DataTable tabla = new DataTable();
 
                 adapter.Fill(tabla);
 
                 foreach (DataRow fila in tabla.Rows)
                 {
-                    if (fila["Nombre"].ToString()
-                        .ToUpper() == nombre.ToUpper())
+                    string nombreBD = fila["Nombre"].ToString().Trim().ToUpper();
+                    string nombreInput = nombre.Trim().ToUpper();
+
+                    if (nombreBD == nombreInput)
                     {
                         return true;
                     }
@@ -84,14 +83,11 @@ namespace DAL
             }
         }
 
-        public bool Guardar(
-             string idFamilia,
-             string nombre)
+        public bool Guardar(string idFamilia,string nombre)
+    
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Familia",
-                _connectionString))
+            using (SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia",_connectionString))
+ 
             {
                 DataSet ds = new DataSet();
 

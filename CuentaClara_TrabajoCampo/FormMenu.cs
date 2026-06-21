@@ -80,7 +80,7 @@ namespace CuentaClara_TrabajoCampo
         }
         private void Bloquear(Servicio_Usuario usuarioActual)
         {
-            if (usuarioActual != null && usuarioActual.IdRol == "Admin")
+            if (usuarioActual != null && usuarioActual.IdRol == "R1")
             {
                 btnInicio.Enabled = false;
                 btnCategorias.Enabled = false;
@@ -166,15 +166,18 @@ namespace CuentaClara_TrabajoCampo
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
             BLL_Rol bllRol = new BLL_Rol();
 
-            
+
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
-           
+
             lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
 
             Bloquear(usuarioActual);
         }
 
-       
+        private void lblUsuario_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

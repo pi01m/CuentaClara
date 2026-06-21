@@ -32,19 +32,32 @@ namespace IU
             InitializeComponent();
         }
 
+        private void DesmarcarCheckedLists()
+        {
+            for (int i = 0; i < clbPermiso.Items.Count; i++) clbPermiso.SetItemChecked(i, false);
+            for (int i = 0; i < clbFamilia.Items.Count; i++) clbFamilia.SetItemChecked(i, false);
+        }
+
         private void FormGestionPerfil_Load(object sender, EventArgs e)
         {
             bllFamilia = new BLL_Familia();
             bllPermiso = new BLL_Permiso();
             bllRol = new BLL_Rol();
 
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+
             CargarCombos();
             MostrarArbol();
 
             btnAplicar.Enabled = false;
-            cmbFamilia.Enabled = false;
+            clbFamilia.Enabled = false;
+            clbPermiso.Enabled = false;
             cmbFamiliaHija.Enabled = false;
-            cmbPermiso.Enabled = false;
+            cmbFamilia.Enabled = false;
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
         }
@@ -52,28 +65,65 @@ namespace IU
         private void CargarCombos()
         {
 
-            cmbPermiso.DataSource = bllPermiso.ListarPermisos();
-            cmbPermiso.DisplayMember = "Nombre";
-            cmbPermiso.ValueMember = "IdPermiso";
-
+            clbPermiso.DataSource = null;
+            clbPermiso.Items.Clear();
+            clbPermiso.DataSource = bllPermiso.ListarPermisos();
+            clbPermiso.DisplayMember = "Nombre";
+            clbPermiso.ValueMember = "IdPermiso";
 
             DataTable familias = bllFamilia.ObtenerFamilias();
 
-            cmbFamilia.DataSource = familias;
-            cmbFamilia.DisplayMember = "Nombre";
-            cmbFamilia.ValueMember = "IdFamilia";
 
+            clbFamilia.DataSource = null;
+            clbFamilia.Items.Clear();
+            clbFamilia.DataSource = familias.Copy();
+            clbFamilia.DisplayMember = "Nombre";
+            clbFamilia.ValueMember = "IdFamilia";
+
+            cmbFamiliaHija.DataSource = null;
             cmbFamiliaHija.DataSource = familias.Copy();
             cmbFamiliaHija.DisplayMember = "Nombre";
             cmbFamiliaHija.ValueMember = "IdFamilia";
 
+            cmbFamilia.DataSource = null;
+            cmbFamilia.DataSource = familias.Copy();
+            cmbFamilia.DisplayMember = "Nombre";
+            cmbFamilia.ValueMember = "IdFamilia";
 
+            cmbRol.DataSource = null;
             cmbRol.DataSource = bllRol.ObtenerRoles();
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
         }
 
+        private void MostrarVistaPreviaFamilia(string idFamilia)
+        {
+            treeViewVistaPrevia.Nodes.Clear();
 
+            if (string.IsNullOrEmpty(idFamilia)) return;
+
+            try
+            {
+                // Traemos la familia desarmada con todo su composite usando tu BLL
+                Servicio_Familia familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(idFamilia);
+
+                if (familiaCompleta != null)
+                {
+                    // Creamos el nodo principal
+                    TreeNode nodoRaiz = new TreeNode("[F] " + familiaCompleta.Nombre);
+                    treeViewVistaPrevia.Nodes.Add(nodoRaiz);
+
+                    // Reutilizamos tu método existente para llenar los hijos
+                    DibujarComposite(nodoRaiz, familiaCompleta);
+
+                    treeViewVistaPrevia.ExpandAll();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la vista previa: " + ex.Message);
+            }
+        }
         private void DibujarComposite(TreeNode nodoPadre, Servicio_Familia familiaArmada)
         {
             if (familiaArmada != null && familiaArmada.ObtenerHijos() != null)
@@ -179,16 +229,52 @@ namespace IU
         {
             try
             {
+                if (clbFamilia.CheckedItems.Count == 0)
+                {
+                    MessageBox.Show("Seleccione al menos una familia de la lista.");
+                    return;
+                }
+
                 if (radioBtn_Rol.Checked)
                 {
                     BLL_Rol bllRol = new BLL_Rol();
                     string idRol = cmbRol.SelectedValue.ToString();
-                    string idFamilia = cmbFamilia.SelectedValue.ToString();
 
-                    bllRol.AsignarFamiliaARol(idRol, idFamilia);
+                    foreach (DataRowView item in clbFamilia.CheckedItems)
+                    {
+                        string idFamilia = item["IdFamilia"].ToString();
+                        string nombreFamilia = item["Nombre"].ToString();
 
-                    bllBitacora.RegistrarBitacora("Asignación familia a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                    MessageBox.Show("Familia asignada al rol correctamente."); LimpiarModo();
+                        string conflictos = bllRol.VerificarRedundanciasRol(idRol, idFamilia);
+                        bool limpiar = false;
+
+
+                        if (!string.IsNullOrEmpty(conflictos))
+                        {
+                            DialogResult r = MessageBox.Show(
+                                $"La familia '{nombreFamilia}' contiene permisos que el Rol ya posee de forma directa: {conflictos}.\n\n¿Desea eliminar esos permisos sueltos para poder asignar la familia?", "Conflicto de Permisos",
+
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question);
+
+                            if (r == DialogResult.Yes)
+                            {
+                                limpiar = true;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+
+                        }
+                        bllRol.AsignarFamiliaARol(idRol, idFamilia, limpiar);
+                    }
+
+
+                    bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+                    MessageBox.Show("Familias asignadas al rol correctamente.");
+                    LimpiarModo();
                 }
                 else if (radioBtn_Familia.Checked)
                 {
@@ -216,35 +302,64 @@ namespace IU
         {
             try
             {
+                if (clbPermiso.CheckedItems.Count == 0)
+                {
+                    MessageBox.Show("Seleccione al menos un permiso de la lista.");
+                    return;
+                }
                 if (radioBtn_Rol.Checked)
                 {
                     string idRol = cmbRol.SelectedValue.ToString();
-                    string idPermiso = cmbPermiso.SelectedValue.ToString();
                     BLL_Rol bllRol = new BLL_Rol();
 
-                    if (bllRol.TienePermiso(idRol, idPermiso))
+                    int asignados = 0;
+                    foreach (DataRowView item in clbPermiso.CheckedItems)
                     {
-                        MessageBox.Show("El rol ya posee ese permiso.");
-                        return;
+                        string idPermiso = item["IdPermiso"].ToString();
+
+
+                        if (!bllRol.RolTienePermisoRecursivo(idRol, idPermiso))
+                        {
+                            bllRol.AsignarPermiso(idRol, idPermiso);
+                            asignados++;
+                        }
+                        else
+                        {
+                            // Opcional: Avisarle al usuario que se omitió porque ya lo tiene heredado
+                            MessageBox.Show($"El rol ya posee el permiso '{item["Nombre"].ToString()}' (de forma directa o a través de una familia). Se omitió esta asignación.", "Aviso de redundancia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
 
-                    bllRol.AsignarPermiso(idRol, idPermiso);
-                    bllBitacora.RegistrarBitacora("Asignación permiso a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                    MessageBox.Show("Permiso asignado correctamente."); LimpiarModo();
+                    if (asignados > 0)
+                    {
+                        bllBitacora.RegistrarBitacora($"Asignación de {asignados} permisos a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+                        MessageBox.Show($"Se asignaron {asignados} permisos correctamente.");
+                    }
+
+                    LimpiarModo();
+
                 }
                 else if (radioBtn_Familia.Checked)
                 {
                     string idFamilia = cmbFamilia.SelectedValue.ToString();
-                    string idPermiso = cmbPermiso.SelectedValue.ToString();
-                    BLL_Familia bllFamilia = new BLL_Familia();
 
-                    if (bllFamilia.TienePermiso(idFamilia, idPermiso))
+                    BLL_Familia bllFamilia = new BLL_Familia();
+                    int asignados = 0;
+
+                    foreach (DataRowView item in clbPermiso.CheckedItems)
                     {
-                        MessageBox.Show("La familia ya posee ese permiso.");
-                        return;
+                        string idPermiso = item["IdPermiso"].ToString();
+                        if (!bllFamilia.TienePermiso(idFamilia, idPermiso))
+                        {
+                            bllFamilia.AsignarPermiso(idFamilia, idPermiso);
+                            asignados++;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"La familia ya posee el permiso '{item["Nombre"].ToString()}'. Se omitió asignar este permiso.");
+                        }
                     }
 
-                    bllFamilia.AsignarPermiso(idFamilia, idPermiso);
                     bllBitacora.RegistrarBitacora("Asignación permiso a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
                     MessageBox.Show("Permiso asignado correctamente."); LimpiarModo();
                 }
@@ -312,6 +427,7 @@ namespace IU
                     return;
                 }
 
+
                 string idFamilia = idNodoSeleccionado;
                 string nombre = nombreNodoSeleccionado;
 
@@ -331,25 +447,48 @@ namespace IU
         {
             try
             {
-                string nombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese nombre de la familia", "Nueva Familia");
 
+                if ((clbPermiso.CheckedItems.Count + clbFamilia.CheckedItems.Count) < 2)
+                {
+                    MessageBox.Show("Una familia debe contener al menos 2 componentes desde su creación. Tilde más elementos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string nombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese nombre de la familia", "Nueva Familia");
                 if (string.IsNullOrWhiteSpace(nombre)) return;
 
                 BLL_Familia bllFamilia = new BLL_Familia();
-
                 if (bllFamilia.ExisteNombre(nombre))
                 {
                     MessageBox.Show("Ya existe una familia con ese nombre.");
                     return;
                 }
 
-                Servicio_Familia familia = new Servicio_Familia(Guid.NewGuid().ToString(), nombre);
+
+                string idNuevaFamilia = Guid.NewGuid().ToString();
+                Servicio_Familia familia = new Servicio_Familia(idNuevaFamilia, nombre);
                 bllFamilia.Guardar(familia);
 
-                bllBitacora.RegistrarBitacora("Alta Familia: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                MessageBox.Show("Familia creada correctamente.");
+
+                foreach (DataRowView itemChecked in clbPermiso.CheckedItems)
+                {
+                    string idPermiso = itemChecked["IdPermiso"].ToString();
+                    bllFamilia.AsignarPermiso(idNuevaFamilia, idPermiso);
+                }
+
+
+                foreach (DataRowView itemChecked in clbFamilia.CheckedItems)
+                {
+                    string idSubFamilia = itemChecked["IdFamilia"].ToString();
+                    bllFamilia.AsignarSubFamilia(idNuevaFamilia, idSubFamilia);
+                }
+
+                bllBitacora.RegistrarBitacora("Alta Familia Modular: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+                MessageBox.Show("Familia estructurada y guardada correctamente.");
+
                 LimpiarModo();
                 CargarCombos();
+                MostrarArbol();
             }
             catch (Exception ex)
             {
@@ -413,30 +552,52 @@ namespace IU
             }
         }
 
-        private void CrearPerfil()
+        private void CrearRol()
         {
             try
             {
-                string nombre =
-                    Microsoft.VisualBasic.Interaction.InputBox(
-                        "Ingrese nombre del perfil",
-                        "Nuevo Perfil");
 
-                if (string.IsNullOrWhiteSpace(nombre))
+                if (clbPermiso.CheckedItems.Count == 0 && clbFamilia.CheckedItems.Count == 0)
+                {
+                    MessageBox.Show("No se permiten Roles vacíos. Tilde al menos un Permiso o una Familia inicial antes de continuar.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
+                }
 
-                Servicio_Familia perfil =
-                    new Servicio_Familia(
-                        Guid.NewGuid().ToString(),
-                        nombre);
+                string nombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese nombre del Rol", "Nuevo Rol");
+                if (string.IsNullOrWhiteSpace(nombre)) return;
+                if (bllRol.ExisteNombre(nombre))
+                {
+                    MessageBox.Show("Ya existe un rol con ese nombre.");
+                    return;
+                }
 
+                string idNuevoPerfil = Guid.NewGuid().ToString();
+                Servicio_Familia perfil = new Servicio_Familia(idNuevoPerfil, nombre);
                 bllRol.CrearRol(perfil);
 
-                MessageBox.Show(
-                    "Perfil creado correctamente.");
 
-                MostrarArbol();
+
+                foreach (DataRowView itemChecked in clbFamilia.CheckedItems)
+                {
+                    string idFamilia = itemChecked["IdFamilia"].ToString();
+                    bllRol.AsignarFamiliaARol(idNuevoPerfil, idFamilia, false);
+                }
+
+                foreach (DataRowView itemChecked in clbPermiso.CheckedItems)
+                {
+                    string idPermiso = itemChecked["IdPermiso"].ToString();
+
+
+                    if (!bllRol.RolTienePermisoRecursivo(idNuevoPerfil, idPermiso))
+                    {
+                        bllRol.AsignarPermiso(idNuevoPerfil, idPermiso);
+                    }
+                }
+
+                MessageBox.Show("Rol creado con éxito. El sistema omitió los permisos redundantes de forma automática.");
+                LimpiarModo();
                 CargarCombos();
+                MostrarArbol();
             }
             catch (Exception ex)
             {
@@ -450,26 +611,26 @@ namespace IU
             {
                 if (tipoNodoSeleccionado != "ROL")
                 {
-                    MessageBox.Show(
-                        "Seleccione un Perfil [ROL]");
+                    MessageBox.Show("Seleccione un Perfil [ROL]");
+
                     return;
                 }
 
-                string nuevoNombre =
-                    Microsoft.VisualBasic.Interaction.InputBox(
-                        "Nuevo nombre del perfil",
-                        "Modificar Perfil",
-                        nombreNodoSeleccionado);
+                string nuevoNombre = Microsoft.VisualBasic.Interaction.InputBox("Nuevo nombre del Rol", "Modificar Rol", nombreNodoSeleccionado);
 
-                if (string.IsNullOrWhiteSpace(nuevoNombre))
+
+                if (string.IsNullOrWhiteSpace(nuevoNombre)) return;
+
+                if (nuevoNombre.ToUpper() != nombreNodoSeleccionado.ToUpper() && bllRol.ExisteNombre(nuevoNombre))
+                {
+                    MessageBox.Show("Ya existe un Rol con ese nombre. Elija otro.");
                     return;
+                }
 
-                bllRol.ModificarPerfil(
-                    idNodoSeleccionado,
-                    nuevoNombre);
+                bllRol.ModificarPerfil(idNodoSeleccionado, nuevoNombre);
 
-                MessageBox.Show(
-                    "Perfil modificado correctamente.");
+                MessageBox.Show("Rol modificado correctamente.");
+
 
                 MostrarArbol();
                 CargarCombos();
@@ -516,8 +677,6 @@ namespace IU
         }
 
 
-
-        // EVENTOS DE BOTONES DE MODO
         private void btnAsignarPermiso_Click_1(object sender, EventArgs e)
         {
             modoActual = "ASIGNAR_PERMISO";
@@ -531,8 +690,8 @@ namespace IU
             radioBtn_Familia.Checked = false;
 
             cmbRol.Enabled = false;
+            clbFamilia.Enabled = false;
             cmbFamilia.Enabled = false;
-            cmbPermiso.Enabled = false;
             cmbFamiliaHija.Enabled = false;
             btnAplicar.Enabled = true;
         }
@@ -554,12 +713,12 @@ namespace IU
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
             button1.Enabled = false;
-
+            clbFamilia.Enabled = true;
 
             cmbRol.Enabled = false;
-            cmbFamilia.Enabled = false;
+            clbFamilia.Enabled = false;
             cmbFamiliaHija.Enabled = false;
-            cmbPermiso.Enabled = false;
+
             btnAplicar.Enabled = true;
         }
 
@@ -584,9 +743,9 @@ namespace IU
 
             button1.Enabled = false;
 
-            cmbFamilia.Enabled = true;
+            clbFamilia.Enabled = true;
             cmbRol.Enabled = false;
-            cmbPermiso.Enabled = false;
+
             cmbFamiliaHija.Enabled = false;
             btnAplicar.Enabled = true;
         }
@@ -611,9 +770,9 @@ namespace IU
             btnModificar.Enabled = false;
             button1.Enabled = false;
 
-            cmbFamilia.Enabled = true;
+            clbFamilia.Enabled = true;
             cmbRol.Enabled = false;
-            cmbPermiso.Enabled = false;
+
             cmbFamiliaHija.Enabled = false;
             btnAplicar.Enabled = true;
         }
@@ -623,8 +782,8 @@ namespace IU
             modoActual = "CREAR";
             listBox1.Items.Clear();
             listBox1.Items.Add("Modo CREAR");
-            listBox1.Items.Add("1. Presione Aplicar.");
-            listBox1.Items.Add("2. Ingrese el nombre en la ventana emergente.");
+            listBox1.Items.Add("1. Elegir Rol/Familia.");
+
 
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
@@ -639,7 +798,7 @@ namespace IU
 
             radioBtn_Rol.Enabled = true;
             radioBtn_Familia.Enabled = true;
-            cmbPermiso.Enabled = false;
+
             cmbFamiliaHija.Enabled = false;
             btnAplicar.Enabled = true;
 
@@ -651,35 +810,43 @@ namespace IU
             if (modoActual == "CREAR" && radioBtn_Rol.Checked)
             {
                 listBox1.Items.Clear();
-                listBox1.Items.Add("Modo crear PERFIL");
+                listBox1.Items.Add(">>> MODO: CREAR NUEVO PERFIL (ROL) <<<");
+                listBox1.Items.Add("1. Seleccione en las listas todos los Permisos y/o Familias iniciales.");
+                listBox1.Items.Add("2. Recuerde que NO puede quedar vacío (es obligatorio marcar al menos uno).");
+                listBox1.Items.Add("3. Presione el botón 'Aplicar'.");
+                listBox1.Items.Add("4. Ingrese el nombre del nuevo Perfil en la ventana emergente.");
 
-                listBox1.Items.Add("Presione Aplicar.");
-                    
+                clbPermiso.Enabled = true;
+                clbFamilia.Enabled = true;
+                cmbFamiliaHija.Enabled = false;
+                cmbRol.Enabled = false;
+
+                DesmarcarCheckedLists();
             }
             if (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked)
             {
                 listBox1.Items.Clear();
                 listBox1.Items.Add("Asignando permiso a ROL:");
-                listBox1.Items.Add("1. Elija el ROL en la lista desplegable.");
+                listBox1.Items.Add("1. Elija el ROL del ComboBox.");
                 listBox1.Items.Add("2. Elija el PERMISO en la lista desplegable.");
                 listBox1.Items.Add("3. Presione Aplicar.");
 
                 cmbRol.Enabled = true;
-                cmbPermiso.Enabled = true;
-                cmbFamilia.Enabled = false;
+                clbPermiso.Enabled = true;
+                clbFamilia.Enabled = false;
                 cmbFamiliaHija.Enabled = false;
             }
             if (modoActual == "ASIGNAR_FAMILIA" && radioBtn_Rol.Checked)
             {
                 listBox1.Items.Clear();
                 listBox1.Items.Add("Modo asignar familia a ROL");
-                listBox1.Items.Add("1. Elija el ROL en la lista desplegable.");
+                listBox1.Items.Add("1. Elija el ROL del ComboBox.");
                 listBox1.Items.Add("2. Elija la FAMILIA en la lista desplegable.");
                 listBox1.Items.Add("3. Presione Aplicar.");
                 cmbRol.Enabled = true;
-                cmbFamilia.Enabled = true;
+                clbFamilia.Enabled = true;
                 cmbFamiliaHija.Enabled = false;
-                cmbPermiso.Enabled = false;
+
             }
         }
 
@@ -688,7 +855,17 @@ namespace IU
             if (modoActual == "CREAR" && radioBtn_Familia.Checked)
             {
                 listBox1.Items.Clear();
-                listBox1.Items.Add("Modo crear FAMILIA");
+                listBox1.Items.Add(">>> MODO: CREAR NUEVA FAMILIA <<<");
+                listBox1.Items.Add("1. Seleccione los Permisos y/o Subfamilias que compondrán esta familia.");
+                listBox1.Items.Add("2. Es OBLIGATORIO tildar al menos un elemento.");
+                listBox1.Items.Add("3. Presione 'Aplicar' e ingrese el nombre de la Familia.");
+
+                clbPermiso.Enabled = true;
+                cmbFamilia.Enabled = true;
+                cmbFamiliaHija.Enabled = false;
+                cmbRol.Enabled = false;
+
+                DesmarcarCheckedLists();
             }
             if (modoActual == "ASIGNAR_PERMISO" && radioBtn_Familia.Checked)
             {
@@ -697,10 +874,13 @@ namespace IU
                 listBox1.Items.Add("1. Elija la FAMILIA en la lista desplegable determinada.");
                 listBox1.Items.Add("2. Elija el PERMISO en la lista desplegable determinada.");
                 listBox1.Items.Add("3. Presione Aplicar.");
-                cmbFamilia.Enabled = true;
-                cmbPermiso.Enabled = true;
+                clbFamilia.Enabled = true;
+
                 cmbRol.Enabled = false;
                 cmbFamiliaHija.Enabled = false;
+                cmbFamilia.Enabled = true;
+                clbPermiso.Enabled = true;
+                clbFamilia.Enabled = false;
             }
             if (modoActual == "ASIGNAR_FAMILIA" && radioBtn_Familia.Checked)
             {
@@ -713,7 +893,9 @@ namespace IU
                 cmbFamilia.Enabled = true;
                 cmbFamiliaHija.Enabled = true;
                 cmbRol.Enabled = false;
-                cmbPermiso.Enabled = false;
+                clbFamilia.Enabled = false;
+                clbPermiso.Enabled = false;
+
             }
         }
         private void button1_Click(object sender, EventArgs e)
@@ -736,8 +918,8 @@ namespace IU
             btnModificar.Enabled = false;
 
             cmbRol.Enabled = false;
-            cmbFamilia.Enabled = false;
-            cmbPermiso.Enabled = false;
+            clbFamilia.Enabled = false;
+
             cmbFamiliaHija.Enabled = false;
 
 
@@ -749,7 +931,7 @@ namespace IU
             {
                 case "CREAR":
                     if (radioBtn_Rol.Checked)
-                        CrearPerfil();
+                        CrearRol();
                     else
                         CrearFamilia();
                     break;
@@ -787,9 +969,11 @@ namespace IU
             radioBtn_Familia.Enabled = false;
             radioBtn_Rol.Checked = false;
             radioBtn_Familia.Checked = false;
+            clbPermiso.Enabled = false;
+            clbFamilia.Enabled = false;
+            DesmarcarCheckedLists();
             cmbRol.Enabled = false;
-            cmbFamilia.Enabled = false;
-            cmbPermiso.Enabled = false;
+            btnCrear.Enabled = true;
             cmbFamiliaHija.Enabled = false;
             btnAsignarFamilia.Enabled = true;
             btnAsignarPermiso.Enabled = true;
@@ -798,6 +982,7 @@ namespace IU
             button1.Enabled = true;
             btnAplicar.Enabled = false;
             treeView1.SelectedNode = null;
+            treeViewVistaPrevia.Nodes.Clear();
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -806,7 +991,24 @@ namespace IU
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-           Close();
+            Close();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void clbFamilia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (clbFamilia.SelectedItem != null)
+            {
+                
+                DataRowView row = (DataRowView)clbFamilia.SelectedItem;
+                string idFam = row["IdFamilia"].ToString();
+
+                MostrarVistaPreviaFamilia(idFam);
+            }
         }
     }
 }

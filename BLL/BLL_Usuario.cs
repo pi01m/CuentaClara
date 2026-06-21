@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Text.RegularExpressions;
 namespace BLL
 {
     public class BLL_Usuario
@@ -21,8 +22,6 @@ namespace BLL
 
             _dalUsuario = new DAL_Usuario(connStr);
 
-            //_dalFamiliaPermiso = new DAL_FamiliaRol(connStr);
-
             _encriptadorServicio = new Servicio_Cripto();
 
             _bitacoraServicio = new BLL_BitacoraEvento();
@@ -30,6 +29,24 @@ namespace BLL
                     
 
             _sm = SessionManager.GetInstancia();
+        }
+        private void ValidarDatosBasicos(string dni, string nombre, string apellido, string email)
+        {
+           
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido))
+                throw new Exception("El nombre y el apellido son obligatorios.");
+
+           
+            if (!Regex.IsMatch(nombre, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$") || !Regex.IsMatch(apellido, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+                throw new Exception("El nombre y el apellido solo pueden contener letras.");
+
+           
+            if (string.IsNullOrWhiteSpace(dni) || !Regex.IsMatch(dni, @"^\d{8}$"))
+                throw new Exception("El DNI debe contener exactamente 8 números enteros.");
+
+            
+            if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                throw new Exception("El formato del correo electrónico no es válido.");
         }
         public DataTable ListarUsuarios()
         {
@@ -46,11 +63,7 @@ namespace BLL
                 usuario.Permisos.AgregarRol(permiso);
             }
         }
-        public bool AsignarRol(string dni, string idRol)
-        {
-            return _dalUsuario.AsignarRol(dni, idRol);
-        }
-
+      
         public bool CargarCredenciales(string nombreUsuario,string contraseña){
             
             string hash =_encriptadorServicio.CifrarContraseña(contraseña);
@@ -81,8 +94,11 @@ namespace BLL
         {
             try
             {
+
+                ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
+
                 if (_dalUsuario.ExisteUsuario(usuario.Login))
-                    return false;
+                    throw new Exception("El nombre de usuario (Login) ya se encuentra registrado.");
 
                 string contraseñaInicial = usuario.Apellido + usuario.DNI;
                    
@@ -209,20 +225,21 @@ namespace BLL
             return true;
         }
 
-        public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail)
+        public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail, string nuevoRol)
         {
             try
             {
+                ValidarDatosBasicos(dni, nuevoNombre, nuevoApellido, nuevoEmail);
                 Servicio_Usuario usuario = _dalUsuario.ObtenerUsuario(dni);
 
-                if (usuario == null)return false;
-
-                if (!VerificarEstadoUsuario(usuario))return false;
+                if (usuario == null) throw new Exception("No se encontró el usuario a modificar.");
+                if (!VerificarEstadoUsuario(usuario)) throw new Exception("El usuario no se encuentra en un estado válido para ser modificado.");
 
                 usuario.Nombre = nuevoNombre;
                 usuario.Apellido = nuevoApellido;
                 usuario.email = nuevoEmail;
-
+                usuario.IdRol = nuevoRol;
+                usuario.Login = nuevoNombre + dni;
                 _dalUsuario.ModificarUsuario(usuario);
 
                 Servicio_Usuario admin =_sm.GetUsuarioActual();
@@ -236,15 +253,7 @@ namespace BLL
                 return false;
             }
         }
-        public bool ValidarAdministrador(  string contraseñaIngresada)
-  
-        {
-            Servicio_Usuario admin = SessionManager.GetInstancia() .GetUsuarioActual();
-
-            string hash =_encriptadorServicio.CifrarContraseña( contraseñaIngresada);
-            return string.Equals(hash,admin.Password, StringComparison.OrdinalIgnoreCase);  
-  
-        }
+      
         public DataTable ListarLogins()
         {
             return _dalUsuario.ListarLogins();

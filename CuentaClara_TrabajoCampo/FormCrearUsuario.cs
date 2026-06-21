@@ -17,7 +17,7 @@ namespace CuentaClara_TrabajoCampo
             InitializeComponent();
         }
 
-
+        private BLL_Rol bllRol = new BLL_Rol();
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -30,7 +30,7 @@ namespace CuentaClara_TrabajoCampo
             usuario.email = txtCorreo.Text;
             txtLogin.Text = txtNombre.Text + txtDNI.Text;
             usuario.Login = txtLogin.Text;
-            usuario.IdRol = cmbRol.SelectedItem.ToString();
+            usuario.IdRol = cmbRol.SelectedValue.ToString();
             usuario.Activo = chkActivo.Checked ? 1 : 0;
 
 
@@ -53,7 +53,10 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormCrearUsuario_Load_1(object sender, EventArgs e)
         {
-
+            cmbRol.DataSource = null;
+            cmbRol.DataSource = bllRol.ObtenerRoles();
+            cmbRol.DisplayMember = "Nombre";
+            cmbRol.ValueMember = "IdRol";
         }
 
         private void chkActivo_CheckedChanged(object sender, EventArgs e)

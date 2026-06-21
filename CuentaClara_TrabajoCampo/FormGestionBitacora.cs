@@ -95,7 +95,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)

@@ -727,7 +727,7 @@ namespace IU
             modoActual = "MODIFICAR";
             listBox1.Items.Clear();
             listBox1.Items.Add("Modo modificar FAMILIA seleccionada\n");
-            listBox1.Items.Add("1. Seleccione una Familia [F] en el árbol.");
+            listBox1.Items.Add("1. Seleccione una Familia [F] o Rol [R] en el árbol.");
             listBox1.Items.Add("2. Presione Aplicar.");
             listBox1.Items.Add("3. Ingrese el nuevo nombre en la ventana emergente.");
 
@@ -755,8 +755,8 @@ namespace IU
             modoActual = "ELIMINAR";
             listBox1.Items.Clear();
 
-            listBox1.Items.Add("Modo ELIMINAR FAMILIA (Baja completa)");
-            listBox1.Items.Add("1. Seleccione una Familia [F] en el árbol.");
+            listBox1.Items.Add("Modo ELIMINAR FAMILIA/ROL (Baja completa)");
+            listBox1.Items.Add("1. Seleccione una Familia [F] o Rol [R] en el árbol.");
             listBox1.Items.Add("2. Presione Aplicar para destruirla del sistema.");
 
             radioBtn_Rol.Enabled = false;

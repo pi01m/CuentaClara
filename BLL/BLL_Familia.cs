@@ -14,8 +14,8 @@ namespace BLL
         private DAL_Familia dal;
         private BLL_BitacoraEvento bllBitacora = new BLL_BitacoraEvento();
         private DAL_Rol dalRol;
-        private BLL_Permiso bllPermiso
-            ;
+        private BLL_Permiso bllPermiso;
+            
 
         public BLL_Familia()
         {
@@ -161,12 +161,7 @@ namespace BLL
 
         }
 
-        public List<Servicio_Familia> ObtenerSubFamilias( string idFamilia)
-           
-        {
-            return dal.ObtenerSubFamilias(idFamilia);
-               
-        }
+       
         private Servicio_Familia BuscarFamilia(string idFamilia)
         {
             List<Servicio_Familia> familias = dal.ListarFamilias();

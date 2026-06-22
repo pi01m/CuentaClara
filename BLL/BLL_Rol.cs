@@ -133,13 +133,6 @@ namespace BLL
 
         }
 
-        public bool TieneFamilia( string idRol,string idFamilia)
-  
-        {
-            return dal.ExisteFamilia( idRol, idFamilia);
-               
-               
-        }
 
         public List<Servicio_Familia> ObtenerFamiliasPorRol(string idRol)
             

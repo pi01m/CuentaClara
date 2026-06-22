@@ -22,7 +22,7 @@ namespace IU
         private string tipoNodoSeleccionado = "";
         private string nombreNodoSeleccionado = "";
 
-        
+
         private BLL_Familia bllFamilia;
         private BLL_Permiso bllPermiso;
         private BLL_Rol bllRol;
@@ -105,16 +105,16 @@ namespace IU
 
             try
             {
-                
+
                 Servicio_Familia familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(idFamilia);
 
                 if (familiaCompleta != null)
                 {
-                    
+
                     TreeNode nodoRaiz = new TreeNode("[F] " + familiaCompleta.Nombre);
                     treeViewVistaPrevia.Nodes.Add(nodoRaiz);
 
-                   
+
                     DibujarComposite(nodoRaiz, familiaCompleta);
 
                     treeViewVistaPrevia.ExpandAll();
@@ -254,7 +254,7 @@ namespace IU
                         if (!string.IsNullOrEmpty(conflictos))
                         {
                             DialogResult r = MessageBox.Show($"La familia '{nombreFamilia}' contiene permisos que el Rol ya posee de forma directa: {conflictos}.\n\n¿Desea eliminar esos permisos sueltos para poder asignar la familia?", "Conflicto de Permisos",
-                                MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                             if (r == DialogResult.Yes)
                             {
@@ -281,7 +281,7 @@ namespace IU
 
                     bllFamilia.AsignarSubFamilia(idPadre, idHija);
 
-                    
+
                     MessageBox.Show("Familia asignada correctamente."); LimpiarModo();
                 }
                 else
@@ -322,13 +322,13 @@ namespace IU
                         }
                         else
                         {
-                            
+
                             MessageBox.Show($"El rol ya posee el permiso '{item["Nombre"].ToString()}' (de forma directa o a través de una familia). Se omitió esta asignación.", "Aviso de redundancia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
 
                     if (asignados > 0)
-                    {    
+                    {
                         MessageBox.Show($"Se asignaron {asignados} permisos correctamente.");
                     }
 
@@ -427,7 +427,7 @@ namespace IU
                 BLL_Familia bllFamilia = new BLL_Familia();
                 bllFamilia.Eliminar(idFamilia);
 
-                
+
                 MessageBox.Show("Familia eliminada correctamente."); LimpiarModo();
             }
             catch (Exception ex)
@@ -476,7 +476,7 @@ namespace IU
                     bllFamilia.AsignarSubFamilia(idNuevaFamilia, idSubFamilia);
                 }
 
-               
+
                 MessageBox.Show("Familia estructurada y guardada correctamente.");
 
                 LimpiarModo();
@@ -643,15 +643,15 @@ namespace IU
                     return;
                 }
 
-                DialogResult r =MessageBox.Show("¿Eliminar perfil?","Confirmación",MessageBoxButtons.YesNo);
-  
+                DialogResult r = MessageBox.Show("¿Eliminar perfil?", "Confirmación", MessageBoxButtons.YesNo);
+
                 if (r == DialogResult.No) return;
-                   
+
 
                 bllRol.EliminarRol(idNodoSeleccionado);
 
                 MessageBox.Show("Rol eliminado correctamente.");
-                    
+
 
                 MostrarArbol();
                 CargarCombos();
@@ -994,12 +994,17 @@ namespace IU
         {
             if (clbFamilia.SelectedItem != null)
             {
-                
+
                 DataRowView row = (DataRowView)clbFamilia.SelectedItem;
                 string idFam = row["IdFamilia"].ToString();
 
                 MostrarVistaPreviaFamilia(idFam);
             }
+        }
+
+        private void clbPermiso_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -80,8 +80,8 @@
             groupBox1.Location = new Point(873, 120);
             groupBox1.Margin = new Padding(0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(1);
-            groupBox1.Size = new Size(190, 69);
+            groupBox1.Padding = new Padding(2, 3, 2, 3);
+            groupBox1.Size = new Size(461, 189);
             groupBox1.TabIndex = 32;
             groupBox1.TabStop = false;
             // 
@@ -89,10 +89,10 @@
             // 
             radioBtn_Familia.AutoSize = true;
             radioBtn_Familia.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            radioBtn_Familia.Location = new Point(89, 26);
+            radioBtn_Familia.Location = new Point(216, 71);
             radioBtn_Familia.Margin = new Padding(0);
             radioBtn_Familia.Name = "radioBtn_Familia";
-            radioBtn_Familia.Size = new Size(81, 23);
+            radioBtn_Familia.Size = new Size(193, 50);
             radioBtn_Familia.TabIndex = 17;
             radioBtn_Familia.TabStop = true;
             radioBtn_Familia.Text = "FAMILIA";
@@ -103,7 +103,7 @@
             // 
             radioBtn_Rol.AutoSize = true;
             radioBtn_Rol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            radioBtn_Rol.Location = new Point(12, 28);
+            radioBtn_Rol.Location = new Point(29, 77);
             radioBtn_Rol.Margin = new Padding(0);
             radioBtn_Rol.Name = "radioBtn_Rol";
             radioBtn_Rol.Size = new Size(54, 23);
@@ -134,7 +134,7 @@
             btnModificar.Location = new Point(581, 327);
             btnModificar.Margin = new Padding(0);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(158, 44);
+            btnModificar.Size = new Size(384, 120);
             btnModificar.TabIndex = 30;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = false;
@@ -150,7 +150,7 @@
             btnEliminar.Location = new Point(581, 399);
             btnEliminar.Margin = new Padding(0);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(158, 43);
+            btnEliminar.Size = new Size(384, 118);
             btnEliminar.TabIndex = 29;
             btnEliminar.Text = "Eliminar ";
             btnEliminar.UseVisualStyleBackColor = false;
@@ -166,7 +166,7 @@
             lblTitulo.Location = new Point(42, 23);
             lblTitulo.Margin = new Padding(0);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(228, 32);
+            lblTitulo.Size = new Size(559, 81);
             lblTitulo.TabIndex = 19;
             lblTitulo.Text = "Gestión de Perfiles";
             // 
@@ -179,7 +179,7 @@
             lblRol.Location = new Point(53, 79);
             lblRol.Margin = new Padding(0);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(31, 19);
+            lblRol.Size = new Size(72, 46);
             lblRol.TabIndex = 21;
             lblRol.Text = "Rol";
             // 
@@ -190,7 +190,7 @@
             cmbRol.Location = new Point(53, 107);
             cmbRol.Margin = new Padding(0);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(105, 23);
+            cmbRol.Size = new Size(249, 49);
             cmbRol.TabIndex = 22;
             // 
             // btnAsignarPermiso
@@ -203,7 +203,7 @@
             btnAsignarPermiso.Location = new Point(841, 327);
             btnAsignarPermiso.Margin = new Padding(0);
             btnAsignarPermiso.Name = "btnAsignarPermiso";
-            btnAsignarPermiso.Size = new Size(166, 44);
+            btnAsignarPermiso.Size = new Size(403, 120);
             btnAsignarPermiso.TabIndex = 25;
             btnAsignarPermiso.Text = "Asignar Permiso";
             btnAsignarPermiso.UseVisualStyleBackColor = false;
@@ -219,7 +219,7 @@
             btnAsignarFamilia.Location = new Point(841, 265);
             btnAsignarFamilia.Margin = new Padding(0);
             btnAsignarFamilia.Name = "btnAsignarFamilia";
-            btnAsignarFamilia.Size = new Size(166, 44);
+            btnAsignarFamilia.Size = new Size(403, 120);
             btnAsignarFamilia.TabIndex = 26;
             btnAsignarFamilia.Text = "Asignar Familia";
             btnAsignarFamilia.UseVisualStyleBackColor = false;
@@ -235,7 +235,7 @@
             btnCrear.Location = new Point(581, 265);
             btnCrear.Margin = new Padding(0);
             btnCrear.Name = "btnCrear";
-            btnCrear.Size = new Size(158, 44);
+            btnCrear.Size = new Size(384, 120);
             btnCrear.TabIndex = 27;
             btnCrear.Text = "Crear";
             btnCrear.UseVisualStyleBackColor = false;
@@ -251,7 +251,7 @@
             btnAplicar.Location = new Point(51, 672);
             btnAplicar.Margin = new Padding(0);
             btnAplicar.Name = "btnAplicar";
-            btnAplicar.Size = new Size(107, 43);
+            btnAplicar.Size = new Size(260, 118);
             btnAplicar.TabIndex = 28;
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
@@ -264,7 +264,7 @@
             cmbFamiliaHija.Location = new Point(53, 189);
             cmbFamiliaHija.Margin = new Padding(0);
             cmbFamiliaHija.Name = "cmbFamiliaHija";
-            cmbFamiliaHija.Size = new Size(105, 23);
+            cmbFamiliaHija.Size = new Size(249, 49);
             cmbFamiliaHija.TabIndex = 36;
             // 
             // button1
@@ -277,7 +277,7 @@
             button1.Location = new Point(841, 399);
             button1.Margin = new Padding(0);
             button1.Name = "button1";
-            button1.Size = new Size(166, 43);
+            button1.Size = new Size(403, 118);
             button1.TabIndex = 37;
             button1.Text = "Desasignar ";
             button1.UseVisualStyleBackColor = false;
@@ -292,7 +292,7 @@
             label2.Location = new Point(53, 157);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(90, 19);
+            label2.Size = new Size(212, 46);
             label2.TabIndex = 39;
             label2.Text = "Familia-Hija";
             // 
@@ -306,7 +306,7 @@
             button2.Location = new Point(197, 672);
             button2.Margin = new Padding(0);
             button2.Name = "button2";
-            button2.Size = new Size(107, 43);
+            button2.Size = new Size(260, 118);
             button2.TabIndex = 40;
             button2.Text = "Cancelar";
             button2.UseVisualStyleBackColor = false;
@@ -339,8 +339,8 @@
             panel1.Controls.Add(groupBox1);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnAplicar);
-            panel1.Location = new Point(21, 10);
-            panel1.Margin = new Padding(1);
+            panel1.Location = new Point(51, 27);
+            panel1.Margin = new Padding(2, 3, 2, 3);
             panel1.Name = "panel1";
             panel1.Size = new Size(1172, 766);
             panel1.TabIndex = 41;
@@ -430,7 +430,7 @@
             btnSalir.Location = new Point(1019, 23);
             btnSalir.Margin = new Padding(1);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(107, 43);
+            btnSalir.Size = new Size(260, 118);
             btnSalir.TabIndex = 23;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
@@ -459,14 +459,14 @@
             // 
             // FormGestionPerfil
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
             ClientSize = new Size(1227, 799);
             Controls.Add(panelInferior);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(1);
+            Margin = new Padding(2, 3, 2, 3);
             MaximizeBox = false;
             Name = "FormGestionPerfil";
             StartPosition = FormStartPosition.CenterScreen;

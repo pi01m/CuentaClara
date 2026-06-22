@@ -183,16 +183,13 @@ namespace BLL
         {
             Servicio_Usuario usuario = _sm.GetUsuarioActual();
 
-            if (usuario != null)
-            {
-                
-                _bitacoraServicio.RegistrarBitacora("Cerrar Sesión",usuario.Login,"Seguridad",1
+            if (usuario == null)return;
 
-                );
-
-                
-                _sm.CerrarSesion();
-            }
+            _dalUsuario.ActualizarIdiomaUsuario( usuario.Login, usuario.Id_Idioma);
+               
+            _bitacoraServicio.RegistrarBitacora( "Cerrar Sesión",usuario.Login,"Seguridad", 1);
+               
+            _sm.CerrarSesion();
         }
         public int ObtenerIntentos(string login)
         {

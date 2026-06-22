@@ -82,18 +82,22 @@ namespace CuentaClara_TrabajoCampo
 
         public void ActualizarIdioma()
         {
-            AplicarIdioma();
+            string idIdioma =
+            SessionManager.GetInstancia()
+            .GetUsuarioActual()
+            .Id_Idioma;
 
-        }
+            BLL_Idioma bllIdioma = new BLL_Idioma();
 
-        private void AplicarIdioma()
-        {
-            var idioma = SessionManager.GetInstancia().GetIdiomaActual();
-            if (idioma == null) return;
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
 
             TraducirControles(this.Controls, idioma);
 
         }
+
 
         private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
         {
@@ -103,11 +107,9 @@ namespace CuentaClara_TrabajoCampo
                 {
                     string clave = c.Tag.ToString();
 
-                    var etiqueta = idioma.Etiquetas
-                        .FirstOrDefault(x => x.Clave == clave);
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
 
-                    if (etiqueta != null)
-                        c.Text = etiqueta.Texto;
                 }
 
                 if (c is DataGridView dgv)
@@ -136,17 +138,18 @@ namespace CuentaClara_TrabajoCampo
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
-            lblUsuario.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+            lblUsuario.Text = $"Usuario:";
+            lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
 
             Bloquear(usuarioActual);
+            ActualizarIdioma();
         }
 
-        private void FormMenu_FormClosing_1(object sender, FormClosingEventArgs e)
+        private void FormMenu_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (SessionManager.GetInstancia().GetUsuarioActual() != null)
-            {
-                bllUsuario.CerrarSesion();
-            }
+            GestorIdioma.GetInstancia().Desuscribir(this);
+
+            base.OnFormClosed(e);
         }
     }
 }

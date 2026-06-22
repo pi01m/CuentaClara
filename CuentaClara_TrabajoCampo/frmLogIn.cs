@@ -12,21 +12,24 @@ using System.Windows.Forms;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class frmLogIn : Form
+    public partial class frmLogIn : Form, IObserverIdioma
     {
         private readonly BLL_Usuario _bllUsuario;
         private BLL_Idioma bllIdioma;
         public frmLogIn()
         {
-            InitializeComponent(); _bllUsuario = new BLL_Usuario();
+            GestorIdioma.GetInstancia().Suscribir(this);
+            InitializeComponent(); 
+            _bllUsuario = new BLL_Usuario();
         }
 
         private void frmLogIn_Load_1(object sender, EventArgs e)
         {
             bllIdioma = new BLL_Idioma();
 
-            comboBox1.DataSource = bllIdioma.ListarIdiomas();
+            comboBox1.DataSource = bllIdioma.ListarIdiomasBD();
             comboBox1.DisplayMember = "Nombre";
+            comboBox1.ValueMember = "Id_Idioma";
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -45,11 +48,14 @@ namespace CuentaClara_TrabajoCampo
 
             try
             {
-                bool loginExitoso =_bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
+                bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
                 if (loginExitoso)
                 {
-                    bllIdioma.CambiarIdioma(comboBox1.Text);
+                    string idIdioma = comboBox1.SelectedValue.ToString();
+
+                    SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = idIdioma;
+
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();
                     this.Close();
@@ -88,7 +94,7 @@ namespace CuentaClara_TrabajoCampo
             return true;
         }
 
-      
+
 
         private void MostrarError(string mensaje)
         {
@@ -106,11 +112,61 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-    
+
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public void ActualizarIdioma()
+        {
+            string idIdioma = comboBox1.SelectedValue.ToString();
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma =
+                bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarIdioma();
         }
     }
 }

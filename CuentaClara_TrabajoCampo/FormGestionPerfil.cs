@@ -654,7 +654,7 @@ namespace IU
                 listBox1.Items.Add("Modo crear PERFIL");
 
                 listBox1.Items.Add("Presione Aplicar.");
-                    
+
             }
             if (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked)
             {
@@ -806,7 +806,12 @@ namespace IU
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-           Close();
+            Close();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

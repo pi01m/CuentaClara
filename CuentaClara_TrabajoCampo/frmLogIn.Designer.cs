@@ -66,8 +66,9 @@
             comboBox1.FormattingEnabled = true;
             comboBox1.Location = new Point(184, 260);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(188, 25);
+            comboBox1.Size = new Size(188, 53);
             comboBox1.TabIndex = 8;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // picLogo
             // 
@@ -87,7 +88,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(108, 25);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(173, 37);
+            lblTitulo.Size = new Size(420, 89);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -97,15 +98,16 @@
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUsuario.Location = new Point(32, 126);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(128, 17);
+            lblUsuario.Size = new Size(322, 45);
             lblUsuario.TabIndex = 2;
+            lblUsuario.Tag = "lbl_LogInNombreUsuario";
             lblUsuario.Text = "Nombre de Usuario";
             // 
             // txtUsuario
             // 
             txtUsuario.Location = new Point(184, 123);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(185, 25);
+            txtUsuario.Size = new Size(185, 52);
             txtUsuario.TabIndex = 3;
             // 
             // lblClave
@@ -114,8 +116,9 @@
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblClave.Location = new Point(32, 199);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(77, 17);
+            lblClave.Size = new Size(196, 45);
             lblClave.TabIndex = 4;
+            lblClave.Tag = "lbl_LogInClave";
             lblClave.Text = "Contraseña";
             // 
             // txtContrasena
@@ -123,7 +126,7 @@
             txtContrasena.Location = new Point(184, 191);
             txtContrasena.Name = "txtContrasena";
             txtContrasena.PasswordChar = '*';
-            txtContrasena.Size = new Size(185, 25);
+            txtContrasena.Size = new Size(185, 52);
             txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
@@ -137,6 +140,7 @@
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(128, 46);
             btnIngresar.TabIndex = 6;
+            btnIngresar.Tag = "btn_Ingresar";
             btnIngresar.Text = "Ingresar";
             btnIngresar.UseVisualStyleBackColor = false;
             btnIngresar.Click += btnIngresar_Click;
@@ -152,13 +156,14 @@
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(128, 46);
             btnSalir.TabIndex = 7;
+            btnSalir.Tag = "btn_Salir";
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
             // frmLogIn
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(18F, 45F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
             ClientSize = new Size(498, 525);

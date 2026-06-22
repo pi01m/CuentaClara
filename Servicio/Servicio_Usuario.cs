@@ -14,10 +14,10 @@ namespace Servicio
         public string Login { get; set; }
         public string Nombre { get; set; }
         public string Password { get; set; }
-      
-
+        
         public Servicio_Familia Permisos { get; set; } = new Servicio_Familia(string.Empty, string.Empty);
 
-        public string IdRol { get; set; }
+        public string IdRol { get; set; } 
+        public string Id_Idioma { get; set; }
     }
 }

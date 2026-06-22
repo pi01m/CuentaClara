@@ -407,5 +407,32 @@ namespace DAL
                 return true;
             }
         }
+
+        public void ActualizarIdiomaUsuario(string login, string id_Idioma)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Usuario WHERE Login = @Login",
+                        conn);
+
+                adapter.SelectCommand.Parameters.AddWithValue("@Login", login);
+
+                DataSet ds = new DataSet();
+
+                adapter.Fill(ds, "Usuario");
+
+                DataRow fila = ds.Tables["Usuario"].Rows[0];
+
+                fila["Id_Idioma"] = id_Idioma;
+
+                SqlCommandBuilder builder =
+                    new SqlCommandBuilder(adapter);
+
+                adapter.Update(ds, "Usuario");
+
+            }
+        }
     }
 }

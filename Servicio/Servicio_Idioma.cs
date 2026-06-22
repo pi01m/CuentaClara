@@ -8,6 +8,7 @@ namespace Servicio
 {
     public class Servicio_Idioma
     {
+        public string Id_Idioma { get; set; }
         public string Nombre { get; set; }
 
         public List<Servicio_Etiqueta> Etiquetas { get; set; }

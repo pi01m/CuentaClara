@@ -10,7 +10,7 @@ namespace Servicio
 
         private Servicio_Usuario _usuarioActual;
 
-        private Servicio_Idioma _idiomaActual;
+   
         private SessionManager() { }
 
         public static SessionManager GetInstancia() => _instancia;
@@ -19,8 +19,7 @@ namespace Servicio
         public Servicio_Usuario GetUsuarioActual() => _usuarioActual;
         public void SetUsuarioActual(Servicio_Usuario u) => _usuarioActual = u;
 
-        public Servicio_Idioma GetIdiomaActual() =>_idiomaActual;
-        public void SetIdiomaActual(Servicio_Idioma idioma) => _idiomaActual = idioma;
+       
        
         public bool CrearSesion(Servicio_Usuario usuario)
         {

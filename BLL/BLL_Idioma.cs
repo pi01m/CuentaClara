@@ -95,12 +95,22 @@ namespace BLL
             return _dalIdioma.GuardarIdiomaActualizado(idioma);
         }
 
-        public bool CambiarIdioma(string nombreIdioma)
+       
+
+        public List<Servicio_Idioma> ListarIdiomasBD()
         {
-            Servicio_Idioma idioma = _dalIdioma.ObtenerIdioma(nombreIdioma);
-            if (idioma == null) return false;
-            SessionManager.GetInstancia().SetIdiomaActual(idioma);
-            return true;
+            return _dalIdioma.DameIdiomasBD();
+        }
+
+        public Servicio_Idioma ObtenerIdiomaPorId(string idIdioma)
+        {
+            List<Servicio_Idioma> idiomasBD = _dalIdioma.DameIdiomasBD();
+
+            Servicio_Idioma idiomaBD =idiomasBD.FirstOrDefault(x => x.Id_Idioma == idIdioma);
+              
+            if (idiomaBD == null)return null;
+             
+            return _dalIdioma.ObtenerIdioma(idiomaBD.Nombre);
         }
     }
 }

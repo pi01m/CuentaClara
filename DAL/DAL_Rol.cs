@@ -20,25 +20,23 @@ namespace DAL
 
         public bool CrearRol(string idRol, string nombre)
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Rol",
-                _connectionString))
+            using (SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Rol",_connectionString))
+ 
             {
                 DataSet ds = new DataSet();
                 da.Fill(ds, "Rol");
 
-                DataRow row =
-                    ds.Tables["Rol"].NewRow();
+                DataRow row = ds.Tables["Rol"].NewRow();
+                   
 
                 row["IdRol"] = idRol;
                 row["Nombre"] = nombre;
 
                 ds.Tables["Rol"].Rows.Add(row);
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb =new SqlCommandBuilder(da);
 
+                    
                 da.Update(ds, "Rol");
 
                 return true;
@@ -46,18 +44,42 @@ namespace DAL
         }
 
 
-        public DataTable ListarRoles()
+        public List<Servicio_Familia> ListarRoles()
         {
+            List<Servicio_Familia> lista = new List<Servicio_Familia>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Rol", conn);
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Rol", conn))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
 
-                DataTable tabla = new DataTable();
-                adapter.Fill(tabla);
-
-                return tabla;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        lista.Add(new Servicio_Familia(row["IdRol"].ToString(), row["Nombre"].ToString()));
+                    }
+                }
             }
+            return lista;
         }
+
+        public List<Servicio_Familia> ObtenerFamiliasPorRol(string idRol)
+        {
+            List<Servicio_Familia> lista = new List<Servicio_Familia>();
+            using (SqlDataAdapter da = new SqlDataAdapter(@"SELECT f.* FROM Familia f INNER JOIN Familia_Rol fr ON fr.IdFamilia=f.IdFamilia WHERE fr.IdRol=@Rol", _connectionString))
+            {
+                da.SelectCommand.Parameters.AddWithValue("@Rol", idRol);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    lista.Add(new Servicio_Familia(row["IdFamilia"].ToString(), row["Nombre"].ToString()));
+                }
+            }
+            return lista;
+        }
+
         public string ObtenerNombreRol(string idRol)
         {
             using (SqlConnection cn = new SqlConnection(_connectionString))
@@ -100,19 +122,15 @@ namespace DAL
 
         public bool ExistePermiso(string idRol, string idPermiso)
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                @"SELECT *
-              FROM Rol_Permiso
-              WHERE IdRol=@Rol
-              AND IdPermiso=@Permiso",
-                _connectionString))
-            {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Rol", idRol);
+            using (SqlDataAdapter da =new SqlDataAdapter(  @"SELECT *FROM Rol_Permiso WHERE IdRol=@Rol AND IdPermiso=@Permiso",_connectionString))
 
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Permiso", idPermiso);
+                
+            {
+                da.SelectCommand.Parameters.AddWithValue("@Rol", idRol);
+                    
+
+                da.SelectCommand.Parameters.AddWithValue("@Permiso", idPermiso);
+                    
 
                 DataTable dt = new DataTable();
 
@@ -122,35 +140,31 @@ namespace DAL
             }
         }
 
-        public void AsignarPermiso(
-            string idRol,
-            string idPermiso)
+        public void AsignarPermiso(string idRol,string idPermiso)
+    
         {
-            using (SqlConnection cn =
-                new SqlConnection(_connectionString))
+            using (SqlConnection cn =new SqlConnection(_connectionString))
+                
             {
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                    "SELECT * FROM Rol_Permiso",
-                    cn);
+                SqlDataAdapter da = new SqlDataAdapter( "SELECT * FROM Rol_Permiso",cn);
 
                 DataSet ds = new DataSet();
 
                 da.Fill(ds, "Rol_Permiso");
 
-                DataRow fila =
-                    ds.Tables["Rol_Permiso"].NewRow();
+                DataRow fila =ds.Tables["Rol_Permiso"].NewRow();
+                    
 
-                fila["IdRol_Permiso"] =
-                    Guid.NewGuid().ToString();
+                fila["IdRol_Permiso"] =Guid.NewGuid().ToString();
+                    
 
                 fila["IdRol"] = idRol;
                 fila["IdPermiso"] = idPermiso;
 
                 ds.Tables["Rol_Permiso"].Rows.Add(fila);
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                   
 
                 da.Update(ds, "Rol_Permiso");
             }
@@ -199,35 +213,30 @@ namespace DAL
                 }
             }
         }
-        public void AsignarFamilia(
-            string idRol,
-            string idFamilia)
+        public void AsignarFamilia( string idRol,string idFamilia)
+  
         {
-            using (SqlConnection cn =
-                new SqlConnection(_connectionString))
+            using (SqlConnection cn =new SqlConnection(_connectionString))
+                
             {
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                    "SELECT * FROM Familia_Rol",
-                    cn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Rol",cn);
 
                 DataSet ds = new DataSet();
 
                 da.Fill(ds, "Familia_Rol");
 
-                DataRow fila =
-                    ds.Tables["Familia_Rol"].NewRow();
+                DataRow fila =ds.Tables["Familia_Rol"].NewRow();
+                    
 
-                fila["IdFamilia_Rol"] =
-                    Guid.NewGuid().ToString();
+                fila["IdFamilia_Rol"] =Guid.NewGuid().ToString();
+                    
 
                 fila["IdRol"] = idRol;
                 fila["IdFamilia"] = idFamilia;
 
                 ds.Tables["Familia_Rol"].Rows.Add(fila);
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb =new SqlCommandBuilder(da);
 
                 da.Update(ds, "Familia_Rol");
             }
@@ -331,10 +340,8 @@ namespace DAL
                 da.Update(ds, "Rol_Permiso");
             }
 
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                "SELECT * FROM Familia_Rol",
-                _connectionString))
+            using (SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Familia_Rol",_connectionString))
+ 
             {
                 DataSet ds = new DataSet();
 
@@ -348,15 +355,14 @@ namespace DAL
                     }
                 }
 
-                SqlCommandBuilder cb =
-                    new SqlCommandBuilder(da);
+                SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                   
 
                 da.Update(ds, "Familia_Rol");
             }
         }
-        public bool ExisteFamiliaEnRol(
-            string idRol,
-            string idFamilia)
+        public bool ExisteFamiliaEnRol( string idRol,string idFamilia)
+   
         {
             using (SqlDataAdapter da =
                 new SqlDataAdapter(
@@ -379,45 +385,7 @@ namespace DAL
                 return dt.Rows.Count > 0;
             }
         }
-        public void CrearPerfilCompleto(
-    string idRol,
-    string nombre,
-    List<string> familias,
-    List<string> permisos)
-        {
-            CrearRol(idRol, nombre);
-
-            foreach (string idFamilia in familias)
-            {
-                AsignarFamilia(idRol, idFamilia);
-            }
-
-            foreach (string idPermiso in permisos)
-            {
-                AsignarPermiso(idRol, idPermiso);
-            }
-        }
-        public DataTable ObtenerFamiliasPorRol(string idRol)
-            
-        {
-            using (SqlDataAdapter da = new SqlDataAdapter(
-               
-                @"SELECT f.*
-              FROM Familia f
-              INNER JOIN Familia_Rol fr
-              ON fr.IdFamilia=f.IdFamilia
-              WHERE fr.IdRol=@Rol",
-                _connectionString))
-            {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Rol", idRol);
-
-                DataTable dt = new DataTable();
-
-                da.Fill(dt);
-
-                return dt;
-            }
-        }
+       
+        
     }
 }

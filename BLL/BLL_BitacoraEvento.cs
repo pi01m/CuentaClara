@@ -18,7 +18,7 @@ namespace BLL
             _dal = new DAL_BitacoraEvento(connStr);
         }
 
-        public bool RegistrarBitacora(string evento,string login,string modulo,int criticidad){
+        public void RegistrarBitacora(string evento,string login,string modulo,int criticidad){
             Servicio_Bitacora bitacora = new Servicio_Bitacora
             {
                 id_Evento = Guid.NewGuid().ToString(), //aleatorioo
@@ -30,7 +30,14 @@ namespace BLL
                 Hora = DateTime.Now.ToString("HH:mm:ss")
             };
 
-            return _dal.GuardarBitacora(bitacora);
+            bool guardadoExitoso = _dal.GuardarBitacora(bitacora);
+
+            
+            if (!guardadoExitoso)
+            {
+              
+                throw new Exception("ALERTA CRÍTICA: No se pudo registrar el evento de seguridad en la base de datos de Auditoría. Contacte a soporte técnico.");
+            }
         }
 
         public DataTable ListarBitacora()

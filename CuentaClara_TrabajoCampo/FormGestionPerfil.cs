@@ -22,7 +22,7 @@ namespace IU
         private string tipoNodoSeleccionado = "";
         private string nombreNodoSeleccionado = "";
 
-        private BLL_BitacoraEvento bllBitacora = new BLL_BitacoraEvento();
+        
         private BLL_Familia bllFamilia;
         private BLL_Permiso bllPermiso;
         private BLL_Rol bllRol;
@@ -71,27 +71,28 @@ namespace IU
             clbPermiso.DisplayMember = "Nombre";
             clbPermiso.ValueMember = "IdPermiso";
 
-            DataTable familias = bllFamilia.ObtenerFamilias();
+            List<Servicio_Familia> familias = bllFamilia.ObtenerFamilias();
 
 
             clbFamilia.DataSource = null;
             clbFamilia.Items.Clear();
-            clbFamilia.DataSource = familias.Copy();
+            clbFamilia.DataSource = new List<Servicio_Familia>(familias);
             clbFamilia.DisplayMember = "Nombre";
             clbFamilia.ValueMember = "IdFamilia";
 
             cmbFamiliaHija.DataSource = null;
-            cmbFamiliaHija.DataSource = familias.Copy();
+            cmbFamiliaHija.DataSource = new List<Servicio_Familia>(familias);
             cmbFamiliaHija.DisplayMember = "Nombre";
             cmbFamiliaHija.ValueMember = "IdFamilia";
 
             cmbFamilia.DataSource = null;
-            cmbFamilia.DataSource = familias.Copy();
+            cmbFamilia.DataSource = new List<Servicio_Familia>(familias);
             cmbFamilia.DisplayMember = "Nombre";
             cmbFamilia.ValueMember = "IdFamilia";
 
+            List<Servicio_Familia> roles = bllRol.ObtenerRoles();
             cmbRol.DataSource = null;
-            cmbRol.DataSource = bllRol.ObtenerRoles();
+            cmbRol.DataSource = roles;
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
         }
@@ -104,16 +105,16 @@ namespace IU
 
             try
             {
-                // Traemos la familia desarmada con todo su composite usando tu BLL
+                
                 Servicio_Familia familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(idFamilia);
 
                 if (familiaCompleta != null)
                 {
-                    // Creamos el nodo principal
+                    
                     TreeNode nodoRaiz = new TreeNode("[F] " + familiaCompleta.Nombre);
                     treeViewVistaPrevia.Nodes.Add(nodoRaiz);
 
-                    // Reutilizamos tu método existente para llenar los hijos
+                   
                     DibujarComposite(nodoRaiz, familiaCompleta);
 
                     treeViewVistaPrevia.ExpandAll();
@@ -149,26 +150,26 @@ namespace IU
         {
             treeView1.Nodes.Clear();
 
-            DataTable dtRoles = bllRol.ObtenerRoles();
+            List<Servicio_Familia> listaRoles = bllRol.ObtenerRoles();
 
-            if (dtRoles != null)
+            if (listaRoles != null)
             {
-                foreach (DataRow rowRol in dtRoles.Rows)
+                foreach (Servicio_Familia rol in listaRoles)
                 {
-                    string idRol = rowRol["IdRol"].ToString();
-                    string nombreRol = rowRol["Nombre"].ToString();
+                    string idRol = rol.IdRol;
+                    string nombreRol = rol.Nombre;
 
                     TreeNode nodoRol = new TreeNode("[ROL] " + nombreRol);
                     nodoRol.Tag = idRol;
                     treeView1.Nodes.Add(nodoRol);
 
-                    DataTable dtFamiliasDelRol = bllRol.ObtenerFamiliasPorRol(idRol);
-                    if (dtFamiliasDelRol != null)
+                    List<Servicio_Familia> familiasDelRol = bllRol.ObtenerFamiliasPorRol(idRol);
+                    if (familiasDelRol != null)
                     {
-                        foreach (DataRow rowFam in dtFamiliasDelRol.Rows)
+                        foreach (Servicio_Familia fam in familiasDelRol)
                         {
-                            string idFam = rowFam["IdFamilia"].ToString();
-                            string nombreFam = rowFam["Nombre"].ToString();
+                            string idFam = fam.IdRol;
+                            string nombreFam = fam.Nombre;
 
                             TreeNode nodoFam = new TreeNode("[F] " + nombreFam);
                             nodoFam.Tag = idFam;
@@ -182,13 +183,13 @@ namespace IU
                         }
                     }
 
-                    DataTable permisosRol = bllPermiso.ObtenerPermisosPorRol(idRol);
+                    List<Servicio_Permiso> permisosRol = bllPermiso.ObtenerPermisosPorRol(idRol);
                     if (permisosRol != null)
                     {
-                        foreach (DataRow rowPerm in permisosRol.Rows)
+                        foreach (Servicio_Permiso perm in permisosRol)
                         {
-                            string idPermiso = rowPerm["IdPermiso"].ToString();
-                            string nombrePermiso = rowPerm["Nombre"].ToString();
+                            string idPermiso = perm.IdRol;
+                            string nombrePermiso = perm.Nombre;
 
                             TreeNode nodoPermiso = new TreeNode("[P] " + nombrePermiso);
                             nodoPermiso.Tag = idPermiso;
@@ -199,6 +200,7 @@ namespace IU
             }
 
             treeView1.ExpandAll();
+
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -251,11 +253,8 @@ namespace IU
 
                         if (!string.IsNullOrEmpty(conflictos))
                         {
-                            DialogResult r = MessageBox.Show(
-                                $"La familia '{nombreFamilia}' contiene permisos que el Rol ya posee de forma directa: {conflictos}.\n\n¿Desea eliminar esos permisos sueltos para poder asignar la familia?", "Conflicto de Permisos",
-
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question);
+                            DialogResult r = MessageBox.Show($"La familia '{nombreFamilia}' contiene permisos que el Rol ya posee de forma directa: {conflictos}.\n\n¿Desea eliminar esos permisos sueltos para poder asignar la familia?", "Conflicto de Permisos",
+                                MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
                             if (r == DialogResult.Yes)
                             {
@@ -271,8 +270,6 @@ namespace IU
                         bllRol.AsignarFamiliaARol(idRol, idFamilia, limpiar);
                     }
 
-
-                    bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
                     MessageBox.Show("Familias asignadas al rol correctamente.");
                     LimpiarModo();
                 }
@@ -284,7 +281,7 @@ namespace IU
 
                     bllFamilia.AsignarSubFamilia(idPadre, idHija);
 
-                    bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+                    
                     MessageBox.Show("Familia asignada correctamente."); LimpiarModo();
                 }
                 else
@@ -325,14 +322,13 @@ namespace IU
                         }
                         else
                         {
-                            // Opcional: Avisarle al usuario que se omitió porque ya lo tiene heredado
+                            
                             MessageBox.Show($"El rol ya posee el permiso '{item["Nombre"].ToString()}' (de forma directa o a través de una familia). Se omitió esta asignación.", "Aviso de redundancia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
 
                     if (asignados > 0)
-                    {
-                        bllBitacora.RegistrarBitacora($"Asignación de {asignados} permisos a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+                    {    
                         MessageBox.Show($"Se asignaron {asignados} permisos correctamente.");
                     }
 
@@ -360,7 +356,6 @@ namespace IU
                         }
                     }
 
-                    bllBitacora.RegistrarBitacora("Asignación permiso a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
                     MessageBox.Show("Permiso asignado correctamente."); LimpiarModo();
                 }
                 else
@@ -408,7 +403,6 @@ namespace IU
                 Servicio_Familia familia = new Servicio_Familia(idFamilia, nuevoNombre);
                 bllFamilia.Modificar(familia);
 
-                bllBitacora.RegistrarBitacora("Modificacion Familia: " + nuevoNombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
                 MessageBox.Show("Familia modificada correctamente."); LimpiarModo();
             }
             catch (Exception ex)
@@ -427,14 +421,13 @@ namespace IU
                     return;
                 }
 
-
                 string idFamilia = idNodoSeleccionado;
                 string nombre = nombreNodoSeleccionado;
 
                 BLL_Familia bllFamilia = new BLL_Familia();
                 bllFamilia.Eliminar(idFamilia);
 
-                bllBitacora.RegistrarBitacora("Baja Familia: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+                
                 MessageBox.Show("Familia eliminada correctamente."); LimpiarModo();
             }
             catch (Exception ex)
@@ -483,7 +476,7 @@ namespace IU
                     bllFamilia.AsignarSubFamilia(idNuevaFamilia, idSubFamilia);
                 }
 
-                bllBitacora.RegistrarBitacora("Alta Familia Modular: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+               
                 MessageBox.Show("Familia estructurada y guardada correctamente.");
 
                 LimpiarModo();
@@ -541,8 +534,6 @@ namespace IU
                 {
                     bllFamilia.DesasignarSubFamilia(idPadre, idHijo);
                 }
-
-                bllBitacora.RegistrarBitacora("Desasignación en Perfiles", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
 
                 MessageBox.Show("Elemento desvinculado correctamente."); LimpiarModo();
             }
@@ -605,7 +596,7 @@ namespace IU
             }
         }
 
-        private void ModificarPerfil()
+        private void ModificarRol()
         {
             try
             {
@@ -627,7 +618,7 @@ namespace IU
                     return;
                 }
 
-                bllRol.ModificarPerfil(idNodoSeleccionado, nuevoNombre);
+                bllRol.ModificarRol(idNodoSeleccionado, nuevoNombre);
 
                 MessageBox.Show("Rol modificado correctamente.");
 
@@ -652,20 +643,15 @@ namespace IU
                     return;
                 }
 
-                DialogResult r =
-                    MessageBox.Show(
-                        "¿Eliminar perfil?",
-                        "Confirmación",
-                        MessageBoxButtons.YesNo);
+                DialogResult r =MessageBox.Show("¿Eliminar perfil?","Confirmación",MessageBoxButtons.YesNo);
+  
+                if (r == DialogResult.No) return;
+                   
 
-                if (r == DialogResult.No)
-                    return;
+                bllRol.EliminarRol(idNodoSeleccionado);
 
-                bllRol.EliminarPerfil(
-                    idNodoSeleccionado);
-
-                MessageBox.Show(
-                    "Perfil eliminado correctamente.");
+                MessageBox.Show("Rol eliminado correctamente.");
+                    
 
                 MostrarArbol();
                 CargarCombos();
@@ -937,7 +923,7 @@ namespace IU
                     break;
                 case "MODIFICAR":
                     if (tipoNodoSeleccionado == "ROL")
-                        ModificarPerfil();
+                        ModificarRol();
                     else
                         ModificarFamilia();
                     break;
@@ -964,6 +950,11 @@ namespace IU
         private void LimpiarModo()
         {
             modoActual = "";
+
+            idNodoSeleccionado = "";
+            tipoNodoSeleccionado = "";
+            nombreNodoSeleccionado = "";
+
             listBox1.Items.Clear();
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;

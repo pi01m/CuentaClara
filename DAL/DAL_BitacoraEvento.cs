@@ -20,33 +20,41 @@ namespace DAL
 
         public bool GuardarBitacora(Servicio_Bitacora bitacora)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            try
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter("SELECT * FROM Bitacora WHERE 1 = 0", conn);
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    SqlDataAdapter adapter =
+                        new SqlDataAdapter("SELECT * FROM Bitacora WHERE 1 = 0", conn);
 
-                DataSet ds = new DataSet();
-                adapter.Fill(ds, "Bitacora");
+                    DataSet ds = new DataSet();
+                    adapter.Fill(ds, "Bitacora");
 
-                DataTable tabla = ds.Tables["Bitacora"];
+                    DataTable tabla = ds.Tables["Bitacora"];
 
-                DataRow fila = tabla.NewRow();
+                    DataRow fila = tabla.NewRow();
 
-                fila["idEvento"] = bitacora.id_Evento;
-                fila["Evento"] = bitacora.Evento;
-                fila["Login"] = bitacora.Login;
-                fila["Modulo"] = bitacora.Modulo;
-                fila["Fecha"] = bitacora.Fecha.Date;
-                fila["Hora"] = bitacora.Hora;
-                fila["Criticidad"] = bitacora.Criticidad;
+                    fila["idEvento"] = bitacora.id_Evento;
+                    fila["Evento"] = bitacora.Evento;
+                    fila["Login"] = bitacora.Login;
+                    fila["Modulo"] = bitacora.Modulo;
+                    fila["Fecha"] = bitacora.Fecha.Date;
+                    fila["Hora"] = bitacora.Hora;
+                    fila["Criticidad"] = bitacora.Criticidad;
 
-                tabla.Rows.Add(fila);
+                    tabla.Rows.Add(fila);
 
-                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+                    SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
-                adapter.Update(ds, "Bitacora");
+                    adapter.Update(ds, "Bitacora");
 
-                return true;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+              
+                return false;
             }
         }
 

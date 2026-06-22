@@ -8,39 +8,20 @@ namespace CuentaClara_TrabajoCampo
     {
 
         private BLL_Usuario bllUsuario = new BLL_Usuario();
+        private BLL_Rol bllRol = new BLL_Rol();
         public FormMenu()
         {
             InitializeComponent();
             GestorIdioma.GetInstancia().Suscribir(this);
-
-            if (SessionManager.GetInstancia().GetUsuarioActual().IdRol == "Admin")
-            {
-                btnInicio.Enabled = false;
-                btnCategorias.Enabled = false;
-                btnGraficos.Enabled = false;
-                btnNuevoEgreso.Enabled = false;
-                btnNuevoIngreso.Enabled = false;
-                btnVencimientos.Enabled = false;
-                btnTransacciones.Enabled = false;
-                btnSaldos.Enabled = false;
-
-                btnInicio.Visible = false;
-                btnCategorias.Visible = false;
-                btnGraficos.Visible = false;
-                btnNuevoEgreso.Visible = false;
-                btnNuevoIngreso.Visible = false;
-                btnVencimientos.Visible = false;
-                btnTransacciones.Visible = false;
-                btnSaldos.Visible = false;
-            }
+            ;
         }
-
+        
         private void button2_Click(object sender, EventArgs e)
         {
             FormGestionBitacora frm = new FormGestionBitacora();
             this.Hide();
             frm.ShowDialog();
-            frm.Show();
+            this.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,39 +58,25 @@ namespace CuentaClara_TrabajoCampo
             this.Hide();
             frm.ShowDialog();
             this.Show();
+
         }
         private void Bloquear(Servicio_Usuario usuarioActual)
         {
-            if (usuarioActual != null && usuarioActual.IdRol == "Admin")
-            {
-                btnInicio.Enabled = false;
-                btnCategorias.Enabled = false;
-                btnGraficos.Enabled = false;
-                btnNuevoEgreso.Enabled = false;
-                btnNuevoIngreso.Enabled = false;
-                btnVencimientos.Enabled = false;
-                btnTransacciones.Enabled = false;
-                btnSaldos.Enabled = false;
+            if (usuarioActual == null) return;
 
-                btnInicio.Visible = true;
-                btnCategorias.Visible = true;
-                btnGraficos.Visible = true;
-                btnNuevoEgreso.Visible = true;
-                btnNuevoIngreso.Visible = true;
-                btnVencimientos.Visible = true;
-                btnTransacciones.Visible = true;
-                btnSaldos.Visible = true;
-            }
-            else if (usuarioActual.IdRol != "Admin")
-            {
-                button1.Enabled = false;
-                button2.Enabled = false;
-                button3.Enabled = false;
+            button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
+            button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
+            button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
 
-                button3.Visible = true;
-                button1.Visible = true;
-                button2.Visible = true;
-            }
+            btnInicio.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INICIO");
+            btnCategorias.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_CATEGORIAS");
+            btnGraficos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_GRAFICOS");
+            btnNuevoEgreso.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_EGRESOS");
+            btnNuevoIngreso.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INGRESOS");
+            btnVencimientos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_VENCIMIENTOS");
+            btnTransacciones.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_TRANSACCIONES");
+            btnSaldos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_SALDOS");
+
 
         }
 

@@ -26,32 +26,33 @@ namespace BLL
             dalPermiso = new DAL_Permiso(conn);
         }
 
-        public void Guardar(
-            Servicio_Familia familia)
+        public void Guardar(Servicio_Familia familia)
+            
         {
-            if (string.IsNullOrWhiteSpace(
-                familia.Nombre))
+            if (string.IsNullOrWhiteSpace(familia.Nombre))
+
             {
-                throw new Exception(
-                    "Ingrese un nombre.");
+               
+                throw new Exception("Ingrese un nombre.");
+            }
+                    
+
+            if (dal.ExisteNombre( familia.Nombre))
+               
+            {
+                throw new Exception("Ya existe una familia con ese nombre.");
+                    
             }
 
-            if (dal.ExisteNombre(
-                familia.Nombre))
-            {
-                throw new Exception(
-                    "Ya existe una familia con ese nombre.");
-            }
-
-            dal.Guardar(
-                familia.IdRol,
-                familia.Nombre);
+            dal.Guardar( familia.IdRol,familia.Nombre);
+               
+                
         }
         
 
         private void CargarHijosRecursivo(Servicio_Familia familia)
         {
-            // 1. CARGAMOS LAS SUBFAMILIAS (Tu código original, intacto)
+            
             DataTable subFamilias = dal.ObtenerSubFamilias(familia.IdRol);
             foreach (DataRow row in subFamilias.Rows)
             {
@@ -60,23 +61,19 @@ namespace BLL
                     row["Nombre"].ToString());
 
                 familia.AgregarRol(hija);
-                CargarHijosRecursivo(hija); // Recursividad para buscar más adentro
+                CargarHijosRecursivo(hija); 
             }
 
-            // 2. CARGAMOS LOS PERMISOS SIMPLES / PATENTES (¡Lo que faltaba!)
-            // Vamos a la base de datos a buscar qué permisos tiene esta familia
+            
             DataTable permisos = dalPermiso.ObtenerPermisosPorFamilia(familia.IdRol);
 
             if (permisos != null)
             {
                 foreach (DataRow row in permisos.Rows)
                 {
-                    // Instanciamos el permiso como un Servicio_Permiso
-                    Servicio_Permiso permiso = new Servicio_Permiso(
-                        row["IdPermiso"].ToString(),
-                        row["Nombre"].ToString());
+                    
+                    Servicio_Permiso permiso = new Servicio_Permiso(row["IdPermiso"].ToString(),row["Nombre"].ToString());
 
-                    // Lo agregamos al composite (como hereda de Servicio_Rol, entra perfecto)
                     familia.AgregarRol(permiso);
                 }
             }
@@ -84,11 +81,11 @@ namespace BLL
         public void Modificar(Servicio_Familia familia)
             
         {
-            if (string.IsNullOrWhiteSpace(
-                familia.Nombre))
+            if (string.IsNullOrWhiteSpace(familia.Nombre))
+                
             {
-                throw new Exception(
-                    "Ingrese un nombre.");
+                throw new Exception("Ingrese un nombre.");
+                    
             }
 
             dal.Modificar(familia);
@@ -98,56 +95,74 @@ namespace BLL
         public void Eliminar(string idFamilia)
             
         {
-            if (string.IsNullOrWhiteSpace(
-                idFamilia))
+            if (string.IsNullOrWhiteSpace( idFamilia))
+               
             {
-                throw new Exception(
-                    "Seleccione una familia.");
+                throw new Exception( "Seleccione una familia.");
             }
+                   
 
             dal.Eliminar(idFamilia);
         }
 
-        public void AsignarPermiso(
-            string idFamilia,
-            string idPermiso)
+        public void AsignarPermiso( string idFamilia,string idPermiso)
+ 
         {
-            if (string.IsNullOrWhiteSpace(idFamilia))
-                throw new Exception(
-                    "Seleccione una familia.");
+            if (string.IsNullOrWhiteSpace(idFamilia))throw new Exception("Seleccione una familia.");
 
             if (string.IsNullOrWhiteSpace(idPermiso))
-                throw new Exception(
-                    "Seleccione un permiso.");
+                throw new Exception("Seleccione un permiso.");
+                    
 
-            dal.AsignarPermiso(
-                idFamilia,
-                idPermiso);
+            dal.AsignarPermiso(idFamilia,idPermiso);
+                
+                
         }
 
-        public void AsignarSubFamilia(
-            string idPadre,
-            string idHija)
+        public void AsignarSubFamilia(string idPadre,string idHija)
+ 
         {
             if (string.IsNullOrWhiteSpace(idPadre))
-                throw new Exception(
-                    "Seleccione familia padre.");
+                throw new Exception("Seleccione familia padre.");
+                    
 
             if (string.IsNullOrWhiteSpace(idHija))
-                throw new Exception(
-                    "Seleccione familia hija.");
+                throw new Exception( "Seleccione familia hija.");
+                   
 
             if (idPadre == idHija)
-                throw new Exception(
-                    "No puede asignarse a sí misma.");
+                throw new Exception( "No puede asignarse a sí misma.");
+                   
+           
 
-            dal.AsignarSubFamilia(
-                idPadre,
-                idHija);
+    
+           Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
+
+    
+           if (familiaHijaCompleta != null && familiaHijaCompleta.ObtenerHijos() != null)
+           {
+
+              foreach (Servicio_Rol itemHijo in familiaHijaCompleta.ObtenerHijos())
+              {
+            
+               if (!(itemHijo is Servicio_Familia))
+               {
+                
+                  if (this.TienePermiso(idPadre, itemHijo.IdRol))
+                  {
+                    
+                    this.DesasignarPermiso(idPadre, itemHijo.IdRol);
+                  }
+                }
+              }
+           }  
+
+            dal.AsignarSubFamilia(idPadre, idHija); 
+     
         }
 
-        public DataTable ObtenerSubFamilias(
-            string idFamilia)
+        public DataTable ObtenerSubFamilias( string idFamilia)
+           
         {
             return dal.ObtenerSubFamilias(
                 idFamilia);
@@ -171,43 +186,39 @@ namespace BLL
             return null;
         }
  
-        public bool TienePermiso(
-    string idFamilia,
-    string idPermiso)
-        {
-            Servicio_Familia familia =
-                ObtenerFamiliaCompleta(idFamilia);
+        public bool TienePermiso(string idFamilia, string idPermiso)
 
-            return TienePermisoRecursivo(
-                familia,
-                idPermiso);
-        }
-        public bool TieneFamilia(
-    string idPadre,
-    string idHija)
         {
-            Servicio_Familia familia =
-                ObtenerFamiliaCompleta(idPadre);
+            Servicio_Familia familia =ObtenerFamiliaCompleta(idFamilia);
+                
 
-            return BuscarFamiliaRecursiva(
-                familia,
-                idHija);
+            return TienePermisoRecursivo( familia,idPermiso);
+               
+                
         }
-        private bool BuscarFamiliaRecursiva(
-    Servicio_Familia familia,
-    string idBuscada)
+
+        public bool TieneFamilia(string idPadre, string idHija)
         {
-            foreach (Servicio_Rol item
-                in familia.ObtenerHijos())
+            Servicio_Familia familia =ObtenerFamiliaCompleta(idPadre);
+
+
+            return BuscarFamiliaRecursiva(familia,idHija);
+                     
+        }
+
+        private bool BuscarFamiliaRecursiva(Servicio_Familia familia,string idBuscada)
+
+        {
+            foreach (Servicio_Rol item in familia.ObtenerHijos())
+                
             {
                 if (item is Servicio_Familia sub)
                 {
                     if (sub.IdRol == idBuscada)
                         return true;
 
-                    if (BuscarFamiliaRecursiva(
-                        sub,
-                        idBuscada))
+                    if (BuscarFamiliaRecursiva(sub,idBuscada))
+   
                     {
                         return true;
                     }
@@ -216,12 +227,12 @@ namespace BLL
 
             return false;
         }
-        private bool TienePermisoRecursivo(
-    Servicio_Familia familia,
-    string idPermiso)
+        private bool TienePermisoRecursivo( Servicio_Familia familia,string idPermiso)
+   
+    
         {
-            foreach (Servicio_Rol item
-                in familia.ObtenerHijos())
+            foreach (Servicio_Rol item in familia.ObtenerHijos())
+                
             {
                 if (item is Servicio_Permiso)
                 {
@@ -231,9 +242,8 @@ namespace BLL
 
                 if (item is Servicio_Familia subFamilia)
                 {
-                    if (TienePermisoRecursivo(
-                        subFamilia,
-                        idPermiso))
+                    if (TienePermisoRecursivo(subFamilia,idPermiso))
+
                     {
                         return true;
                     }
@@ -245,8 +255,7 @@ namespace BLL
         public Servicio_Familia ObtenerFamiliaCompleta(string idFamilia)
 
         {
-            Servicio_Familia familia =
-        BuscarFamilia(idFamilia);
+            Servicio_Familia familia =BuscarFamilia(idFamilia);
 
             CargarHijosRecursivo(familia);
 
@@ -265,13 +274,31 @@ namespace BLL
 
         public void DesasignarPermiso(string idFamilia, string idPermiso)
         {
+            
+            Servicio_Familia familiaCompleta = ObtenerFamiliaCompleta(idFamilia);
+
+            if (familiaCompleta.ObtenerHijos().Count <= 2)
+            {
+                throw new Exception("Una familia no puede quedar con un solo elemento. Si desea desarmarla, debe eliminar la familia por completo.");
+            }
+
+            
             dal.DesasignarPermiso(idFamilia, idPermiso);
         }
 
         public void DesasignarSubFamilia(string padre, string hija)
         {
+           
+            Servicio_Familia familiaCompleta = ObtenerFamiliaCompleta(padre);
+            
+            if (familiaCompleta.ObtenerHijos().Count <= 2)
+            {
+                throw new Exception("Una familia no puede quedar con un solo elemento. Si desea desarmarla, debe eliminar la familia por completo.");
+            }
+
             dal.DesasignarSubFamilia(padre, hija);
         }
-    } }
+    } 
+}
    
     

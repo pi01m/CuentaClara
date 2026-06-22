@@ -53,7 +53,7 @@ namespace DAL
                     Activo = Convert.ToInt32(row["Activo"]),
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
                     IdRol = row.Table.Columns.Contains("IdRol") && row["IdRol"] != DBNull.Value ? row["IdRol"].ToString() : null,
-                    //IdFamiliaRol = new Servicio_FamiliaRol(row["IdFamiliaRol"].ToString(), "")
+                    
                 };
             }
         }
@@ -69,12 +69,9 @@ namespace DAL
                         
 
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@Login",SqlDbType.NVarChar, 100){
-                        Value = login
-                    })
+                        Value = login});
                     
-                        
-                    ;
-
+  
                 DataSet ds = new DataSet();
 
                 adapter.Fill(ds, "Usuario");
@@ -195,6 +192,10 @@ namespace DAL
                 fila["Apellido"] = usuario.Apellido;
 
                 fila["email"] = usuario.email;
+
+                fila["IdRol"] = usuario.IdRol;
+
+                fila["Login"] = usuario.Login;
 
                 SqlCommandBuilder builder =new SqlCommandBuilder(adapter);
                  
@@ -358,29 +359,7 @@ namespace DAL
                 return tabla;
             }
         }
-        public bool AsignarRol(string dni, string idRol)
-        {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario_Rol", conn);
-
-                DataSet ds = new DataSet();
-                adapter.Fill(ds, "Usuario_Rol");
-
-                DataRow fila = ds.Tables["Usuario_Rol"].NewRow();
-
-                fila["DNI"] = dni;
-                fila["IdRol"] = idRol;
-
-                ds.Tables["Usuario_Rol"].Rows.Add(fila);
-
-                SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-
-                adapter.Update(ds, "Usuario_Rol");
-
-                return true;
-            }
-        }
+    
 
         public bool ActualizarClave(string login, string nuevoHash)
         {

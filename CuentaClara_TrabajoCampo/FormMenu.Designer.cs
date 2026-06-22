@@ -315,7 +315,6 @@
             lblUsuarioValor.Size = new Size(625, 54);
             lblUsuarioValor.TabIndex = 2;
             lblUsuarioValor.Tag = "";
-            lblUsuarioValor.Text = "Devora (Rol: Usuario Operativo)";
             // 
             // lblUsuario
             // 
@@ -327,7 +326,6 @@
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(922, 54);
             lblUsuario.TabIndex = 0;
-            lblUsuario.Text = "Usuario Activo: Devora (Rol: Usuario Operativo)";
             // 
             // lblBD
             // 

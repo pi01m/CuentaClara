@@ -13,7 +13,7 @@ namespace CuentaClara_TrabajoCampo
     public partial class FormGestionUsuarios : Form
     {
         private BLL_Usuario bll = new BLL_Usuario();
-
+        private BLL_Rol bllRol = new BLL_Rol();
         public FormGestionUsuarios()
         {
             InitializeComponent();
@@ -44,12 +44,13 @@ namespace CuentaClara_TrabajoCampo
         {
             radioBtnTodosUser.Checked = true;
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            BLL_Rol bllRol = new BLL_Rol();
 
+            string nombreRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
-            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
-
-            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreRol}";
+            cmbRol.DataSource = bllRol.ObtenerRoles();
+            cmbRol.DisplayMember = "Nombre";
+            cmbRol.ValueMember = "IdRol";
             CargarUsuarios();
 
             btnAplicar.Enabled = false;
@@ -92,7 +93,7 @@ namespace CuentaClara_TrabajoCampo
 
             txtLogin.ReadOnly = true;
             chkActivo.Enabled = false;
-            txtRol.ReadOnly = true;
+            cmbRol.Enabled = false;
         }
 
         private void btnCrear_Click(object sender, EventArgs e)
@@ -113,7 +114,7 @@ namespace CuentaClara_TrabajoCampo
             btnCrear.Enabled = false;
             btnDesbloquear.Enabled = false;
             btnActivarDesactivar.Enabled = false;
-
+            cmbRol.Enabled = true;
             lstMensajes.Items.Clear();
             lstMensajes.Items.Add("Modo Modificar");
         }
@@ -152,7 +153,8 @@ namespace CuentaClara_TrabajoCampo
             txtNombre.Text = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
             txtCorreo.Text = dgvUsuarios.CurrentRow.Cells["email"].Value.ToString();
             txtLogin.Text = dgvUsuarios.CurrentRow.Cells["Login"].Value.ToString();
-            txtRol.Text = dgvUsuarios.CurrentRow.Cells["IdRol"].Value.ToString();
+            string idRol = dgvUsuarios.CurrentRow.Cells["IdRol"].Value.ToString();
+            cmbRol.Text = bllRol.ObtenerNombreRol(idRol);
             chkActivo.Checked = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Activo"].Value) == 1;
 
 
@@ -181,7 +183,8 @@ namespace CuentaClara_TrabajoCampo
 
             if (modo == "Modo Modificar")
             {
-                bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text);
+                string nuevoIdRol = cmbRol.SelectedValue.ToString();
+                bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text, nuevoIdRol);
 
                 MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
 
@@ -237,10 +240,6 @@ namespace CuentaClara_TrabajoCampo
             CargarUsuarios();
         }
 
-        private void panelContenedor_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
 

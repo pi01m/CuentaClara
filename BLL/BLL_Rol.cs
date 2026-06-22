@@ -34,9 +34,8 @@ namespace BLL
             return dal.ListarRoles();
         }
 
-        public void AsignarPermiso(
-            string idRol,
-            string idPermiso)
+        public void AsignarPermiso(string idRol,string idPermiso)
+
         {
             if (string.IsNullOrWhiteSpace(idRol))
                 throw new Exception("Seleccione un rol.");
@@ -48,9 +47,8 @@ namespace BLL
                 throw new Exception(
                     "El rol ya posee ese permiso.");
 
-            dal.AsignarPermiso(
-                idRol,
-                idPermiso);
+            dal.AsignarPermiso( idRol,idPermiso);
+   
         }
 
         public string ObtenerNombreRol(string idRol)
@@ -58,18 +56,34 @@ namespace BLL
             return dal.ObtenerNombreRol(idRol);
         }
 
-        public bool TienePermiso(
-            string idRol,
-            string idPermiso)
+        public bool TienePermiso( string idRol, string idPermiso)
         {
-            return dal.ExistePermiso(
-                idRol,
-                idPermiso);
+            return dal.ExistePermiso( idRol,idPermiso);       
         }
+        public string VerificarRedundanciasRol(string idRol, string idFamilia)
+        {
+            BLL_Familia bllFam = new BLL_Familia();
+            Servicio_Familia familiaCompleta = bllFam.ObtenerFamiliaCompleta(idFamilia);
+            List<string> redundantes = new List<string>();
 
-        public void AsignarFamiliaARol(
-            string idRol,
-            string idFamilia)
+            if (familiaCompleta != null && familiaCompleta.ObtenerHijos() != null)
+            {
+                foreach (Servicio_Rol itemHijo in familiaCompleta.ObtenerHijos())
+                {
+                    if (!(itemHijo is Servicio_Familia))
+                    {
+                        if (this.TienePermiso(idRol, itemHijo.IdRol))
+                        {
+                            redundantes.Add(itemHijo.Nombre);
+                        }
+                    }
+                }
+            }
+      
+            return string.Join(", ", redundantes);      // Devuelve los nombres separados por coma (ej: "Crear Usuario, Editar Usuario")
+        }
+        public void AsignarFamiliaARol( string idRol,string idFamilia, bool limpiarRedundancias)
+     
         {
             if (string.IsNullOrWhiteSpace(idRol))
                 throw new Exception("Seleccione un rol.");
@@ -77,26 +91,48 @@ namespace BLL
             if (string.IsNullOrWhiteSpace(idFamilia))
                 throw new Exception("Seleccione una familia.");
 
-            if (dal.ExisteFamilia(
-                idRol,
-                idFamilia))
+            if (dal.ExisteFamilia(idRol,idFamilia))
+ 
             {
-                throw new Exception(
-                    "La familia ya está asignada.");
+                throw new Exception( "La familia ya está asignada.");
+                   
             }
 
-            dal.AsignarFamilia(
-                idRol,
-                idFamilia);
+            BLL_Familia bllFam = new BLL_Familia();
+            Servicio_Familia familiaCompleta = bllFam.ObtenerFamiliaCompleta(idFamilia);
+
+
+            if (limpiarRedundancias)
+            {
+                
+
+                if (familiaCompleta != null && familiaCompleta.ObtenerHijos() != null)
+                {
+                    foreach (Servicio_Rol itemHijo in familiaCompleta.ObtenerHijos())
+                    {
+                        if (!(itemHijo is Servicio_Familia))
+                        {
+                            if (this.TienePermiso(idRol, itemHijo.IdRol))
+                            {
+                               
+                                this.DesasignarPermiso(idRol, itemHijo.IdRol);
+                            }
+                        }
+                    }
+                }
+            }
+
+            dal.AsignarFamilia( idRol,idFamilia);
+               
+                
         }
 
-        public bool TieneFamilia(
-            string idRol,
-            string idFamilia)
+        public bool TieneFamilia( string idRol,string idFamilia)
+  
         {
-            return dal.ExisteFamilia(
-                idRol,
-                idFamilia);
+            return dal.ExisteFamilia( idRol, idFamilia);
+               
+               
         }
 
         public DataTable ObtenerFamiliasPorRol(string idRol)
@@ -143,7 +179,51 @@ namespace BLL
         {
             return dal.ExisteNombre(nombre);
         }
+        public bool RolTienePermisoRecursivo(string idRol, string idPermiso)
+        {
+            // 1. Verificamos si lo tiene asignado directamente de forma suelta
+            if (TienePermiso(idRol, idPermiso)) return true;
 
+            // 2. Verificamos si lo tiene heredado dentro de alguna de sus familias asignadas
+            DataTable dtFamilias = ObtenerFamiliasPorRol(idRol);
+            if (dtFamilias != null)
+            {
+                BLL_Familia bllFam = new BLL_Familia();
+                foreach (DataRow row in dtFamilias.Rows)
+                {
+                    string idFamilia = row["IdFamilia"].ToString();
+                    // Obtenemos la familia con toda su estructura interna
+                    Servicio_Familia famCompleta = bllFam.ObtenerFamiliaCompleta(idFamilia);
+
+                    if (FamiliaContienePermiso(famCompleta, idPermiso))
+                    {
+                        return true; // Lo encontró dentro de esta rama
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool FamiliaContienePermiso(Servicio_Familia familia, string idPermisoBuscado)
+        {
+            if (familia != null && familia.ObtenerHijos() != null)
+            {
+                foreach (Servicio_Rol hijo in familia.ObtenerHijos())
+                {
+                    if (hijo is Servicio_Familia subFamilia)
+                    {
+                        // Si es familia, aplicamos recursividad para buscar más adentro
+                        if (FamiliaContienePermiso(subFamilia, idPermisoBuscado)) return true;
+                    }
+                    else
+                    {
+                        // Si es un permiso (nodo hoja), verificamos si es el que buscamos
+                        if (hijo.IdRol == idPermisoBuscado) return true;
+                    }
+                }
+            }
+            return false;
+        }
 
     }
 }

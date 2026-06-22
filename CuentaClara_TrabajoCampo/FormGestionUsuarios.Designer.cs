@@ -31,9 +31,9 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panelContenedor = new Panel();
+            cmbRol = new ComboBox();
             radioBtnTodosUser = new RadioButton();
             radioBtnUserActivos = new RadioButton();
-            txtRol = new TextBox();
             lblDNI = new Label();
             txtDNI = new TextBox();
             lblRol = new Label();
@@ -68,9 +68,9 @@
             // panelContenedor
             // 
             panelContenedor.BackColor = Color.White;
+            panelContenedor.Controls.Add(cmbRol);
             panelContenedor.Controls.Add(radioBtnTodosUser);
             panelContenedor.Controls.Add(radioBtnUserActivos);
-            panelContenedor.Controls.Add(txtRol);
             panelContenedor.Controls.Add(lblDNI);
             panelContenedor.Controls.Add(txtDNI);
             panelContenedor.Controls.Add(lblRol);
@@ -99,7 +99,15 @@
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1258, 736);
             panelContenedor.TabIndex = 0;
-            panelContenedor.Paint += panelContenedor_Paint;
+           
+            // 
+            // cmbRol
+            // 
+            cmbRol.FormattingEnabled = true;
+            cmbRol.Location = new Point(185, 661);
+            cmbRol.Name = "cmbRol";
+            cmbRol.Size = new Size(209, 23);
+            cmbRol.TabIndex = 34;
             // 
             // radioBtnTodosUser
             // 
@@ -128,13 +136,6 @@
             radioBtnUserActivos.Text = "Usuarios Activos";
             radioBtnUserActivos.UseVisualStyleBackColor = true;
             radioBtnUserActivos.CheckedChanged += radioBtnUserActivos_CheckedChanged;
-            // 
-            // txtRol
-            // 
-            txtRol.Location = new Point(185, 661);
-            txtRol.Name = "txtRol";
-            txtRol.Size = new Size(209, 23);
-            txtRol.TabIndex = 31;
             // 
             // lblDNI
             // 
@@ -292,6 +293,7 @@
             dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvUsuarios.Size = new Size(974, 320);
             dgvUsuarios.TabIndex = 1;
+          
             dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
             // 
             // btnCrear
@@ -503,8 +505,8 @@
         private Label lblLogin;
         private TextBox txtLogin;
         private CheckBox chkActivo;
-        private TextBox txtRol;
         private RadioButton radioBtnUserActivos;
         private RadioButton radioBtnTodosUser;
+        private ComboBox cmbRol;
     }
 }

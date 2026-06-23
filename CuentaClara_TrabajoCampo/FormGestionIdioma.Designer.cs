@@ -39,7 +39,8 @@
             lblTexto = new Label();
             txtTexto = new TextBox();
             panelInferior = new Panel();
-            lblUsuarioLogueado = new Label();
+            lblUsuarioValor = new Label();
+            lblUsuario = new Label();
             btnNuevoIdioma = new Button();
             btnAgregarEtiqueta = new Button();
             btnModificarEtiqueta = new Button();
@@ -61,6 +62,7 @@
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(710, 99);
             lblTitulo.TabIndex = 0;
+            lblTitulo.Tag = "lbl_TituloGestiondeIdiomas";
             lblTitulo.Text = "Gestión de Idiomas";
             // 
             // lblSeccionIdioma
@@ -73,6 +75,7 @@
             lblSeccionIdioma.Name = "lblSeccionIdioma";
             lblSeccionIdioma.Size = new Size(390, 50);
             lblSeccionIdioma.TabIndex = 1;
+            lblSeccionIdioma.Tag = "lbl_SeleccioneElIdioma";
             lblSeccionIdioma.Text = "Seleccione el Idioma:";
             // 
             // cboIdiomas
@@ -133,6 +136,7 @@
             lblClave.Name = "lblClave";
             lblClave.Size = new Size(114, 46);
             lblClave.TabIndex = 4;
+            lblClave.Tag = "Clave";
             lblClave.Text = "Clave:";
             // 
             // txtClave
@@ -153,6 +157,7 @@
             lblTexto.Name = "lblTexto";
             lblTexto.Size = new Size(117, 46);
             lblTexto.TabIndex = 6;
+            lblTexto.Tag = "Texto";
             lblTexto.Text = "Texto:";
             // 
             // txtTexto
@@ -167,7 +172,8 @@
             // panelInferior
             // 
             panelInferior.BackColor = Color.FromArgb(12, 74, 144);
-            panelInferior.Controls.Add(lblUsuarioLogueado);
+            panelInferior.Controls.Add(lblUsuarioValor);
+            panelInferior.Controls.Add(lblUsuario);
             panelInferior.Dock = DockStyle.Bottom;
             panelInferior.Location = new Point(0, 1924);
             panelInferior.Margin = new Padding(7, 8, 7, 8);
@@ -175,17 +181,30 @@
             panelInferior.Size = new Size(2820, 126);
             panelInferior.TabIndex = 13;
             // 
-            // lblUsuarioLogueado
+            // lblUsuarioValor
             // 
-            lblUsuarioLogueado.AutoSize = true;
-            lblUsuarioLogueado.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblUsuarioLogueado.ForeColor = Color.White;
-            lblUsuarioLogueado.Location = new Point(41, 33);
-            lblUsuarioLogueado.Margin = new Padding(7, 0, 7, 0);
-            lblUsuarioLogueado.Name = "lblUsuarioLogueado";
-            lblUsuarioLogueado.Size = new Size(500, 46);
-            lblUsuarioLogueado.TabIndex = 0;
-            lblUsuarioLogueado.Text = "Usuario activo: Administrador";
+            lblUsuarioValor.AutoSize = true;
+            lblUsuarioValor.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblUsuarioValor.ForeColor = Color.White;
+            lblUsuarioValor.Location = new Point(322, 33);
+            lblUsuarioValor.Margin = new Padding(7, 0, 7, 0);
+            lblUsuarioValor.Name = "lblUsuarioValor";
+            lblUsuarioValor.Size = new Size(471, 46);
+            lblUsuarioValor.TabIndex = 16;
+            lblUsuarioValor.Text = "Maria Lopez- Administrador";
+            // 
+            // lblUsuario
+            // 
+            lblUsuario.AutoSize = true;
+            lblUsuario.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblUsuario.ForeColor = Color.White;
+            lblUsuario.Location = new Point(41, 33);
+            lblUsuario.Margin = new Padding(7, 0, 7, 0);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(267, 46);
+            lblUsuario.TabIndex = 0;
+            lblUsuario.Tag = "lbl_Usuario";
+            lblUsuario.Text = "Usuario activo: ";
             // 
             // btnNuevoIdioma
             // 
@@ -198,6 +217,7 @@
             btnNuevoIdioma.Name = "btnNuevoIdioma";
             btnNuevoIdioma.Size = new Size(396, 142);
             btnNuevoIdioma.TabIndex = 8;
+            btnNuevoIdioma.Tag = "btn_NuevoIdioma";
             btnNuevoIdioma.Text = "Nuevo Idioma";
             btnNuevoIdioma.UseVisualStyleBackColor = false;
             btnNuevoIdioma.Click += btnNuevoIdioma_Click;
@@ -213,6 +233,7 @@
             btnAgregarEtiqueta.Name = "btnAgregarEtiqueta";
             btnAgregarEtiqueta.Size = new Size(396, 142);
             btnAgregarEtiqueta.TabIndex = 9;
+            btnAgregarEtiqueta.Tag = "btn_AgregarEtiqueta";
             btnAgregarEtiqueta.Text = "Agregar Etiqueta";
             btnAgregarEtiqueta.UseVisualStyleBackColor = false;
             btnAgregarEtiqueta.Click += btnAgregarEtiqueta_Click;
@@ -228,6 +249,7 @@
             btnModificarEtiqueta.Name = "btnModificarEtiqueta";
             btnModificarEtiqueta.Size = new Size(396, 142);
             btnModificarEtiqueta.TabIndex = 10;
+            btnModificarEtiqueta.Tag = "btn_ModificarEtiqueta";
             btnModificarEtiqueta.Text = "Modificar Etiqueta";
             btnModificarEtiqueta.UseVisualStyleBackColor = false;
             btnModificarEtiqueta.Click += btnModificarEtiqueta_Click;
@@ -243,8 +265,10 @@
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(311, 120);
             btnSalir.TabIndex = 12;
+            btnSalir.Tag = "btn_Salir";
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = false;
+            btnSalir.Click += btnSalir_Click;
             // 
             // btnAplicar
             // 
@@ -257,6 +281,7 @@
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(311, 120);
             btnAplicar.TabIndex = 11;
+            btnAplicar.Tag = "btn_Aplicar";
             btnAplicar.Text = "Aplicar";
             btnAplicar.UseVisualStyleBackColor = false;
             btnAplicar.Click += btnAplicar_Click;
@@ -282,6 +307,7 @@
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(311, 120);
             btnCancelar.TabIndex = 15;
+            btnCancelar.Tag = "btn_Cancelar";
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
             // 
@@ -313,6 +339,7 @@
             Name = "FormGestionIdioma";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Gestión de Idioma";
+            FormClosed += FormGestionIdioma_FormClosed;
             Load += FormGestionIdioma_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEtiquetas).EndInit();
             panelInferior.ResumeLayout(false);
@@ -336,8 +363,9 @@
         private System.Windows.Forms.Button btnAplicar;
         private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Panel panelInferior;
-        private System.Windows.Forms.Label lblUsuarioLogueado;
+        private System.Windows.Forms.Label lblUsuario;
         private ListBox listBox1;
         private Button btnCancelar;
+        private Label lblUsuarioValor;
     }
 }

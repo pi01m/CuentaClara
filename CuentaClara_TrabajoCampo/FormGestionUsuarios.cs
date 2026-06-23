@@ -10,10 +10,11 @@ using System.Windows.Forms;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class FormGestionUsuarios : Form
+    public partial class FormGestionUsuarios : Form, IObserverIdioma
     {
         private BLL_Usuario bll = new BLL_Usuario();
         private BLL_Rol bllRol = new BLL_Rol();
+        private string modoActual;
         public FormGestionUsuarios()
         {
             InitializeComponent();
@@ -22,7 +23,8 @@ namespace CuentaClara_TrabajoCampo
             dgvUsuarios.ReadOnly = true;
 
             dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
-            CargarUsuarios();
+            GestorIdioma.GetInstancia().Suscribir(this);
+            //CargarUsuarios();
         }
 
 
@@ -36,9 +38,9 @@ namespace CuentaClara_TrabajoCampo
             {
                 dgvUsuarios.DataSource = bll.ListarUsuariosActivos();
             }
-
+            TraducirColumnasUsuarios();
             dgvUsuarios.Refresh();
-
+            
         }
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
@@ -46,8 +48,8 @@ namespace CuentaClara_TrabajoCampo
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
 
             string nombreRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
-
-            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreRol}";
+            label1.Text = $"{usuarioActual.Login}-{nombreRol}";
+            
             cmbRol.DataSource = bllRol.ObtenerRoles();
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
@@ -56,10 +58,16 @@ namespace CuentaClara_TrabajoCampo
             btnAplicar.Enabled = false;
             btnCancelar.Enabled = false;
             lblTotalUsuarios.Text = dgvUsuarios.Rows.Count.ToString();
+
+            ActualizarIdioma();
+
             BloquearCampos();
 
+            modoActual = "ModoConsulta";
+
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Modo Consulta");
+            //lstMensajes.Items.Add("Modo Consulta");
+            lstMensajes.Items.Add(TraducirTexto("ModoConsulta"));
         }
 
         private void HabilitarCamposEdicion()
@@ -80,8 +88,11 @@ namespace CuentaClara_TrabajoCampo
             btnDesbloquear.Enabled = true;
             btnActivarDesactivar.Enabled = true;
 
+            modoActual = "ModoConsulta";
+
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Modo Consulta");
+            //lstMensajes.Items.Add("Modo Consulta");
+            lstMensajes.Items.Add(TraducirTexto("ModoConsulta"));
         }
 
         private void BloquearCampos()
@@ -115,8 +126,12 @@ namespace CuentaClara_TrabajoCampo
             btnDesbloquear.Enabled = false;
             btnActivarDesactivar.Enabled = false;
             cmbRol.Enabled = true;
+             
+            modoActual = "ModoModificar";
+
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Modo Modificar");
+            //lstMensajes.Items.Add("Modo Modificar");
+            lstMensajes.Items.Add(TraducirTexto("ModoModificar"));
         }
 
         private void btnDesbloquear_Click(object sender, EventArgs e)
@@ -128,8 +143,12 @@ namespace CuentaClara_TrabajoCampo
             btnModificar.Enabled = false;
             btnActivarDesactivar.Enabled = false;
 
+            modoActual = "ModoDesbloquear";
+
+
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Modo Desbloquear");
+            //lstMensajes.Items.Add("Modo Desbloquear");
+            lstMensajes.Items.Add(TraducirTexto("ModoDesbloquear"));
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -141,7 +160,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
@@ -173,53 +192,54 @@ namespace CuentaClara_TrabajoCampo
             btnModificar.Enabled = false;
             btnDesbloquear.Enabled = false;
 
+            modoActual = "ModoActivarDesactivar";
+
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Modo Activar / Desactivar");
+            //lstMensajes.Items.Add("Modo Activar / Desactivar");
+            lstMensajes.Items.Add(TraducirTexto("ModoActivarDesactivar"));
         }
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            string modo = lstMensajes.Items[0].ToString();
-
-            if (modo == "Modo Modificar")
+            if (modoActual == "Modo Modificar")
             {
                 string nuevoIdRol = cmbRol.SelectedValue.ToString();
                 bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text, nuevoIdRol);
 
-                MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
-
-
+                //MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
+                MessageBox.Show(resultado ? TraducirTexto("UsuarioModificado") : TraducirTexto("NoSePudoModificar"));
+    
             }
 
-            else if (modo == "Modo Desbloquear")
+            else if (modoActual == "Modo Desbloquear")
             {
                 int intentos = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Bloqueo"].Value);
 
 
                 if (intentos < 3)
                 {
-                    MessageBox.Show("El usuario seleccionado no se encuentra bloqueado.");
-
+                    //MessageBox.Show("El usuario seleccionado no se encuentra bloqueado.");
+                    MessageBox.Show(TraducirTexto("UsuarioNoBloqueado"));
                     return;
                 }
 
                 bll.DesbloquearUsuario(txtLogin.Text);
 
-                MessageBox.Show("Usuario desbloqueado correctamente.");
-
+                //MessageBox.Show("Usuario desbloqueado correctamente.");
+                MessageBox.Show(TraducirTexto("UsuarioDesbloqueado"));
                 CargarUsuarios();
 
                 RestaurarModoConsulta();
             }
 
-            else if (modo == "Modo Activar / Desactivar")
+            else if (modoActual == "Modo Activar / Desactivar")
             {
                 int activo = chkActivo.Checked ? 1 : 0;
 
                 bll.CambiarEstadoUsuario(txtDNI.Text, activo);
 
-                MessageBox.Show("Estado actualizado correctamente.");
-
+                //MessageBox.Show("Estado actualizado correctamente.");
+                MessageBox.Show(TraducirTexto("EstadoActualizado"));
             }
 
             CargarUsuarios();
@@ -239,7 +259,95 @@ namespace CuentaClara_TrabajoCampo
         {
             CargarUsuarios();
         }
+         
+        private void FormGestionUsuarios_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
 
+            base.OnFormClosed(e);
+        }
+
+        public void ActualizarIdioma()
+        {
+            string idIdioma =
+            SessionManager.GetInstancia()
+            .GetUsuarioActual()
+            .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+            TraducirColumnasUsuarios();
+        }
+
+        private void TraducirControles(Control.ControlCollection controls, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controls)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma =
+                SessionManager.GetInstancia()
+                .GetUsuarioActual()
+                .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
+
+        private void TraducirColumnasUsuarios()
+        {
+            dgvUsuarios.Columns["DNI"].HeaderText = TraducirTexto("DNI");
+            dgvUsuarios.Columns["Apellido"].HeaderText = TraducirTexto("Apellido");
+            dgvUsuarios.Columns["Nombre"].HeaderText = TraducirTexto("Nombre");
+            dgvUsuarios.Columns["email"].HeaderText = TraducirTexto("Email");
+            dgvUsuarios.Columns["Login"].HeaderText = TraducirTexto("Login");
+            dgvUsuarios.Columns["IdRol"].HeaderText = TraducirTexto("Rol");
+            dgvUsuarios.Columns["Activo"].HeaderText = TraducirTexto("Activo");
+
+            dgvUsuarios.Columns["Password"].HeaderText = TraducirTexto("Password");
+            dgvUsuarios.Columns["Bloqueo"].HeaderText = TraducirTexto("Bloqueo");
+            dgvUsuarios.Columns["Id_Idioma"].HeaderText = TraducirTexto("Idioma");
+        }
     }
 }
 

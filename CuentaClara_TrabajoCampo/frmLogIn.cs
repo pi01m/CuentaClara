@@ -36,7 +36,8 @@ namespace CuentaClara_TrabajoCampo
         {
             if (!ValidarCampos())
             {
-                MostrarError("Debe completar todos los campos.");
+                //MostrarError("Debe completar todos los campos.");
+                MostrarError(TraducirTexto("msg_DebeCompletarCampos"));
                 return;
             }
 
@@ -62,7 +63,8 @@ namespace CuentaClara_TrabajoCampo
                 }
                 else
                 {
-                    MessageBox.Show("Usuario o contraseña incorrectos.");
+                    //MessageBox.Show("Usuario o contraseña incorrectos.");
+                    MessageBox.Show(TraducirTexto("msg_UsuarioContrasenaIncorrectos"));
                 }
             }
             catch (Exception ex)
@@ -132,6 +134,21 @@ namespace CuentaClara_TrabajoCampo
                 return;
 
             TraducirControles(this.Controls, idioma);
+        }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = comboBox1.SelectedValue.ToString();
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
         }
 
         private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)

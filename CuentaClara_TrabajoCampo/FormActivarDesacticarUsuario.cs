@@ -24,5 +24,15 @@ namespace CuentaClara_TrabajoCampo
         {
 
         }
+
+        private void FormActivarDesacticarUsuario_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnActivar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

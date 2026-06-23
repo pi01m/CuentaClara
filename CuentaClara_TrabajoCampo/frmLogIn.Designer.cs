@@ -174,6 +174,7 @@
             Name = "frmLogIn";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Inicio de Sesión";
+            FormClosed += frmLogIn_FormClosed;
             Load += frmLogIn_Load_1;
             panelLogin.ResumeLayout(false);
             panelLogin.PerformLayout();

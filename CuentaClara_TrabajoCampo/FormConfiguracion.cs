@@ -41,8 +41,8 @@ namespace IU
         {
             if (cmbIdioma.SelectedValue == null) return;
             string nuevoIdioma = cmbIdioma.SelectedValue.ToString();
-            SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = nuevoIdioma;
-            //bllUsuario.CambiarIdiomaEnSesion(nuevoIdioma);
+            //SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = nuevoIdioma;
+            bllUsuario.CambiarIdiomaEnSesion(nuevoIdioma);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -98,9 +98,9 @@ namespace IU
 
         private void FormConfiguracion_FormClosed(object sender, FormClosedEventArgs e)
         {
-            GestorIdioma.GetInstancia().Desuscribir(this);
 
-            base.OnFormClosed(e);
+          GestorIdioma.GetInstancia().Desuscribir(this);
+
         }
 
         private void cmbIdioma_SelectedIndexChanged(object sender, EventArgs e)

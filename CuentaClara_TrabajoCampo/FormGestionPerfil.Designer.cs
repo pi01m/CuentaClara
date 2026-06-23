@@ -398,11 +398,12 @@
             label3.AutoSize = true;
             label3.BackColor = Color.White;
             label3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label3.Location = new Point(1303, 262);
+            label3.Location = new Point(421, 133);
             label3.Margin = new Padding(0);
             label3.Name = "label3";
             label3.Size = new Size(134, 46);
             label3.TabIndex = 45;
+            label3.Tag = "lbl_Familia";
             label3.Text = "Familia";
             // 
             // label1
@@ -411,11 +412,12 @@
             label1.AutoSize = true;
             label1.BackColor = Color.White;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label1.Location = new Point(1136, 252);
+            label1.Location = new Point(127, 133);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(149, 46);
             label1.TabIndex = 44;
+            label1.Tag = "lbl_Permiso";
             label1.Text = "Permiso";
             // 
             // clbFamilia
@@ -469,10 +471,10 @@
             label5.ForeColor = Color.White;
             label5.Location = new Point(253, 12);
             label5.Name = "label5";
-            label5.Size = new Size(227, 41);
+            label5.Size = new Size(407, 41);
             label5.TabIndex = 1;
             label5.Tag = "";
-            label5.Text = "Usuario activo:";
+            label5.Text = "Maria Lopez-Administrador";
             // 
             // lblUsuarioActivo
             // 

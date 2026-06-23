@@ -150,7 +150,7 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            base.OnFormClosed(e);
+
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -169,9 +169,12 @@ namespace CuentaClara_TrabajoCampo
         private void button6_Click(object sender, EventArgs e)//cambiar idioma
         {
             FormConfiguracion frm = new FormConfiguracion();
-            
             frm.ShowDialog();
-            this.Show();
+        }
+
+        private void panelUsuario_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

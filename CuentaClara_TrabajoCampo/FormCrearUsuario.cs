@@ -75,7 +75,7 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            base.OnFormClosed(e);
+
         }
 
         public void ActualizarIdioma()
@@ -124,6 +124,11 @@ namespace CuentaClara_TrabajoCampo
                 if (c.HasChildren)
                     TraducirControles(c.Controls, idioma);
             }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

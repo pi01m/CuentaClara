@@ -224,6 +224,7 @@
             btnCancelar.Tag = "btn_Cancelar";
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnGuardar
             // 

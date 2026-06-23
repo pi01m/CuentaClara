@@ -301,7 +301,7 @@
             // 
             cboEvento.DropDownStyle = ComboBoxStyle.DropDownList;
             cboEvento.Font = new Font("Segoe UI", 10F);
-            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Imprimir", "Cambio Clave", "Asignación familia a rol", "Asignación familia a familia", "Asignación permiso a rol", "Asignación permiso a familia", "Modificacion Familia", "Baja Familia", "Alta Familia", "Desasignación en Perfiles" });
+            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Imprimir", "Cambio Clave", "Asignación familia a rol", "Asignación familia a familia", "Asignación permiso a rol", "Asignación permiso a familia", "Modificacion Familia", "Baja Familia", "Alta Familia", "Desasignación en Perfiles", "Cambio de Idioma" });
             cboEvento.Location = new Point(1894, 1189);
             cboEvento.Margin = new Padding(7, 8, 7, 8);
             cboEvento.Name = "cboEvento";
@@ -440,10 +440,10 @@
             panelInferior.Controls.Add(lblUsuarioValor);
             panelInferior.Controls.Add(lblUsuarioActivo);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 1785);
+            panelInferior.Location = new Point(0, 1778);
             panelInferior.Margin = new Padding(7, 8, 7, 8);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(2776, 96);
+            panelInferior.Size = new Size(2776, 103);
             panelInferior.TabIndex = 0;
             // 
             // lblUsuarioValor

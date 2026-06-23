@@ -324,7 +324,6 @@ namespace IU
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            base.OnFormClosed(e);
         }
 
         public void ActualizarIdioma()

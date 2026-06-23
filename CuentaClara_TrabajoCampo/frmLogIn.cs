@@ -19,7 +19,7 @@ namespace CuentaClara_TrabajoCampo
         public frmLogIn()
         {
             GestorIdioma.GetInstancia().Suscribir(this);
-            InitializeComponent(); 
+            InitializeComponent();
             _bllUsuario = new BLL_Usuario();
         }
 
@@ -184,6 +184,11 @@ namespace CuentaClara_TrabajoCampo
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActualizarIdioma();
+        }
+
+        private void frmLogIn_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
         }
     }
 }

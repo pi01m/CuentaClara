@@ -194,15 +194,15 @@ namespace BLL
             }
 
             
-            if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
-            {
+            //if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
+            //{
                 _bitacoraServicio.RegistrarBitacora(
-                    "Usuario cambió idioma durante la sesión",
+                    "Cambio de Idioma",
                     usuario.Login,
-                    "Idioma",
+                    "Administracion",
                     2
                 );
-            }
+            //}
 
             _bitacoraServicio.RegistrarBitacora(
                 "Cerrar Sesión",
@@ -299,17 +299,17 @@ namespace BLL
             return actualizacionExitosa;
         }
 
-        //public void CambiarIdiomaEnSesion(string? idIdioma)
-        //{
-        //    Servicio_Usuario usuario = _sm.GetUsuarioActual();
+        public void CambiarIdiomaEnSesion(string? idIdioma)
+        {
+            Servicio_Usuario usuario = _sm.GetUsuarioActual();
 
-        //    if (usuario == null) return;
+            if (usuario == null) return;
 
-        //    usuario.Id_Idioma = idIdioma;
+            usuario.Id_Idioma = idIdioma;
 
-        //    _sm.SetUsuarioActual(usuario);
+            _sm.SetUsuarioActual(usuario);
 
-        //    GestorIdioma.GetInstancia().Notificar();
-        //}
+            GestorIdioma.GetInstancia().Notificar();
+        }
     }
 }

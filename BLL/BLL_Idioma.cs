@@ -112,5 +112,7 @@ namespace BLL
              
             return _dalIdioma.ObtenerIdioma(idiomaBD.Nombre);
         }
+
+        
     }
 }

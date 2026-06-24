@@ -124,7 +124,7 @@
             listBox1.Location = new Point(620, 790);
             listBox1.Margin = new Padding(0);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(835, 86);
+            listBox1.Size = new Size(835, 127);
             listBox1.TabIndex = 31;
             // 
             // btnModificar
@@ -258,7 +258,7 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnAplicar.Location = new Point(773, 911);
+            btnAplicar.Location = new Point(763, 951);
             btnAplicar.Margin = new Padding(0);
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(260, 118);
@@ -316,7 +316,7 @@
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button2.ForeColor = Color.FromArgb(18, 87, 150);
-            button2.Location = new Point(1109, 911);
+            button2.Location = new Point(1123, 951);
             button2.Margin = new Padding(0);
             button2.Name = "button2";
             button2.Size = new Size(260, 118);

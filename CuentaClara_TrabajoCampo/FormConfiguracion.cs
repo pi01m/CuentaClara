@@ -41,7 +41,7 @@ namespace IU
         {
             if (cmbIdioma.SelectedValue == null) return;
             string nuevoIdioma = cmbIdioma.SelectedValue.ToString();
-            //SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = nuevoIdioma;
+            
             bllUsuario.CambiarIdiomaEnSesion(nuevoIdioma);
         }
 

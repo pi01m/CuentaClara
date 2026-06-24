@@ -52,7 +52,7 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e) 
         {
             FormCambiarClave frm = new FormCambiarClave();
             this.Hide();

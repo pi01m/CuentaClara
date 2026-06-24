@@ -203,9 +203,15 @@ namespace CuentaClara_TrabajoCampo
                     return;
                 }
 
-                bll.DesbloquearUsuario(txtLogin.Text);
-
-                MessageBox.Show("Usuario desbloqueado correctamente.");
+                bool rta =  bll.DesbloquearUsuario(txtLogin.Text);
+                if (rta)
+                {
+                    MessageBox.Show("Usuario desbloqueado correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error: No se pudo desbloquear el usuario.");
+                }
 
                 CargarUsuarios();
 
@@ -216,9 +222,16 @@ namespace CuentaClara_TrabajoCampo
             {
                 int activo = chkActivo.Checked ? 1 : 0;
 
-                bll.CambiarEstadoUsuario(txtDNI.Text, activo);
+                bool resultado = bll.CambiarEstadoUsuario(txtDNI.Text, activo);
 
-                MessageBox.Show("Estado actualizado correctamente.");
+                if (resultado)
+                {
+                    MessageBox.Show("Estado actualizado correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error: No se pudo actualizar el estado del usuario.");
+                }
 
             }
 

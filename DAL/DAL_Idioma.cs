@@ -172,11 +172,11 @@ namespace DAL
             }
             catch
             {
-                // podrías loguear error
+                
             }
 
             return lista;
         }
     }
     }
-}
+

@@ -21,17 +21,11 @@ namespace Servicio
 
        
        
-        public bool CrearSesion(Servicio_Usuario usuario)
+        public  void CrearSesion(Servicio_Usuario usuario)
         {
-            try
-            {
-                _usuarioActual = usuario;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+           
+         _usuarioActual = usuario;
+            
         }
         public void CerrarSesion()
         {

@@ -129,15 +129,23 @@ namespace BLL
             _dalUsuario.ReiniciarIntentos(login);
         }
 
-        public void DesbloquearUsuario(string login)
+        public bool DesbloquearUsuario(string login)
         {
-            _dalUsuario.ReiniciarIntentos(login);
+            try
+            {
+                this.ReiniciarIntentos(login);
 
-            _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login,"Administración",1);
-                     
+                _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login, "Administración", 1);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
-        public bool IniciarSesion(string nombreUsuario, string hash)
+        private bool IniciarSesion(string nombreUsuario, string hash)
         {
       
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
@@ -156,10 +164,8 @@ namespace BLL
                 IncrementarIntentos(nombreUsuario);
                
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
-                throw new Exception(
-                    $"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}"
-                );
-                
+                throw new Exception($"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}");
+
             }
 
             
@@ -196,7 +202,7 @@ namespace BLL
             return _dalUsuario.ObtenerIntentos(login);
         }
 
-        public bool VerificarEstadoUsuario(Servicio_Usuario usuario)
+        private bool VerificarEstadoUsuario(Servicio_Usuario usuario)
         {
             if (usuario.Activo != 1) return false;
 
@@ -215,11 +221,23 @@ namespace BLL
         }
         public bool CambiarEstadoUsuario(string dni, int activo)
         {
-            _dalUsuario.CambiarEstadoUsuario(dni, activo);
+            try
+            {
+                
+                _dalUsuario.CambiarEstadoUsuario(dni, activo);
 
-            _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario",ObtenerUsuario(dni).Login, "Seguridad", 1); 
+               
+                _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario", ObtenerUsuario(dni).Login, "Seguridad", 1);
 
-            return true;
+                //Faltaría agregar acá el recálculo del Dígito Verificador
+
+                return true; 
+            }
+            catch
+            {
+                return false; 
+            }
+
         }
 
         public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail, string nuevoRol)

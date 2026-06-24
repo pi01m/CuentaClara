@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class FormCrearUsuario : Form
+    public partial class FormCrearUsuario : Form, IObserverIdioma
     {
         public FormCrearUsuario()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
         }
 
         private BLL_Rol bllRol = new BLL_Rol();
@@ -57,6 +58,7 @@ namespace CuentaClara_TrabajoCampo
             cmbRol.DataSource = bllRol.ObtenerRoles();
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
+            ActualizarIdioma();
         }
 
         private void chkActivo_CheckedChanged(object sender, EventArgs e)
@@ -67,6 +69,66 @@ namespace CuentaClara_TrabajoCampo
         private void panelPrincipal_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void FormCrearUsuario_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
+
+
+        }
+
+        public void ActualizarIdioma()
+        {
+            string idIdioma =
+            SessionManager.GetInstancia()
+            .GetUsuarioActual()
+            .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

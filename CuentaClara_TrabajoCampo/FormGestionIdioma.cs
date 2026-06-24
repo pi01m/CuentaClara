@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace IU
 {
-    public partial class FormGestionIdioma : Form
+    public partial class FormGestionIdioma : Form, IObserverIdioma
     {
         private string accion = ""; //nos ayuda a saber en que accion estamos 
         BLL_Idioma bllIdioma;
@@ -22,11 +22,21 @@ namespace IU
         public FormGestionIdioma()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
         }
 
         private void FormGestionIdioma_Load(object sender, EventArgs e)
         {
             bllIdioma = new BLL_Idioma();
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            BLL_Rol bllRol = new BLL_Rol();
+
+
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+
+            lblUsuario.Text = $"Usuario:";
+            lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
+            ActualizarIdioma();
             CargarIdiomas();
         }
 
@@ -38,9 +48,13 @@ namespace IU
             txtClave.Enabled = false;
             listBox1.Items.Clear();
 
-            listBox1.Items.Add("Modo actual: CREAR IDIOMA");
-            listBox1.Items.Add("Ingrese el nombre del idioma en el campo Texto.");
-            listBox1.Items.Add("Presione Aplicar para confirmar.");
+            //listBox1.Items.Add("Modo actual: CREAR IDIOMA");
+            //listBox1.Items.Add("Ingrese el nombre del idioma en el campo Texto.");
+            //listBox1.Items.Add("Presione Aplicar para confirmar.");
+
+            listBox1.Items.Add(TraducirTexto("ModoCrearIdioma"));
+            listBox1.Items.Add(TraducirTexto("IngreseNombreIdioma"));
+            listBox1.Items.Add(TraducirTexto("PresioneAplicarConfirmar"));
 
             txtClave.Clear();
             txtTexto.Clear();
@@ -57,8 +71,8 @@ namespace IU
             {
                 if (txtTexto.Text == "")
                 {
-                    MessageBox.Show("Ingrese un nombre para el idioma");
-
+                    //MessageBox.Show("Ingrese un nombre para el idioma");
+                    MessageBox.Show(TraducirTexto("IngreseNombreParaIdioma"));
                     return;
                 }
 
@@ -72,7 +86,7 @@ namespace IU
 
                 if (resultado)
                 {
-                    MessageBox.Show("Idioma creado correctamente");
+                    MessageBox.Show(TraducirTexto("IdiomaCreadoCorrectamente"));
 
                     CargarIdiomas();
 
@@ -84,12 +98,13 @@ namespace IU
                 }
                 else
                 {
-                    MessageBox.Show("El idioma ya existe");
+                    MessageBox.Show(TraducirTexto("IdiomaYaExiste"));
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear el idioma: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(TraducirTexto("ErrorCrearIdioma") + ": " + ex.Message, TraducirTexto("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
         }
 
@@ -119,13 +134,15 @@ namespace IU
             {
                 if (cboIdiomas.SelectedItem == null)
                 {
-                    MessageBox.Show("Seleccione un idioma");
+                    //MessageBox.Show("Seleccione un idioma");
+                    MessageBox.Show(TraducirTexto("SeleccioneIdioma"));
                     return;
                 }
 
                 if (txtTexto.Text == "")
                 {
-                    MessageBox.Show("Ingrese un texto");
+                    //MessageBox.Show("Ingrese un texto");
+                    MessageBox.Show(TraducirTexto("IngreseTexto"));
                     return;
                 }
 
@@ -137,8 +154,8 @@ namespace IU
 
                 if (resultado)
                 {
-                    MessageBox.Show("Etiqueta modificada correctamente");
-
+                    //MessageBox.Show("Etiqueta modificada correctamente");
+                    MessageBox.Show(TraducirTexto("EtiquetaModificadaCorrectamente"));
                     cboIdiomas_SelectedIndexChanged(null, null);
 
                     txtClave.Clear();
@@ -150,7 +167,8 @@ namespace IU
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar la etiqueta");
+                    // MessageBox.Show("No se pudo modificar la etiqueta");
+                    MessageBox.Show(TraducirTexto("NoSePudoModificarEtiqueta"));
                 }
             }
             catch (Exception ex)
@@ -165,22 +183,22 @@ namespace IU
             {
                 if (cboIdiomas.SelectedItem == null)
                 {
-                    MessageBox.Show("Seleccione un idioma");
-
+                    //MessageBox.Show("Seleccione un idioma");
+                    MessageBox.Show(TraducirTexto("SeleccioneIdioma"));
                     return;
                 }
 
                 if (txtClave.Text == "")
                 {
-                    MessageBox.Show("Ingrese una clave");
-
+                    //MessageBox.Show("Ingrese una clave");
+                    MessageBox.Show(TraducirTexto("IngreseClave"));
                     return;
                 }
 
                 if (txtTexto.Text == "")
                 {
-                    MessageBox.Show("Ingrese un texto");
-
+                    //MessageBox.Show("Ingrese un texto");
+                    MessageBox.Show(TraducirTexto("IngreseTexto"));
                     return;
                 }
 
@@ -192,8 +210,8 @@ namespace IU
 
                 if (resultado)
                 {
-                    MessageBox.Show("Etiqueta agregada correctamente");
-
+                    //MessageBox.Show("Etiqueta agregada correctamente");
+                    MessageBox.Show(TraducirTexto("EtiquetaAgregadaCorrectamente"));
                     cboIdiomas_SelectedIndexChanged(null, null);
 
                     txtClave.Clear();
@@ -205,7 +223,8 @@ namespace IU
                 }
                 else
                 {
-                    MessageBox.Show("La clave ya existe");
+                    //MessageBox.Show("La clave ya existe");
+                    MessageBox.Show(TraducirTexto("ClaveYaExiste"));
                 }
             }
             catch (Exception ex)
@@ -233,8 +252,10 @@ namespace IU
 
 
             dgvEtiquetas.DataSource = null;
-            dgvEtiquetas.DataSource =
-                idioma.Etiquetas;
+            dgvEtiquetas.DataSource = idioma.Etiquetas;
+
+            dgvEtiquetas.Columns["Clave"].HeaderText = TraducirTexto("Clave");
+            dgvEtiquetas.Columns["Texto"].HeaderText = TraducirTexto("Texto");
         }
 
         private void btnAgregarEtiqueta_Click(object sender, EventArgs e)
@@ -243,10 +264,16 @@ namespace IU
 
             listBox1.Items.Clear();
 
-            listBox1.Items.Add("Modo actual: CREAR ETIQUETA");
-            listBox1.Items.Add("Ingrese la Clave.");
-            listBox1.Items.Add("Ingrese el Texto.");
-            listBox1.Items.Add("Presione Aplicar para confirmar.");
+            //listBox1.Items.Add("Modo actual: CREAR ETIQUETA");
+            //listBox1.Items.Add("Ingrese la Clave.");
+            //listBox1.Items.Add("Ingrese el Texto.");
+            //listBox1.Items.Add("Presione Aplicar para confirmar.");
+
+            listBox1.Items.Add(TraducirTexto("ModoCrearEtiqueta"));
+            listBox1.Items.Add(TraducirTexto("IngreseLaClave"));
+            listBox1.Items.Add(TraducirTexto("IngreseElTexto"));
+            listBox1.Items.Add(TraducirTexto("PresioneAplicarConfirmar"));
+
 
             txtClave.Enabled = true;
             txtTexto.Enabled = true;
@@ -261,7 +288,8 @@ namespace IU
         {
             if (dgvEtiquetas.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione una etiqueta");
+                // MessageBox.Show("Seleccione una etiqueta");
+                MessageBox.Show(TraducirTexto("SeleccioneEtiqueta"));
                 return;
             }
 
@@ -278,12 +306,96 @@ namespace IU
 
             listBox1.Items.Clear();
 
-            listBox1.Items.Add("Modo actual: MODIFICAR ETIQUETA");
-            listBox1.Items.Add("Modifique el texto.");
-            listBox1.Items.Add("La clave no puede cambiarse.");
-            listBox1.Items.Add("Presione Aplicar para confirmar.");
+            //listBox1.Items.Add("Modo actual: MODIFICAR ETIQUETA");
+            //listBox1.Items.Add("Modifique el texto.");
+            //listBox1.Items.Add("La clave no puede cambiarse.");
+            //listBox1.Items.Add("Presione Aplicar para confirmar.");
+
+            listBox1.Items.Add(TraducirTexto("ModoModificarEtiqueta"));
+            listBox1.Items.Add(TraducirTexto("ModifiqueTexto"));
+            listBox1.Items.Add(TraducirTexto("ClaveNoPuedeCambiarse"));
+            listBox1.Items.Add(TraducirTexto("PresioneAplicarConfirmar"));
+
 
             txtTexto.Focus();
+        }
+
+        private void FormGestionIdioma_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
+
+        }
+
+        public void ActualizarIdioma()
+        {
+            string idIdioma =
+           SessionManager.GetInstancia()
+           .GetUsuarioActual()
+           .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma =
+                SessionManager.GetInstancia()
+                .GetUsuarioActual()
+                .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CuentaClara_TrabajoCampo
         public frmLogIn()
         {
             GestorIdioma.GetInstancia().Suscribir(this);
-            InitializeComponent(); 
+            InitializeComponent();
             _bllUsuario = new BLL_Usuario();
         }
 
@@ -36,7 +36,8 @@ namespace CuentaClara_TrabajoCampo
         {
             if (!ValidarCampos())
             {
-                MostrarError("Debe completar todos los campos.");
+                //MostrarError("Debe completar todos los campos.");
+                MostrarError(TraducirTexto("msg_DebeCompletarCampos"));
                 return;
             }
 
@@ -62,7 +63,8 @@ namespace CuentaClara_TrabajoCampo
                 }
                 else
                 {
-                    MessageBox.Show("Usuario o contraseña incorrectos.");
+                    //MessageBox.Show("Usuario o contraseña incorrectos.");
+                    MessageBox.Show(TraducirTexto("msg_UsuarioContrasenaIncorrectos"));
                 }
             }
             catch (Exception ex)
@@ -133,6 +135,21 @@ namespace CuentaClara_TrabajoCampo
 
             TraducirControles(this.Controls, idioma);
         }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = comboBox1.SelectedValue.ToString();
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
 
         private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
         {
@@ -167,6 +184,11 @@ namespace CuentaClara_TrabajoCampo
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActualizarIdioma();
+        }
+
+        private void frmLogIn_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
         }
     }
 }

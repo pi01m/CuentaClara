@@ -90,7 +90,7 @@ namespace BLL
             }
         }
         public bool CrearUsuario(Servicio_Usuario usuario)
-
+    
         {
             try
             {
@@ -228,14 +228,41 @@ namespace BLL
         {
             Servicio_Usuario usuario = _sm.GetUsuarioActual();
 
-            if (usuario == null)return;
+            if (usuario == null) return;
 
-            _dalUsuario.ActualizarIdiomaUsuario( usuario.Login, usuario.Id_Idioma);
-               
-            _bitacoraServicio.RegistrarBitacora( "Cerrar Sesión",usuario.Login,"Seguridad", 1);
-               
+            string idiomaAnterior = _dalUsuario.ObtenerUsuarioPorLogin(usuario.Login)?.Id_Idioma;
+            string idiomaActual = usuario.Id_Idioma;
+
+            
+            if (!string.IsNullOrEmpty(idiomaActual))
+            {
+                _dalUsuario.ActualizarIdiomaUsuario(usuario.Login, idiomaActual);
+            }
+
+            
+            if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
+            {
+                _bitacoraServicio.RegistrarBitacora(
+                    "Actualizacion de Idioma",
+                    usuario.Login,
+                    "Administracion",
+                    2
+                );
+            }
+
+            _bitacoraServicio.RegistrarBitacora(
+                "Cerrar Sesión",
+                usuario.Login,
+                "Seguridad",
+                1
+            );
+
             _sm.CerrarSesion();
         }
+        
+        
+        
+
         public int ObtenerIntentos(string login)
         {
             return _dalUsuario.ObtenerIntentos(login);
@@ -332,6 +359,35 @@ namespace BLL
             bool actualizacionExitosa = _dalUsuario.ActualizarClave(usuarioActual.Login, nuevoHash);
             _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuarioActual.Login, "Administración", 3);
             return actualizacionExitosa;
+        }
+
+        public void CambiarIdiomaEnSesion(string? idIdioma)
+        {
+            Servicio_Usuario usuario = _sm.GetUsuarioActual();
+
+            if (usuario == null || string.IsNullOrEmpty(idIdioma))
+                return;
+
+            string idiomaAnterior = usuario.Id_Idioma;
+
+            if (idiomaAnterior != idIdioma)
+            {
+                _bitacoraServicio.RegistrarBitacora(
+                    "Cambio de Idioma en Sesion",
+                    usuario.Login,
+                    "Administracion",
+                    2
+                );
+            }
+
+            usuario.Id_Idioma = idIdioma;
+
+            _sm.SetUsuarioActual(usuario);
+
+            GestorIdioma.GetInstancia().Notificar();
+
+
+
         }
     }
 }

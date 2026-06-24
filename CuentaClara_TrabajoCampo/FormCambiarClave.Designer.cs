@@ -36,6 +36,7 @@
             txtNuevaClave = new TextBox();
             btnGuardar = new Button();
             panelInferior = new Panel();
+            lblUsuarioValor = new Label();
             lblUsuarioActivo = new Label();
             panelContenedor.SuspendLayout();
             panelInferior.SuspendLayout();
@@ -66,6 +67,7 @@
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(601, 81);
             lblTitulo.TabIndex = 0;
+            lblTitulo.Tag = "lbl_TituloCambiarContraseña";
             lblTitulo.Text = "Cambiar Contraseña";
             // 
             // lblClaveActual
@@ -78,6 +80,7 @@
             lblClaveActual.Name = "lblClaveActual";
             lblClaveActual.Size = new Size(249, 46);
             lblClaveActual.TabIndex = 1;
+            lblClaveActual.Tag = "lbl_ClaveAnterior";
             lblClaveActual.Text = "Clave Anterior";
             // 
             // txtClaveActual
@@ -101,6 +104,7 @@
             lblNuevaClave.Name = "lblNuevaClave";
             lblNuevaClave.Size = new Size(215, 46);
             lblNuevaClave.TabIndex = 3;
+            lblNuevaClave.Tag = "lbl_NuevaClave";
             lblNuevaClave.Text = "Nueva Clave";
             // 
             // txtNuevaClave
@@ -121,11 +125,12 @@
             btnGuardar.FlatStyle = FlatStyle.Flat;
             btnGuardar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(787, 683);
+            btnGuardar.Location = new Point(784, 688);
             btnGuardar.Margin = new Padding(7, 8, 7, 8);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(340, 109);
             btnGuardar.TabIndex = 5;
+            btnGuardar.Tag = "btn_Guardar";
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
             btnGuardar.Click += btnGuardar_Click;
@@ -133,6 +138,7 @@
             // panelInferior
             // 
             panelInferior.BackColor = Color.FromArgb(18, 87, 150);
+            panelInferior.Controls.Add(lblUsuarioValor);
             panelInferior.Controls.Add(lblUsuarioActivo);
             panelInferior.Dock = DockStyle.Bottom;
             panelInferior.Location = new Point(0, 1039);
@@ -140,6 +146,19 @@
             panelInferior.Name = "panelInferior";
             panelInferior.Size = new Size(1549, 109);
             panelInferior.TabIndex = 1;
+            // 
+            // lblUsuarioValor
+            // 
+            lblUsuarioValor.AutoSize = true;
+            lblUsuarioValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblUsuarioValor.ForeColor = Color.White;
+            lblUsuarioValor.Location = new Point(298, 33);
+            lblUsuarioValor.Margin = new Padding(7, 0, 7, 0);
+            lblUsuarioValor.Name = "lblUsuarioValor";
+            lblUsuarioValor.Size = new Size(459, 41);
+            lblUsuarioValor.TabIndex = 2;
+            lblUsuarioValor.Tag = "";
+            lblUsuarioValor.Text = "Maria Lopez-Usuario Operativo";
             // 
             // lblUsuarioActivo
             // 
@@ -151,6 +170,7 @@
             lblUsuarioActivo.Name = "lblUsuarioActivo";
             lblUsuarioActivo.Size = new Size(235, 41);
             lblUsuarioActivo.TabIndex = 0;
+            lblUsuarioActivo.Tag = "lbl_Usuario";
             lblUsuarioActivo.Text = "Usuario activo: ";
             // 
             // FormCambiarClave
@@ -168,6 +188,7 @@
             Name = "FormCambiarClave";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Cambiar Contraseña";
+            FormClosed += FormCambiarClave_FormClosed;
             Load += FormCambiarClave_Load_1;
             panelContenedor.ResumeLayout(false);
             panelContenedor.PerformLayout();
@@ -187,5 +208,6 @@
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Label lblUsuarioActivo;
+        private Label lblUsuarioValor;
     }
 }

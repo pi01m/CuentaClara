@@ -13,9 +13,9 @@ namespace CuentaClara_TrabajoCampo
         {
             InitializeComponent();
             GestorIdioma.GetInstancia().Suscribir(this);
-            ;
+
         }
-        
+
         private void button2_Click(object sender, EventArgs e)
         {
             FormGestionBitacora frm = new FormGestionBitacora();
@@ -52,7 +52,7 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e) 
         {
             FormCambiarClave frm = new FormCambiarClave();
             this.Hide();
@@ -64,9 +64,9 @@ namespace CuentaClara_TrabajoCampo
         {
             if (usuarioActual == null) return;
 
-            button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
-            button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
-            button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
+            // button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
+            //button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
+            // button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
 
             btnInicio.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INICIO");
             btnCategorias.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_CATEGORIAS");
@@ -86,6 +86,7 @@ namespace CuentaClara_TrabajoCampo
             SessionManager.GetInstancia()
             .GetUsuarioActual()
             .Id_Idioma;
+
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -149,7 +150,31 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            base.OnFormClosed(e);
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormGestionIdioma frm = new FormGestionIdioma();
+            this.Hide();
+            frm.ShowDialog();
+            this.Show();
+        }
+
+        private void lblBD_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)//cambiar idioma
+        {
+            FormConfiguracion frm = new FormConfiguracion();
+            frm.ShowDialog();
+        }
+
+        private void panelUsuario_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

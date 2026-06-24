@@ -13,7 +13,7 @@ using QuestPDF.Infrastructure;
 
 namespace CuentaClara_TrabajoCampo
 {
-    public partial class FormGestionBitacora : Form
+    public partial class FormGestionBitacora : Form, IObserverIdioma
     {
         private BLL_BitacoraEvento bll = new BLL_BitacoraEvento();
         private BLL_Usuario bllUsuario = new BLL_Usuario();
@@ -21,6 +21,7 @@ namespace CuentaClara_TrabajoCampo
         public FormGestionBitacora()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
         }
         private void CargarLogins()
         {
@@ -33,9 +34,18 @@ namespace CuentaClara_TrabajoCampo
         private void CargarUltimos3Dias()
         {
             dgvBitacora.DataSource = bll.ListarUltimos3Dias();
+
+            dgvBitacora.Columns["Login"].HeaderText = TraducirTexto("Login");
+            dgvBitacora.Columns["Evento"].HeaderText = TraducirTexto("Evento");
+            dgvBitacora.Columns["Modulo"].HeaderText = TraducirTexto("Modulo");
+            dgvBitacora.Columns["Criticidad"].HeaderText = TraducirTexto("Criticidad");
+            dgvBitacora.Columns["Fecha"].HeaderText = TraducirTexto("Fecha");
+            dgvBitacora.Columns["Hora"].HeaderText = TraducirTexto("Hora");
+
             lblTotalEventos.Text = dgvBitacora.Rows.Count.ToString();
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Se cargaron los eventos de los últimos 3 días.");
+            //lstMensajes.Items.Add("Se cargaron los eventos de los últimos 3 días.");
+            lstMensajes.Items.Add(TraducirTexto("EventosUltimos3Dias"));
             if (dgvBitacora.Rows.Count > 0)
                 dgvBitacora.Rows[0].Selected = true;
         }
@@ -44,15 +54,18 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
+
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
             BLL_Rol bllRol = new BLL_Rol();
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
-            lblUsuarioActivo.Text = $"Usuario: {usuarioActual.Login} - Rol: {nombreLegibleDelRol}";
+            lblUsuarioActivo.Text = $"Usuario:";
+            lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
+
             CargarUltimos3Dias();
             CargarLogins();
-
+            ActualizarIdioma();
 
         }
 
@@ -87,9 +100,12 @@ namespace CuentaClara_TrabajoCampo
             lstMensajes.Items.Clear();
 
             if (dgvBitacora.Rows.Count > 0)
-                lstMensajes.Items.Add("Filtro aplicado correctamente. Registros encontrados: " + dgvBitacora.Rows.Count);
+                //lstMensajes.Items.Add("Filtro aplicado correctamente. Registros encontrados: " + dgvBitacora.Rows.Count);
+                lstMensajes.Items.Add(TraducirTexto("FiltroAplicado") + " " + dgvBitacora.Rows.Count);
+
             else
-                lstMensajes.Items.Add("No se encontraron registros para los filtros seleccionados.");
+                //lstMensajes.Items.Add("No se encontraron registros para los filtros seleccionados.");
+                lstMensajes.Items.Add(TraducirTexto("SinRegistros"));
 
         }
 
@@ -109,8 +125,8 @@ namespace CuentaClara_TrabajoCampo
             dtpFechaFin.Value = DateTime.Today;
 
             lstMensajes.Items.Clear();
-            lstMensajes.Items.Add("Filtros restablecidos.");
-
+            //lstMensajes.Items.Add("Filtros restablecidos.");
+            lstMensajes.Items.Add(TraducirTexto("FiltrosRestablecidos"));
             CargarUltimos3Dias();
 
         }
@@ -124,19 +140,94 @@ namespace CuentaClara_TrabajoCampo
 
             if (save.ShowDialog() == DialogResult.OK)
             {
-                string login =dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
+                string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
 
-                DataTable tabla =(DataTable)dgvBitacora.DataSource;
+                DataTable tabla = (DataTable)dgvBitacora.DataSource;
 
                 bllPdf.ExportarBitacora(tabla, save.FileName, login);
 
-                MessageBox.Show("PDF generado correctamente.");
+                //MessageBox.Show("PDF generado correctamente.");
+                MessageBox.Show(TraducirTexto("PdfGenerado"));
             }
         }
 
-        
+        private void FormGestionBitacora_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
 
+            
+        }
 
+        public void ActualizarIdioma()
+        {
+            string idIdioma =
+           SessionManager.GetInstancia()
+           .GetUsuarioActual()
+           .Id_Idioma;
 
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+        }
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma =
+                SessionManager.GetInstancia()
+                .GetUsuarioActual()
+                .Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
+
+        private void lblTotalEventos_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

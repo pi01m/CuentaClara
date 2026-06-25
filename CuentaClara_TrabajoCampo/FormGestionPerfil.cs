@@ -281,8 +281,6 @@ namespace IU
                     }
 
 
-                    bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                    //MessageBox.Show("Familias asignadas al rol correctamente.");
                     MessageBox.Show(TraducirTexto("msg_FamiliasAsignadasRol"));
                     LimpiarModo();
                 }
@@ -294,14 +292,13 @@ namespace IU
 
                     bllFamilia.AsignarSubFamilia(idPadre, idHija);
 
-                    bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                    /*MessageBox.Show("Familia asignada correctamente.");*/
+                    
                     MessageBox.Show(TraducirTexto("msg_FamiliaAsignadaCorrectamente"));
                     LimpiarModo();
                 }
                 else
                 {
-                    //MessageBox.Show("Seleccione Rol o Familia.");
+                    
                     MessageBox.Show(TraducirTexto("msg_SeleccioneRolOFamilia"));
                 }
             }
@@ -317,7 +314,7 @@ namespace IU
             {
                 if (clbPermiso.CheckedItems.Count == 0)
                 {
-                    //MessageBox.Show("Seleccione al menos un permiso de la lista.");
+                    
                     MessageBox.Show(TraducirTexto("msg_SeleccionePermiso"));
                     return;
                 }
@@ -339,8 +336,7 @@ namespace IU
                         }
                         else
                         {
-                            // Opcional: Avisarle al usuario que se omitió porque ya lo tiene heredado
-                            // MessageBox.Show($"El rol ya posee el permiso '{item["Nombre"].ToString()}' (de forma directa o a través de una familia). Se omitió esta asignación.", "Aviso de redundancia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
                             MessageBox.Show(
                                 string.Format(
                                     TraducirTexto("msg_RolYaPoseePermiso"),
@@ -353,8 +349,7 @@ namespace IU
 
                     if (asignados > 0)
                     {
-                        bllBitacora.RegistrarBitacora($"Asignación de {asignados} permisos a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                        //MessageBox.Show($"Se asignaron {asignados} permisos correctamente.");
+                       
                         MessageBox.Show(string.Format(TraducirTexto("msg_PermisosAsignadosCorrectamente"),asignados));
                           
                     }
@@ -379,21 +374,20 @@ namespace IU
                         }
                         else
                         {
-                            //MessageBox.Show($"La familia ya posee el permiso '{item["Nombre"].ToString()}'. Se omitió asignar este permiso.");
+                           
                             MessageBox.Show(string.Format(TraducirTexto("msg_FamiliaYaPoseePermiso"),item["Nombre"].ToString()));
         
                         }
                     }
 
-                    bllBitacora.RegistrarBitacora("Asignación permiso a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                    //MessageBox.Show("Permiso asignado correctamente.");
+                    
                     MessageBox.Show(TraducirTexto("msg_PermisoAsignadoCorrectamente"));
                     LimpiarModo();
                 }
                 else
                 {
-                    //MessageBox.Show("Seleccione Rol o Familia.");
-                    MessageBox.Show(TraducirTexto("msg_SeleccioneRolOFamilia"));//////////////////////////////////////7
+                   
+                    MessageBox.Show(TraducirTexto("msg_SeleccioneRolOFamilia"));
                 }
             }
             catch (Exception ex)
@@ -408,7 +402,7 @@ namespace IU
             {
                 if (tipoNodoSeleccionado != "FAMILIA")
                 {
-                    //MessageBox.Show("Por favor, seleccione una Familia [F] del árbol para modificar.");
+                    
                     MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaArbol"));
                     return;
                 }
@@ -440,8 +434,7 @@ namespace IU
                 Servicio_Familia familia = new Servicio_Familia(idFamilia, nuevoNombre);
                 bllFamilia.Modificar(familia);
 
-                bllBitacora.RegistrarBitacora("Modificacion Familia: " + nuevoNombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
-                //MessageBox.Show("Familia modificada correctamente.");
+               
                 MessageBox.Show(TraducirTexto("msg_FamiliaModificadaCorrectamente"));
                 LimpiarModo();
             }
@@ -468,8 +461,6 @@ namespace IU
                 BLL_Familia bllFamilia = new BLL_Familia();
                 bllFamilia.Eliminar(idFamilia);
 
-                bllBitacora.RegistrarBitacora("Baja Familia: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
-                //MessageBox.Show("Familia eliminada correctamente.");
                 MessageBox.Show(TraducirTexto("msg_FamiliaEliminadaCorrectamente"));
                 LimpiarModo();
             }
@@ -530,8 +521,6 @@ namespace IU
                     bllFamilia.AsignarSubFamilia(idNuevaFamilia, idSubFamilia);
                 }
 
-                bllBitacora.RegistrarBitacora("Alta Familia Modular: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-                //MessageBox.Show("Familia estructurada y guardada correctamente.");
                 MessageBox.Show(TraducirTexto("msg_FamiliaGuardadaCorrectamente"));
                 LimpiarModo();
                 CargarCombos();
@@ -591,9 +580,7 @@ namespace IU
                     bllFamilia.DesasignarSubFamilia(idPadre, idHijo);
                 }
 
-                bllBitacora.RegistrarBitacora("Desasignación en Perfiles", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
-
-                //MessageBox.Show("Elemento desvinculado correctamente.");
+                
                 MessageBox.Show(TraducirTexto("msg_ElementoDesvinculadoCorrectamente"));
                 LimpiarModo();
             }

@@ -64,9 +64,9 @@ namespace CuentaClara_TrabajoCampo
         {
             if (usuarioActual == null) return;
 
-            // button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
-            //button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
-            // button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
+            button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
+            button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
+            button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
 
             btnInicio.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INICIO");
             btnCategorias.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_CATEGORIAS");

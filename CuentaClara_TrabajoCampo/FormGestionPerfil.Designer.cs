@@ -436,7 +436,7 @@
             clbPermiso.Name = "clbPermiso";
             clbPermiso.Size = new Size(242, 92);
             clbPermiso.TabIndex = 42;
-            clbPermiso.SelectedIndexChanged += clbPermiso_SelectedIndexChanged;
+            
             // 
             // btnSalir
             // 

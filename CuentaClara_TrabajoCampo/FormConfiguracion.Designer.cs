@@ -48,8 +48,9 @@
             panelLogin.Controls.Add(picLogo);
             panelLogin.Dock = DockStyle.Fill;
             panelLogin.Location = new Point(0, 0);
+            panelLogin.Margin = new Padding(1, 1, 1, 1);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(877, 504);
+            panelLogin.Size = new Size(351, 206);
             panelLogin.TabIndex = 1;
             panelLogin.Paint += panelLogin_Paint;
             // 
@@ -60,9 +61,10 @@
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button1.ForeColor = Color.FromArgb(18, 87, 150);
-            button1.Location = new Point(686, 422);
+            button1.Location = new Point(185, 143);
+            button1.Margin = new Padding(1, 1, 1, 1);
             button1.Name = "button1";
-            button1.Size = new Size(163, 69);
+            button1.Size = new Size(107, 37);
             button1.TabIndex = 10;
             button1.Tag = "btn_Salir";
             button1.Text = "Salir";
@@ -76,9 +78,10 @@
             btnGuardarr.FlatStyle = FlatStyle.Flat;
             btnGuardarr.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardarr.ForeColor = Color.FromArgb(18, 87, 150);
-            btnGuardarr.Location = new Point(446, 217);
+            btnGuardarr.Location = new Point(185, 78);
+            btnGuardarr.Margin = new Padding(1, 1, 1, 1);
             btnGuardarr.Name = "btnGuardarr";
-            btnGuardarr.Size = new Size(344, 109);
+            btnGuardarr.Size = new Size(107, 37);
             btnGuardarr.TabIndex = 9;
             btnGuardarr.Tag = "btn_Guardar";
             btnGuardarr.Text = "Guardar";
@@ -88,9 +91,10 @@
             // cmbIdioma
             // 
             cmbIdioma.FormattingEnabled = true;
-            cmbIdioma.Location = new Point(85, 237);
+            cmbIdioma.Location = new Point(35, 87);
+            cmbIdioma.Margin = new Padding(1, 1, 1, 1);
             cmbIdioma.Name = "cmbIdioma";
-            cmbIdioma.Size = new Size(288, 49);
+            cmbIdioma.Size = new Size(121, 23);
             cmbIdioma.TabIndex = 8;
             cmbIdioma.SelectedIndexChanged += cmbIdioma_SelectedIndexChanged;
             // 
@@ -98,19 +102,21 @@
             // 
             picLogo.BackColor = Color.White;
             picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Location = new Point(32, 16);
+            picLogo.Location = new Point(13, 6);
+            picLogo.Margin = new Padding(1, 1, 1, 1);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(58, 46);
+            picLogo.Size = new Size(50, 37);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 0;
             picLogo.TabStop = false;
             // 
             // FormConfiguracion
             // 
-            AutoScaleDimensions = new SizeF(17F, 41F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(877, 504);
+            ClientSize = new Size(351, 206);
             Controls.Add(panelLogin);
+            Margin = new Padding(1, 1, 1, 1);
             Name = "FormConfiguracion";
             Text = "FormConfiguracion";
             FormClosed += FormConfiguracion_FormClosed;

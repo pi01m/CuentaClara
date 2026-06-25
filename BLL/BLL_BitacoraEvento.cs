@@ -40,22 +40,21 @@ namespace BLL
             }
         }
 
-        public DataTable ListarBitacora()
+        public List<Servicio_Bitacora> ListarBitacora()
         {
             return _dal.ListarBitacora();
         }
 
-        public DataTable ListarUltimos3Dias()
+        public List<Servicio_Bitacora> ListarUltimos3Dias()
         {
             return _dal.ListarUltimos3Dias();
         }
 
-        public DataTable FiltrarBitacora(string login, DateTime desde, DateTime hasta,string modulo, string evento, int? criticidad)
-                                 
+        public List<Servicio_Bitacora> FiltrarBitacora(string login, DateTime desde, DateTime hasta, string modulo, string evento, int? criticidad)
         {
+
             return _dal.FiltrarBitacora(login, desde, hasta, modulo, evento, criticidad);
         }
-
 
     }
 }

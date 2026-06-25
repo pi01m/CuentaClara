@@ -242,20 +242,14 @@ namespace BLL
             
             if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Actualizacion de Idioma",
-                    usuario.Login,
-                    "Administracion",
-                    2
+                _bitacoraServicio.RegistrarBitacora("Actualización de Idioma", usuario.Login,"Administración", 2
+
                 );
             }
 
-            _bitacoraServicio.RegistrarBitacora(
-                "Cerrar Sesión",
-                usuario.Login,
-                "Seguridad",
-                1
-            );
+            _bitacoraServicio.RegistrarBitacora( "Cerrar Sesión",usuario.Login,"Seguridad",1);
+  
+            
 
             _sm.CerrarSesion();
         }
@@ -372,12 +366,8 @@ namespace BLL
 
             if (idiomaAnterior != idIdioma)
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Cambio de Idioma en Sesion",
-                    usuario.Login,
-                    "Administracion",
-                    2
-                );
+                _bitacoraServicio.RegistrarBitacora( "Cambio de Idioma en Sesión", usuario.Login,"Administración",2);                    
+               
             }
 
             usuario.Id_Idioma = idIdioma;

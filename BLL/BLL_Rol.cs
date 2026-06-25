@@ -230,5 +230,31 @@ namespace BLL
             return false;
         }
 
-    }
+
+    public bool ValidarPermisoEnArbol(Servicio_Rol componente, string idPermisoBuscado)
+        {
+        
+            if (componente == null) return false;
+
+           
+            if (componente.IdRol == idPermisoBuscado)
+                return true;
+
+           
+            if (componente is Servicio_Familia familia)
+            {
+                foreach (Servicio_Rol hijo in familia.ObtenerHijos())
+                {
+                    // Llamada recursiva
+                    if (ValidarPermisoEnArbol(hijo, idPermisoBuscado))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+         
+            return false;
+        }
+    } 
 }

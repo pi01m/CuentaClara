@@ -54,6 +54,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
+            FormGestionBitacora_Resize(null, null);
 
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
             BLL_Rol bllRol = new BLL_Rol();
@@ -155,7 +156,7 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            
+
         }
 
         public void ActualizarIdioma()
@@ -208,10 +209,7 @@ namespace CuentaClara_TrabajoCampo
 
         private string TraducirTexto(string clave)
         {
-            string idIdioma =
-                SessionManager.GetInstancia()
-                .GetUsuarioActual()
-                .Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -228,6 +226,19 @@ namespace CuentaClara_TrabajoCampo
         private void lblTotalEventos_Click(object sender, EventArgs e)
         {
 
+        }
+    
+        private void FormGestionBitacora_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+                return;
+
+            int altoDisponible = ClientSize.Height - panelInferior.Height;
+
+            panelContenedor.Location = new Point(
+                (ClientSize.Width - panelContenedor.Width) / 2,
+                (altoDisponible - panelContenedor.Height) / 2
+            );
         }
     }
 }

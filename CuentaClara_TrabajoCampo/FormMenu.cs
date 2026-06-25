@@ -52,7 +52,7 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
         }
 
-        private void button4_Click(object sender, EventArgs e) 
+        private void button4_Click(object sender, EventArgs e)
         {
             FormCambiarClave frm = new FormCambiarClave();
             this.Hide();
@@ -60,23 +60,67 @@ namespace CuentaClara_TrabajoCampo
             this.Show();
 
         }
+
+        private void DeshabilitarTodosLosBotones()
+        {
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            btnInicio.Enabled = false;
+            btnCategorias.Enabled = false;
+            btnGraficos.Enabled = false;
+            btnNuevoEgreso.Enabled = false;
+            btnNuevoIngreso.Enabled = false;
+            btnVencimientos.Enabled = false;
+            btnTransacciones.Enabled = false;
+            btnSaldos.Enabled = false;
+        }
+
+        private bool ValidarPermisoEnArbol(Servicio_Rol componente, string idPermisoBuscado)
+        {
+            if (componente == null) return false;
+
+
+            if (componente.IdRol == idPermisoBuscado)
+                return true;
+
+
+            if (componente is Servicio_Familia familia)
+            {
+                foreach (Servicio_Rol hijo in familia.ObtenerHijos())
+                {
+
+                    if (ValidarPermisoEnArbol(hijo, idPermisoBuscado))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+
+            return false;
+        }
         private void Bloquear(Servicio_Usuario usuarioActual)
         {
-            if (usuarioActual == null) return;
+            if (usuarioActual == null || usuarioActual.Permisos == null)
+            {
+                DeshabilitarTodosLosBotones();
+                return;
+            }
 
-            button1.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P1");
-            button2.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P2");
-            button3.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "P3");
 
-            btnInicio.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INICIO");
-            btnCategorias.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_CATEGORIAS");
-            btnGraficos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_GRAFICOS");
-            btnNuevoEgreso.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_EGRESOS");
-            btnNuevoIngreso.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_INGRESOS");
-            btnVencimientos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_VENCIMIENTOS");
-            btnTransacciones.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_TRANSACCIONES");
-            btnSaldos.Enabled = bllRol.RolTienePermisoRecursivo(usuarioActual.IdRol, "PERMISO_SALDOS");
+            button1.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P1");
+            button2.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
+            button3.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P3");
 
+            btnInicio.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INICIO");
+            btnCategorias.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_CATEGORIAS");
+            btnGraficos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_GRAFICOS");
+            btnNuevoEgreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_EGRESOS");
+            btnNuevoIngreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INGRESOS");
+            btnVencimientos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_VENCIMIENTOS");
+            btnTransacciones.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_TRANSACCIONES");
+            btnSaldos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_SALDOS");
 
         }
 
@@ -172,7 +216,7 @@ namespace CuentaClara_TrabajoCampo
             frm.ShowDialog();
         }
 
-        private void panelUsuario_Paint(object sender, PaintEventArgs e)
+        private void btnVencimientos_Click(object sender, EventArgs e)
         {
 
         }

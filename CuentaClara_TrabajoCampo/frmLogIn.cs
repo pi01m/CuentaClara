@@ -190,5 +190,15 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
         }
+
+        private void frmLogIn_Resize(object sender, EventArgs e)
+        {
+            if (panelLogin != null)
+            {
+                
+                panelLogin.Left = (this.ClientSize.Width - panelLogin.Width) / 2;
+                panelLogin.Top = (this.ClientSize.Height - panelLogin.Height) / 2;
+            }
+        }
     }
 }

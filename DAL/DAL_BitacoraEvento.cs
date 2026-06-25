@@ -17,7 +17,32 @@ namespace DAL
             _connectionString = connectionString;
         }
 
+        private List<Servicio_Bitacora> MapearTablaALista(DataTable tabla)
+        {
+            List<Servicio_Bitacora> listaEventos = new List<Servicio_Bitacora>();
 
+            foreach (DataRow fila in tabla.Rows)
+            {
+                Servicio_Bitacora bit = new Servicio_Bitacora();
+
+                bit.id_Evento = fila["idEvento"].ToString();
+                bit.Evento = fila["Evento"].ToString();
+                bit.Login = fila["Login"].ToString();
+                bit.Modulo = fila["Modulo"].ToString();
+                bit.Criticidad = Convert.ToInt32(fila["Criticidad"]);
+
+                // Mapeo de tiempo
+                bit.Fecha = Convert.ToDateTime(fila["Fecha"]);
+
+                // Como antes cambiamos la columna Hora a nvarchar en SQL Server, 
+                // acá la leemos directo como un string.
+                bit.Hora = fila["Hora"].ToString();
+
+                listaEventos.Add(bit);
+            }
+
+            return listaEventos;
+        }
         public bool GuardarBitacora(Servicio_Bitacora bitacora)
         {
             try
@@ -58,36 +83,38 @@ namespace DAL
             }
         }
 
-        public DataTable ListarBitacora()
+        public List<Servicio_Bitacora> ListarBitacora()
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 SqlDataAdapter adapter =
                     new SqlDataAdapter("SELECT * FROM Bitacora ORDER BY Fecha DESC, Hora DESC", conn);
 
-                DataTable tabla = new DataTable();
-                adapter.Fill(tabla);
+                DataTable tablaVirtual = new DataTable();
+                adapter.Fill(tablaVirtual);
 
-                return tabla;
+                // ¡Acá llamamos a la magia del formateo!
+                return MapearTablaALista(tablaVirtual);
             }
         }
-        public DataTable ListarUltimos3Dias()
+
+        public List<Servicio_Bitacora> ListarUltimos3Dias()
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string sql = @"SELECT * FROM Bitacora WHERE Fecha >= DATEADD(DAY, -3, GETDATE())  ORDER BY Fecha DESC, Hora DESC";
+                string sql = @"SELECT * FROM Bitacora WHERE Fecha >= DATEADD(DAY, -3, GETDATE()) ORDER BY Fecha DESC, Hora DESC";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
 
-                DataTable tabla = new DataTable();
-                adapter.Fill(tabla);
+                DataTable tablaVirtual = new DataTable();
+                adapter.Fill(tablaVirtual);
 
-                return tabla;
+                // Devolvemos los objetos listos para usar
+                return MapearTablaALista(tablaVirtual);
             }
         }
 
-        public DataTable FiltrarBitacora(string login, DateTime desde, DateTime hasta, string modulo, string evento, int? criticidad)
-
+        public List<Servicio_Bitacora> FiltrarBitacora(string login, DateTime desde, DateTime hasta, string modulo, string evento, int? criticidad)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -96,6 +123,7 @@ namespace DAL
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
+
 
                 if (!string.IsNullOrEmpty(login))
                 {
@@ -115,24 +143,33 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Evento", "%" + evento + "%");
                 }
 
+
                 if (criticidad.HasValue)
                 {
                     sql.Append("AND Criticidad = @Criticidad ");
                     cmd.Parameters.AddWithValue("@Criticidad", criticidad.Value);
                 }
 
+
                 sql.Append("AND Fecha BETWEEN @Desde AND @Hasta ");
 
+
                 cmd.Parameters.AddWithValue("@Desde", desde.Date);
-                cmd.Parameters.AddWithValue("@Hasta", hasta.Date);
+
+
+                DateTime fechaHastaAjustada = hasta.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                cmd.Parameters.AddWithValue("@Hasta", fechaHastaAjustada);
+
+                sql.Append("ORDER BY Fecha DESC, Hora DESC");
 
                 cmd.CommandText = sql.ToString();
 
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable tabla = new DataTable();
-                adapter.Fill(tabla);
+                DataTable tablaVirtual = new DataTable();
+                adapter.Fill(tablaVirtual);
 
-                return tabla;
+
+                return MapearTablaALista(tablaVirtual);
             }
         }
     }

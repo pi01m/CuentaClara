@@ -40,16 +40,17 @@ namespace CuentaClara_TrabajoCampo
             }
             TraducirColumnasUsuarios();
             dgvUsuarios.Refresh();
-            
+
         }
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
+            FormGestionUsuarios_Resize(null, null);
             radioBtnTodosUser.Checked = true;
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
 
             string nombreRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
             label1.Text = $"{usuarioActual.Login}-{nombreRol}";
-            
+
             cmbRol.DataSource = bllRol.ObtenerRoles();
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
@@ -126,7 +127,7 @@ namespace CuentaClara_TrabajoCampo
             btnDesbloquear.Enabled = false;
             btnActivarDesactivar.Enabled = false;
             cmbRol.Enabled = true;
-             
+
             modoActual = "ModoModificar";
 
             lstMensajes.Items.Clear();
@@ -208,7 +209,7 @@ namespace CuentaClara_TrabajoCampo
 
                 //MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
                 MessageBox.Show(resultado ? TraducirTexto("UsuarioModificado") : TraducirTexto("NoSePudoModificar"));
-    
+
             }
 
             else if (modoActual == "Modo Desbloquear")
@@ -227,6 +228,16 @@ namespace CuentaClara_TrabajoCampo
 
                 //MessageBox.Show("Usuario desbloqueado correctamente.");
                 MessageBox.Show(TraducirTexto("UsuarioDesbloqueado"));
+                bool rta = bll.DesbloquearUsuario(txtLogin.Text);
+                if (rta)
+                {
+                    MessageBox.Show("Usuario desbloqueado correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error: No se pudo desbloquear el usuario.");
+                }
+
                 CargarUsuarios();
 
                 RestaurarModoConsulta();
@@ -236,10 +247,19 @@ namespace CuentaClara_TrabajoCampo
             {
                 int activo = chkActivo.Checked ? 1 : 0;
 
-                bll.CambiarEstadoUsuario(txtDNI.Text, activo);
+                bool resultado = bll.CambiarEstadoUsuario(txtDNI.Text, activo);
 
                 //MessageBox.Show("Estado actualizado correctamente.");
                 MessageBox.Show(TraducirTexto("EstadoActualizado"));
+                if (resultado)
+                {
+                    MessageBox.Show("Estado actualizado correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error: No se pudo actualizar el estado del usuario.");
+                }
+
             }
 
             CargarUsuarios();
@@ -259,12 +279,12 @@ namespace CuentaClara_TrabajoCampo
         {
             CargarUsuarios();
         }
-         
+
         private void FormGestionUsuarios_FormClosed(object sender, FormClosedEventArgs e)
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-            
+
         }
 
         public void ActualizarIdioma()
@@ -347,6 +367,19 @@ namespace CuentaClara_TrabajoCampo
             dgvUsuarios.Columns["Password"].HeaderText = TraducirTexto("Password");
             dgvUsuarios.Columns["Bloqueo"].HeaderText = TraducirTexto("Bloqueo");
             dgvUsuarios.Columns["Id_Idioma"].HeaderText = TraducirTexto("Idioma");
+        }
+
+        private void FormGestionUsuarios_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+                return;
+
+            int altoDisponible = ClientSize.Height - panelInferior.Height;
+
+            panelContenedor.Location = new Point(
+                (ClientSize.Width - panelContenedor.Width) / 2,
+                (altoDisponible - panelContenedor.Height) / 2
+            );
         }
     }
 }

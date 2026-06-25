@@ -18,33 +18,33 @@ namespace BLL
 
         public BLL_Usuario()
         {
-            string connStr ="Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+            string connStr = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
             _dalUsuario = new DAL_Usuario(connStr);
 
             _encriptadorServicio = new Servicio_Cripto();
 
             _bitacoraServicio = new BLL_BitacoraEvento();
-               
-                    
+
+
 
             _sm = SessionManager.GetInstancia();
         }
         private void ValidarDatosBasicos(string dni, string nombre, string apellido, string email)
         {
-           
+
             if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido))
                 throw new Exception("El nombre y el apellido son obligatorios.");
 
-           
+
             if (!Regex.IsMatch(nombre, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$") || !Regex.IsMatch(apellido, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
                 throw new Exception("El nombre y el apellido solo pueden contener letras.");
 
-           
+
             if (string.IsNullOrWhiteSpace(dni) || !Regex.IsMatch(dni, @"^\d{8}$"))
                 throw new Exception("El DNI debe contener exactamente 8 números enteros.");
 
-            
+
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 throw new Exception("El formato del correo electrónico no es válido.");
         }
@@ -57,22 +57,22 @@ namespace BLL
             return _dalUsuario.ListarUsuariosActivos();
         }
 
-        public void AsignarPermisos( List<Servicio_Rol> permisos,Servicio_Usuario usuario){
+        public void AsignarPermisos(List<Servicio_Rol> permisos, Servicio_Usuario usuario) {
             foreach (Servicio_Rol permiso in permisos)
             {
                 usuario.Permisos.AgregarRol(permiso);
             }
         }
-      
-        public bool CargarCredenciales(string nombreUsuario,string contraseña){
-            
-            string hash =_encriptadorServicio.CifrarContraseña(contraseña);
+
+        public bool CargarCredenciales(string nombreUsuario, string contraseña) {
+
+            string hash = _encriptadorServicio.CifrarContraseña(contraseña);
             return IniciarSesion(nombreUsuario, hash);
         }
 
-        public bool CompararHash(string hashIngresado,string hashBD) {
+        public bool CompararHash(string hashIngresado, string hashBD) {
 
-            return string.Equals(hashIngresado,hashBD,StringComparison.OrdinalIgnoreCase);
+            return string.Equals(hashIngresado, hashBD, StringComparison.OrdinalIgnoreCase);
         }
 
         public bool IncrementarIntentos(string login)
@@ -81,8 +81,8 @@ namespace BLL
             {
                 _dalUsuario.IncrementarIntentos(login);
 
-                _bitacoraServicio.RegistrarBitacora("Login Incorrecto",login,"Seguridad",1);
-                 return true;
+                _bitacoraServicio.RegistrarBitacora("Login Incorrecto", login, "Seguridad", 1);
+                return true;
             }
             catch
             {
@@ -90,6 +90,7 @@ namespace BLL
             }
         }
         public bool CrearUsuario(Servicio_Usuario usuario)
+    
         {
             try
             {
@@ -100,20 +101,20 @@ namespace BLL
                     throw new Exception("El nombre de usuario (Login) ya se encuentra registrado.");
 
                 string contraseñaInicial = usuario.Apellido + usuario.DNI;
-                   
 
-                usuario.Password =_encriptadorServicio .CifrarContraseña( contraseñaInicial);
-                       
+
+                usuario.Password = _encriptadorServicio.CifrarContraseña(contraseñaInicial);
+
                 usuario.Bloqueo = 0;
 
                 bool resultado = _dalUsuario.CrearUsuario(usuario);
-                   
+
 
                 if (resultado)
                 {
-                    _bitacoraServicio.RegistrarBitacora("Usuario Creado",usuario.Login,"Administración",3);
-     
-                        
+                    _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuario.Login, "Administración", 3);
+
+
                 }
 
                 return resultado;
@@ -128,55 +129,100 @@ namespace BLL
             _dalUsuario.ReiniciarIntentos(login);
         }
 
-        public void DesbloquearUsuario(string login)
+        public bool DesbloquearUsuario(string login)
         {
-            _dalUsuario.ReiniciarIntentos(login);
+            try
+            {
+                this.ReiniciarIntentos(login);
 
-            _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login,"Administración",1);
-                     
+                _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login, "Administración", 1);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
-        public bool IniciarSesion(string nombreUsuario, string hash)
+        private bool IniciarSesion(string nombreUsuario, string hash)
         {
-      
+
+
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
             if (intentos >= 3)
             {
-                _bitacoraServicio.RegistrarBitacora( "Intento de login bloqueado",nombreUsuario,"Seguridad",1 );
-                throw new Exception("Usuario bloqueado");
+                _bitacoraServicio.RegistrarBitacora("Intento de login bloqueado", nombreUsuario, "Seguridad", 1);
+                throw new Exception("Usuario bloqueado por múltiples intentos fallidos.");
             }
 
-      
+
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
-               
 
             if (usuario == null)
             {
                 IncrementarIntentos(nombreUsuario);
-               
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
-                throw new Exception(
-                    $"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}"
-                );
-                
+                throw new Exception($"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}");
             }
 
-            
+
             if (!VerificarEstadoUsuario(usuario))
             {
-                _bitacoraServicio.RegistrarBitacora( "Usuario bloqueado o inactivo", nombreUsuario, "Seguridad",1);
-
-                throw new Exception("Usuario bloqueado o inactivo");
+                _bitacoraServicio.RegistrarBitacora("Usuario bloqueado o inactivo", nombreUsuario, "Seguridad", 1);
+                throw new Exception("El usuario se encuentra inactivo o bloqueado.");
+            }
+            if (string.IsNullOrWhiteSpace(usuario.IdRol))
+            {
+                _bitacoraServicio.RegistrarBitacora("Intento de login sin rol asignado", nombreUsuario, "Seguridad", 2);
+                throw new Exception("Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
             }
 
-            
+            BLL_Rol bllRol = new BLL_Rol();
+            BLL_Familia bllFamilia = new BLL_Familia();
+            BLL_Permiso bllPermiso = new BLL_Permiso();
+
+
+            usuario.Permisos = new Servicio_Familia(usuario.IdRol, "Raíz_Permisos_" + usuario.Login);
+
+
+            List<Servicio_Permiso> permisosDirectos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+            if (permisosDirectos != null)
+            {
+                foreach (Servicio_Permiso permiso in permisosDirectos)
+                {
+                    usuario.Permisos.AgregarRol(permiso);
+                }
+            }
+
+
+            List<Servicio_Familia> familiasDelRol = bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+            if (familiasDelRol != null)
+            {
+                foreach (Servicio_Familia familiaLigera in familiasDelRol)
+                {
+
+                    Servicio_Familia familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(familiaLigera.IdRol);
+                    usuario.Permisos.AgregarRol(familiaCompleta);
+                }
+            }
+
+            // 5. Validación de Integridad (Dígito Verificador)
+            // BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
+            // bllDV.ValidarIntegridad(); 
+
+
             _sm.CrearSesion(usuario);
 
-           
-            _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login,"Seguridad",1);
+            
+            _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login, "Seguridad", 1);
 
             return true;
+
         }
+
+
+
 
         public void CerrarSesion()
         {
@@ -196,20 +242,14 @@ namespace BLL
             
             if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Actualizacion de Idioma",
-                    usuario.Login,
-                    "Administracion",
-                    2
+                _bitacoraServicio.RegistrarBitacora("Actualización de Idioma", usuario.Login,"Administración", 2
+
                 );
             }
 
-            _bitacoraServicio.RegistrarBitacora(
-                "Cerrar Sesión",
-                usuario.Login,
-                "Seguridad",
-                1
-            );
+            _bitacoraServicio.RegistrarBitacora( "Cerrar Sesión",usuario.Login,"Seguridad",1);
+  
+            
 
             _sm.CerrarSesion();
         }
@@ -222,7 +262,7 @@ namespace BLL
             return _dalUsuario.ObtenerIntentos(login);
         }
 
-        public bool VerificarEstadoUsuario(Servicio_Usuario usuario)
+        private bool VerificarEstadoUsuario(Servicio_Usuario usuario)
         {
             if (usuario.Activo != 1) return false;
 
@@ -241,11 +281,23 @@ namespace BLL
         }
         public bool CambiarEstadoUsuario(string dni, int activo)
         {
-            _dalUsuario.CambiarEstadoUsuario(dni, activo);
+            try
+            {
+                
+                _dalUsuario.CambiarEstadoUsuario(dni, activo);
 
-            _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario",ObtenerUsuario(dni).Login, "Seguridad", 1); 
+               
+                _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario", ObtenerUsuario(dni).Login, "Seguridad", 1);
 
-            return true;
+                //Faltaría agregar acá el recálculo del Dígito Verificador
+
+                return true; 
+            }
+            catch
+            {
+                return false; 
+            }
+
         }
 
         public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail, string nuevoRol)
@@ -314,12 +366,8 @@ namespace BLL
 
             if (idiomaAnterior != idIdioma)
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Cambio de Idioma en Sesion",
-                    usuario.Login,
-                    "Administracion",
-                    2
-                );
+                _bitacoraServicio.RegistrarBitacora( "Cambio de Idioma en Sesión", usuario.Login,"Administración",2);                    
+               
             }
 
             usuario.Id_Idioma = idIdioma;

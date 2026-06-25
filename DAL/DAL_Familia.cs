@@ -41,17 +41,23 @@ namespace DAL
         }
 
 
-        public DataTable ListarFamilias()
+        public List<Servicio_Familia> ListarFamilias()
         {
+            List<Servicio_Familia> lista = new List<Servicio_Familia>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia", conn);
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Familia", conn))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
 
-                DataTable tabla = new DataTable();
-                adapter.Fill(tabla);
-
-                return tabla;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        lista.Add(new Servicio_Familia(row["IdFamilia"].ToString(), row["Nombre"].ToString()));
+                    }
+                }
             }
+            return lista;
         }
 
         #region NUEVO
@@ -172,24 +178,21 @@ namespace DAL
                 return true;
             }
         }
-        public DataTable ObtenerSubFamilias(
-            string idFamilia)
+        public List<Servicio_Familia> ObtenerSubFamilias(string idFamilia)
         {
-            using (SqlDataAdapter da = new SqlDataAdapter(
-        @"SELECT f.*
-          FROM Familia f
-          INNER JOIN Familia_Familia ff
-             ON f.IdFamilia = ff.IdFamiliaHija
-          WHERE ff.IdFamiliaPadre = @Familia",
-        _connectionString))
+            List<Servicio_Familia> lista = new List<Servicio_Familia>();
+            using (SqlDataAdapter da = new SqlDataAdapter(@"SELECT f.* FROM Familia f INNER JOIN Familia_Familia ff ON f.IdFamilia = ff.IdFamiliaHija WHERE ff.IdFamiliaPadre = @Familia", _connectionString))
             {
                 da.SelectCommand.Parameters.AddWithValue("@Familia", idFamilia);
-
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                return dt;
+                foreach (DataRow row in dt.Rows)
+                {
+                    lista.Add(new Servicio_Familia(row["IdFamilia"].ToString(), row["Nombre"].ToString()));
+                }
             }
+            return lista;
         }
         public void DesasignarPermiso(string idFamilia, string idPermiso)
         {

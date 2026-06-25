@@ -12,9 +12,10 @@ namespace BLL
     {
 
         private DAL_Familia dal;
-        
+        private BLL_BitacoraEvento bllBitacora = new BLL_BitacoraEvento();
         private DAL_Rol dalRol;
-        private DAL_Permiso dalPermiso;
+        private BLL_Permiso bllPermiso;
+            
 
         public BLL_Familia()
         {
@@ -23,7 +24,7 @@ namespace BLL
             dal = new DAL_Familia(conn);
             
             dalRol = new DAL_Rol(conn);
-            dalPermiso = new DAL_Permiso(conn);
+            bllPermiso = new BLL_Permiso();
         }
 
         public void Guardar(Servicio_Familia familia)
@@ -45,35 +46,33 @@ namespace BLL
             }
 
             dal.Guardar( familia.IdRol,familia.Nombre);
-               
-                
+            bllBitacora.RegistrarBitacora("Alta Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+
+
         }
         
 
         private void CargarHijosRecursivo(Servicio_Familia familia)
         {
-            
-            DataTable subFamilias = dal.ObtenerSubFamilias(familia.IdRol);
-            foreach (DataRow row in subFamilias.Rows)
-            {
-                Servicio_Familia hija = new Servicio_Familia(
-                    row["IdFamilia"].ToString(),
-                    row["Nombre"].ToString());
 
-                familia.AgregarRol(hija);
-                CargarHijosRecursivo(hija); 
+            List<Servicio_Familia> subFamilias = dal.ObtenerSubFamilias(familia.IdRol);
+
+            if (subFamilias != null)
+            {
+                foreach (Servicio_Familia hija in subFamilias)
+                {
+                  
+                    familia.AgregarRol(hija);
+                    CargarHijosRecursivo(hija);
+                }
             }
 
-            
-            DataTable permisos = dalPermiso.ObtenerPermisosPorFamilia(familia.IdRol);
+            List<Servicio_Permiso> permisos = bllPermiso.ObtenerPermisosPorFamilia(familia.IdRol);
 
             if (permisos != null)
             {
-                foreach (DataRow row in permisos.Rows)
+                foreach (Servicio_Permiso permiso in permisos)
                 {
-                    
-                    Servicio_Permiso permiso = new Servicio_Permiso(row["IdPermiso"].ToString(),row["Nombre"].ToString());
-
                     familia.AgregarRol(permiso);
                 }
             }
@@ -88,8 +87,9 @@ namespace BLL
                     
             }
 
-            dal.Modificar(familia);
-                
+            dal.Modificar(familia); 
+            bllBitacora.RegistrarBitacora("Modificación Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+
         }
 
         public void Eliminar(string idFamilia)
@@ -103,6 +103,7 @@ namespace BLL
                    
 
             dal.Eliminar(idFamilia);
+            bllBitacora.RegistrarBitacora("Baja Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
         }
 
         public void AsignarPermiso( string idFamilia,string idPermiso)
@@ -115,8 +116,8 @@ namespace BLL
                     
 
             dal.AsignarPermiso(idFamilia,idPermiso);
-                
-                
+            bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+
         }
 
         public void AsignarSubFamilia(string idPadre,string idHija)
@@ -132,8 +133,6 @@ namespace BLL
 
             if (idPadre == idHija)
                 throw new Exception( "No puede asignarse a sí misma.");
-                   
-           
 
     
            Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
@@ -158,28 +157,23 @@ namespace BLL
            }  
 
             dal.AsignarSubFamilia(idPadre, idHija); 
-     
+            bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+
         }
 
-        public DataTable ObtenerSubFamilias( string idFamilia)
-           
-        {
-            return dal.ObtenerSubFamilias(
-                idFamilia);
-        }
+       
         private Servicio_Familia BuscarFamilia(string idFamilia)
-
         {
-            DataTable familias =
-                dal.ListarFamilias();
+            List<Servicio_Familia> familias = dal.ListarFamilias();
 
-            foreach (DataRow row in familias.Rows)
+            if (familias != null)
             {
-                if (row["IdFamilia"].ToString() == idFamilia)
+                foreach (Servicio_Familia fam in familias)
                 {
-                    return new Servicio_Familia(
-                        row["IdFamilia"].ToString(),
-                        row["Nombre"].ToString());
+                    if (fam.IdRol == idFamilia)
+                    {
+                        return fam;
+                    }
                 }
             }
 
@@ -262,7 +256,7 @@ namespace BLL
             return familia;
         }
 
-        public DataTable ObtenerFamilias()
+        public List<Servicio_Familia> ObtenerFamilias()
         {
             return dal.ListarFamilias();
         } 
@@ -284,6 +278,7 @@ namespace BLL
 
             
             dal.DesasignarPermiso(idFamilia, idPermiso);
+            bllBitacora.RegistrarBitacora("Permiso desasignado de Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
         }
 
         public void DesasignarSubFamilia(string padre, string hija)
@@ -297,6 +292,7 @@ namespace BLL
             }
 
             dal.DesasignarSubFamilia(padre, hija);
+            bllBitacora.RegistrarBitacora("Subfamilia desasignada de Familia ID: " + padre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
         }
     } 
 }

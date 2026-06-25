@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelLogin = new Panel();
+            label1 = new Label();
             comboBox1 = new ComboBox();
             picLogo = new PictureBox();
             lblTitulo = new Label();
@@ -47,6 +48,7 @@
             panelLogin.Anchor = AnchorStyles.None;
             panelLogin.BackColor = Color.White;
             panelLogin.BorderStyle = BorderStyle.FixedSingle;
+            panelLogin.Controls.Add(label1);
             panelLogin.Controls.Add(comboBox1);
             panelLogin.Controls.Add(picLogo);
             panelLogin.Controls.Add(lblTitulo);
@@ -56,17 +58,29 @@
             panelLogin.Controls.Add(txtContrasena);
             panelLogin.Controls.Add(btnIngresar);
             panelLogin.Controls.Add(btnSalir);
-            panelLogin.Location = new Point(144, 62);
+            panelLogin.Location = new Point(30, 28);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(1033, 735);
+            panelLogin.Size = new Size(415, 479);
             panelLogin.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(65, 306);
+            label1.Name = "label1";
+            label1.Size = new Size(51, 17);
+            label1.TabIndex = 9;
+            label1.Tag = "lbl_LogInClave";
+            label1.Text = "Idioma";
             // 
             // comboBox1
             // 
+            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(678, 295);
+            comboBox1.Location = new Point(65, 336);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(279, 53);
+            comboBox1.Size = new Size(284, 25);
             comboBox1.TabIndex = 8;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
@@ -86,9 +100,9 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(108, 25);
+            lblTitulo.Location = new Point(96, 25);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(420, 89);
+            lblTitulo.Size = new Size(173, 37);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -96,49 +110,52 @@
             // 
             lblUsuario.AutoSize = true;
             lblUsuario.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.Location = new Point(93, 195);
+            lblUsuario.Location = new Point(65, 136);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(322, 45);
+            lblUsuario.Size = new Size(128, 17);
             lblUsuario.TabIndex = 2;
             lblUsuario.Tag = "lbl_LogInNombreUsuario";
             lblUsuario.Text = "Nombre de Usuario";
             // 
             // txtUsuario
             // 
-            txtUsuario.Location = new Point(93, 243);
+            txtUsuario.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtUsuario.Location = new Point(65, 165);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(474, 52);
+            txtUsuario.Size = new Size(284, 25);
             txtUsuario.TabIndex = 3;
             // 
             // lblClave
             // 
             lblClave.AutoSize = true;
             lblClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblClave.Location = new Point(93, 320);
+            lblClave.Location = new Point(65, 220);
             lblClave.Name = "lblClave";
-            lblClave.Size = new Size(196, 45);
+            lblClave.Size = new Size(77, 17);
             lblClave.TabIndex = 4;
             lblClave.Tag = "lbl_LogInClave";
             lblClave.Text = "Contraseña";
             // 
             // txtContrasena
             // 
-            txtContrasena.Location = new Point(93, 368);
+            txtContrasena.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtContrasena.Location = new Point(65, 255);
             txtContrasena.Name = "txtContrasena";
             txtContrasena.PasswordChar = '*';
-            txtContrasena.Size = new Size(474, 52);
+            txtContrasena.Size = new Size(284, 25);
             txtContrasena.TabIndex = 5;
             // 
             // btnIngresar
             // 
+            btnIngresar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnIngresar.BackColor = Color.FromArgb(18, 87, 150);
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
             btnIngresar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(450, 475);
+            btnIngresar.Location = new Point(267, 403);
             btnIngresar.Name = "btnIngresar";
-            btnIngresar.Size = new Size(207, 95);
+            btnIngresar.Size = new Size(116, 37);
             btnIngresar.TabIndex = 6;
             btnIngresar.Tag = "btn_Ingresar";
             btnIngresar.Text = "Ingresar";
@@ -147,14 +164,15 @@
             // 
             // btnSalir
             // 
+            btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSalir.BackColor = Color.White;
             btnSalir.FlatAppearance.BorderColor = Color.FromArgb(18, 87, 150);
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(73, 475);
+            btnSalir.Location = new Point(32, 403);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(205, 90);
+            btnSalir.Size = new Size(116, 37);
             btnSalir.TabIndex = 7;
             btnSalir.Tag = "btn_Salir";
             btnSalir.Text = "Salir";
@@ -163,19 +181,19 @@
             // 
             // frmLogIn
             // 
-            AutoScaleDimensions = new SizeF(18F, 45F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1336, 891);
+            ClientSize = new Size(481, 524);
             Controls.Add(panelLogin);
             Font = new Font("Segoe UI", 10F);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
+            MinimumSize = new Size(497, 562);
             Name = "frmLogIn";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Inicio de Sesión";
             FormClosed += frmLogIn_FormClosed;
             Load += frmLogIn_Load_1;
+            Resize += frmLogIn_Resize;
             panelLogin.ResumeLayout(false);
             panelLogin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
@@ -199,5 +217,6 @@
         private Button btnIngresar;
         private Button btnSalir;
         private ComboBox comboBox1;
+        private Label label1;
     }
 }

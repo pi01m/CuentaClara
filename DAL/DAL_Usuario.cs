@@ -147,7 +147,7 @@ namespace DAL
                 return true;
             }
         }
-        public bool CambiarEstadoUsuario(string login, int activo)
+        public void CambiarEstadoUsuario(string login, int activo)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -155,9 +155,9 @@ namespace DAL
                     
                 adapter.SelectCommand.Parameters.Add( new SqlParameter("@DNI", login));
                 DataSet ds = new DataSet();   
-                adapter.Fill(ds, "Usuario");      
+                adapter.Fill(ds, "Usuario");
 
-                if (ds.Tables["Usuario"].Rows.Count == 0)return false;
+                if (ds.Tables["Usuario"].Rows.Count == 0) ;
                     
 
                 DataRow fila = ds.Tables["Usuario"].Rows[0];
@@ -168,7 +168,7 @@ namespace DAL
 
                 adapter.Update(ds, "Usuario");
 
-                return true;
+            
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Microsoft.Data.SqlClient;
 using Servicio;
 using System;
 using System.Collections.Generic;
@@ -28,12 +29,16 @@ namespace BLL
                 
                
         }
-        
-        public DataTable ObtenerPermisosPorRol(string idUsuario)
+        public List<Servicio_Permiso> ObtenerPermisosPorFamilia(string idFamilia)
+        {
+            
+            return dal.ObtenerPermisosPorFamilia(idFamilia);
+        }
+        public List<Servicio_Permiso> ObtenerPermisosPorRol(string idUsuario)
         {
             return dal.ObtenerPermisosPorRol(idUsuario);
         }
-        public DataTable ListarPermisos()
+        public List<Servicio_Permiso> ListarPermisos()
         {
             return dal.ListarPermisos();
         }

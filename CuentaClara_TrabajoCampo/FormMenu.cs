@@ -95,7 +95,7 @@ namespace CuentaClara_TrabajoCampo
             if (idioma == null)
                 return;
 
-            TraducirControles(this.Controls, idioma);
+           TraducirControles(this.Controls, idioma);
 
         }
 

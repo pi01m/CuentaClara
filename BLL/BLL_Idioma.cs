@@ -94,9 +94,6 @@ namespace BLL
 
             return _dalIdioma.GuardarIdiomaActualizado(idioma);
         }
-
-       
-
         public List<Servicio_Idioma> ListarIdiomasBD()
         {
             return _dalIdioma.DameIdiomasBD();
@@ -113,6 +110,9 @@ namespace BLL
             return _dalIdioma.ObtenerIdioma(idiomaBD.Nombre);
         }
 
-        
+        public void TraducirControles(System.Windows.Forms.Control.ControlCollection controls, Servicio_Idioma idioma)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

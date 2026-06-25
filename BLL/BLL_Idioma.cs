@@ -110,9 +110,6 @@ namespace BLL
             return _dalIdioma.ObtenerIdioma(idiomaBD.Nombre);
         }
 
-        public void TraducirControles(System.Windows.Forms.Control.ControlCollection controls, Servicio_Idioma idioma)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

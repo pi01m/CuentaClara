@@ -18,10 +18,61 @@ namespace CuentaClara_TrabajoCampo
         private BLL_BitacoraEvento bll = new BLL_BitacoraEvento();
         private BLL_Usuario bllUsuario = new BLL_Usuario();
         private BLL_PDF bllPdf = new BLL_PDF();
+        private BLL_Rol bllRol = new BLL_Rol();
         public FormGestionBitacora()
         {
             InitializeComponent();
             GestorIdioma.GetInstancia().Suscribir(this);
+        }
+        private void DeshabilitarBotones()
+        {
+            btnAplicar.Enabled = false;
+            btnImprimir.Enabled = false;
+            btnLimpiar.Enabled = false;
+            btnSalir.Enabled = true;
+        }
+        private void RefrescarSesionUsuario()
+        {
+            var login = SessionManager.GetInstancia().GetUsuarioActual().Login;
+
+            var bllUsuario = new BLL_Usuario();
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion(login);
+
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);
+        }
+        private void ActualizarContador()
+        {
+            if (dgvBitacora.DataSource != null)
+            {
+
+                if (dgvBitacora.DataSource is List<Servicio_Bitacora> lista)
+                {
+                    label2.Text = lista.Count.ToString();
+                }
+                else
+                {
+                    label2.Text = dgvBitacora.Rows.Count.ToString();
+                }
+            }
+            else
+            {
+                label2.Text = "0";
+            }
+        }
+        private void BloquearBotonesSegunPermisos(Servicio_Usuario usuarioActual)
+        {
+            if (usuarioActual == null || usuarioActual.Permisos == null)
+            {
+                DeshabilitarBotones();
+                return;
+            }
+
+            btnAplicar.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P6"); // Bitacora_Consultar
+            btnImprimir.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P7"); // Bitacora_Exportar
+
+            btnLimpiar.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P6");
+
+            btnSalir.Enabled = true;
         }
         private void CargarLogins()
         {
@@ -42,22 +93,25 @@ namespace CuentaClara_TrabajoCampo
             dgvBitacora.Columns["Fecha"].HeaderText = TraducirTexto("Fecha");
             dgvBitacora.Columns["Hora"].HeaderText = TraducirTexto("Hora");
 
-            lblTotalEventos.Text = dgvBitacora.Rows.Count.ToString();
+            
             lstMensajes.Items.Clear();
             //lstMensajes.Items.Add("Se cargaron los eventos de los últimos 3 días.");
             lstMensajes.Items.Add(TraducirTexto("EventosUltimos3Dias"));
-            if (dgvBitacora.Rows.Count > 0)
-                dgvBitacora.Rows[0].Selected = true;
-        }
+            if (dgvBitacora.Rows.Count > 0) dgvBitacora.Rows[0].Selected = true;
+            ActualizarContador();
 
+        }
 
 
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
+                       
             FormGestionBitacora_Resize(null, null);
 
+            RefrescarSesionUsuario();
+
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            BLL_Rol bllRol = new BLL_Rol();
+            BLL_Rol bllRol = new BLL_Rol();BloquearBotonesSegunPermisos(usuarioActual);
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
@@ -65,28 +119,45 @@ namespace CuentaClara_TrabajoCampo
             lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
 
             CargarUltimos3Dias();
+            ActualizarContador();
             CargarLogins();
             ActualizarIdioma();
 
         }
 
-        private void panelContenedor_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void dgvBitacora_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvBitacora.CurrentRow == null) return;
+            if (dgvBitacora.SelectedRows.Count == 0 && dgvBitacora.CurrentRow == null) return;
 
-            string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
-
-            Servicio_Usuario user = bllUsuario.ObtenerUsuarioPorLogin(login);
-
-            if (user != null)
+            try
             {
-                txtNombre.Text = user.Nombre;
-                txtApellido.Text = user.Apellido;
+                DataGridViewRow row = dgvBitacora.CurrentRow;
+
+
+                if (row.Cells["Login"].Value != null)
+                {
+                    string login = row.Cells["Login"].Value.ToString();
+
+
+                    Servicio_Usuario user = bllUsuario.ObtenerUsuarioPorLogin(login);
+
+                    if (user != null)
+                    {
+                        txtNombre.Text = user.Nombre;
+                        txtApellido.Text = user.Apellido;
+                    }
+                    else
+                    {
+
+                        txtNombre.Text = "N/A";
+                        txtApellido.Text = "N/A";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Error cargando detalles: " + ex.Message);
             }
         }
 
@@ -94,9 +165,11 @@ namespace CuentaClara_TrabajoCampo
         {
             dgvBitacora.DataSource = bll.FiltrarBitacora(cboLogin.Text, dtpFechaInicio.Value, dtpFechaFin.Value, cboModulo.Text, cboEvento.Text,
 
-            string.IsNullOrEmpty(cboCriticidad.Text) ? (int?)null : Convert.ToInt32(cboCriticidad.Text)
-    );
-            lblTotalEventos.Text = dgvBitacora.Rows.Count.ToString();
+            string.IsNullOrEmpty(cboCriticidad.Text) ? (int?)null : Convert.ToInt32(cboCriticidad.Text));
+
+            dgvBitacora.Refresh();
+
+            ActualizarContador();
 
             lstMensajes.Items.Clear();
 
@@ -134,21 +207,31 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnImprimir_Click(object sender, EventArgs e)
         {
-            SaveFileDialog save = new SaveFileDialog();
-
-            save.Filter = "PDF (*.pdf)|*.pdf";
-            save.FileName = "Bitacora.pdf";
-
-            if (save.ShowDialog() == DialogResult.OK)
+            try
             {
-                string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
+                SaveFileDialog save = new SaveFileDialog();
 
-                DataTable tabla = (DataTable)dgvBitacora.DataSource;
+                save.Filter = "PDF (*.pdf)|*.pdf";
+                save.FileName = "Bitacora.pdf";
 
-                bllPdf.ExportarBitacora(tabla, save.FileName, login);
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
 
-                //MessageBox.Show("PDF generado correctamente.");
-                MessageBox.Show(TraducirTexto("PdfGenerado"));
+
+                    List<Servicio_Bitacora> lista = (List<Servicio_Bitacora>)dgvBitacora.DataSource;
+
+                    bllPdf.ExportarBitacora(lista, save.FileName, login);
+
+
+                    //MessageBox.Show("PDF generado correctamente.");
+                    MessageBox.Show(TraducirTexto("PdfGenerado"));
+                }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error al generar el PDF: " + ex.Message);
+                MessageBox.Show(TraducirTexto("ErrorPdf") + ": " + ex.Message);
             }
         }
 
@@ -161,17 +244,14 @@ namespace CuentaClara_TrabajoCampo
 
         public void ActualizarIdioma()
         {
-            string idIdioma =
-           SessionManager.GetInstancia()
-           .GetUsuarioActual()
-           .Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
             Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
 
-            if (idioma == null)
-                return;
+            if (idioma == null) return;
+
 
             TraducirControles(this.Controls, idioma);
         }
@@ -202,8 +282,8 @@ namespace CuentaClara_TrabajoCampo
                     }
                 }
 
-                if (c.HasChildren)
-                    TraducirControles(c.Controls, idioma);
+                if (c.HasChildren) TraducirControles(c.Controls, idioma);
+
             }
         }
 
@@ -223,11 +303,7 @@ namespace CuentaClara_TrabajoCampo
             return etiqueta != null ? etiqueta.Texto : clave;
         }
 
-        private void lblTotalEventos_Click(object sender, EventArgs e)
-        {
 
-        }
-    
         private void FormGestionBitacora_Resize(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Minimized)
@@ -240,5 +316,7 @@ namespace CuentaClara_TrabajoCampo
                 (altoDisponible - panelContenedor.Height) / 2
             );
         }
+
+       
     }
 }

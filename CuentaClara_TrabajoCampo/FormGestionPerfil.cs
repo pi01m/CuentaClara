@@ -32,7 +32,16 @@ namespace IU
             InitializeComponent();
             GestorIdioma.GetInstancia().Suscribir(this);
         }
+        private void RefrescarSesionUsuario()
+        {
+            var login = SessionManager.GetInstancia().GetUsuarioActual().Login;
 
+            BLL_Usuario bllUsuario = new BLL_Usuario();
+
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion(login);
+
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);
+        }
         private void DesmarcarCheckedLists()
         {
             for (int i = 0; i < clbPermiso.Items.Count; i++) clbPermiso.SetItemChecked(i, false);
@@ -41,14 +50,23 @@ namespace IU
 
         private void FormGestionPerfil_Load(object sender, EventArgs e)
         {
+            FormGestionPerfil_Resize(null, null);
             bllFamilia = new BLL_Familia();
             bllPermiso = new BLL_Permiso();
             bllRol = new BLL_Rol();
-
-            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+           
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual(); 
+            RefrescarSesionUsuario();
+            BloquearBotonesSegunPermisos();
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+            var bllUsuario = new BLL_Usuario();
 
+            
+
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion( SessionManager.GetInstancia().GetUsuarioActual().Login);
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);   
+ 
             label5.Text = $"{usuarioActual.Login} -  {nombreLegibleDelRol}";
 
             CargarCombos();
@@ -63,7 +81,124 @@ namespace IU
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
         }
+        private void DeshabilitarBotones()
+        {
+        
+            btnCrear.Enabled = false;
+            btnModificar.Enabled = false;
+            btnEliminar.Enabled = false;
 
+            btnAsignarPermiso.Enabled = false;
+            btnAsignarFamilia.Enabled = false;
+            button1.Enabled = false; 
+            btnAplicar.Enabled = false;
+
+            btnSalir.Enabled = true; 
+
+  
+            radioBtn_Rol.Enabled = false;
+            radioBtn_Familia.Enabled = false;
+
+          
+            cmbRol.Enabled = false;
+            cmbFamilia.Enabled = false;
+            cmbFamiliaHija.Enabled = false;
+
+            clbPermiso.Enabled = false;
+            clbFamilia.Enabled = false;
+
+    
+            treeView1.Enabled = false;
+            treeViewVistaPrevia.Enabled = false;
+
+       
+            DesmarcarCheckedLists();
+
+            modoActual = "";
+            idNodoSeleccionado = "";
+            tipoNodoSeleccionado = "";
+            nombreNodoSeleccionado = "";
+        }
+
+        private void BloquearBotonesSegunPermisos()
+        {
+            var usuario = SessionManager.GetInstancia().GetUsuarioActual();
+
+            if (usuario == null || usuario.Permisos == null)
+            {
+                DeshabilitarBotones();
+                return;
+            }
+
+            BLL_Rol bllRol = new BLL_Rol();
+            bool Tiene(string p) => bllRol.ValidarPermisoEnArbol(usuario.Permisos, p);
+
+            bool seleccionoRolOFamilia =
+                radioBtn_Rol.Checked || radioBtn_Familia.Checked;
+
+            bool enModoAsignacion =
+                modoActual == "ASIGNAR_PERMISO" || modoActual == "ASIGNAR_FAMILIA";
+
+            bool enModoEdicion =
+                modoActual == "CREAR" ||
+                modoActual == "MODIFICAR" ||
+                modoActual == "ELIMINAR" ||
+                modoActual == "DESASIGNAR";
+
+         
+
+            btnCrear.Enabled =
+                Tiene("Rol_Crear") || Tiene("Familia_Crear");
+
+            btnModificar.Enabled =
+                Tiene("Rol_Modificar") || Tiene("Familia_Modificar");
+
+            btnEliminar.Enabled =
+                Tiene("Rol_Eliminar") || Tiene("Familia_Eliminar");
+
+            btnAsignarPermiso.Enabled =
+                (Tiene("Rol_AsignarPermiso") || Tiene("Familia_AsignarPermiso"))
+                && !enModoEdicion;
+
+            btnAsignarFamilia.Enabled =
+                (Tiene("Rol_AsignarFamilia") || Tiene("Familia_AsignarFamilia"))
+                && !enModoEdicion;
+
+            button1.Enabled =
+                (Tiene("Rol_DesasignarPermiso") ||
+                 Tiene("Familia_DesasignarPermiso") ||
+                 Tiene("Rol_DesasignarFamilia") ||
+                 Tiene("Familia_DesasignarFamilia"))
+                && !enModoEdicion;
+
+
+
+            btnAplicar.Enabled =
+                enModoEdicion || enModoAsignacion;
+
+         
+
+            radioBtn_Rol.Enabled = enModoEdicion || enModoAsignacion;
+            radioBtn_Familia.Enabled = enModoEdicion || enModoAsignacion;
+
+        
+
+            cmbRol.Enabled = (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked);
+            cmbFamilia.Enabled = radioBtn_Familia.Checked &&
+                                 (modoActual == "ASIGNAR_FAMILIA" || modoActual == "CREAR");
+
+            cmbFamiliaHija.Enabled = modoActual == "ASIGNAR_FAMILIA" && radioBtn_Familia.Checked;
+
+            clbPermiso.Enabled =
+                modoActual == "CREAR" ||
+                modoActual == "ASIGNAR_PERMISO" ||
+                (modoActual == "ASIGNAR_FAMILIA" && radioBtn_Familia.Checked);
+
+            clbFamilia.Enabled =
+                modoActual == "CREAR" ||
+                modoActual == "ASIGNAR_FAMILIA" ||
+                (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked);
+        }
         private void CargarCombos()
         {
 
@@ -229,7 +364,26 @@ namespace IU
                 }
             }
         }
+        private string ObtenerIdRolDesdeArbol()
+        {
+            if (treeView1.SelectedNode == null) return null;
 
+            TreeNode nodo = treeView1.SelectedNode;
+
+            
+            while (nodo.Parent != null)
+            {
+                nodo = nodo.Parent;
+            }
+
+           
+            if (nodo.Text.StartsWith("[ROL]"))
+            {
+                return nodo.Tag.ToString();
+            }
+
+            return null;
+        }
         private void AsignarFamilia()
         {
             try
@@ -253,8 +407,6 @@ namespace IU
 
                         string conflictos = bllRol.VerificarRedundanciasRol(idRol, idFamilia);
                         bool limpiar = false;
-
-
 
                         if (!string.IsNullOrEmpty(conflictos))
                         {
@@ -291,8 +443,24 @@ namespace IU
                     string idPadre = cmbFamilia.SelectedValue.ToString();
                     string idHija = cmbFamiliaHija.SelectedValue.ToString();
 
-                    bllFamilia.AsignarSubFamilia(idPadre, idHija);
+                    // 2. Buscamos el contexto del Rol (el padre de toda la jerarquía)
+                    string idRolContexto = ObtenerIdRolDesdeArbol();
 
+                    if (string.IsNullOrEmpty(idRolContexto))
+                    {
+                        MessageBox.Show("Por favor, seleccione un nodo dentro de un Rol en el árbol.");
+                        return;
+                    }
+
+                    // 3. VALIDAMOS ANTES DE HACER NADA EN LA BASE DE DATOS
+                    BLL_Rol bllRolValidacion = new BLL_Rol();
+                    if (bllRolValidacion.EsRedundanteAsignar(idRolContexto, idHija))
+                    {
+                        MessageBox.Show("Error: La familia ya existe en la jerarquía de este perfil.",
+                                        "Error de integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    bllFamilia.AsignarSubFamilia(idPadre, idHija);
 
                     MessageBox.Show(TraducirTexto("msg_FamiliaAsignadaCorrectamente"));
                     LimpiarModo();
@@ -358,9 +526,10 @@ namespace IU
                     BLL_Familia bllFamilia = new BLL_Familia();
                     int asignados = 0;
 
-                    foreach (DataRowView item in clbPermiso.CheckedItems)
+                    foreach (Servicio_Permiso item in clbPermiso.CheckedItems)
                     {
-                        string idPermiso = item["IdPermiso"].ToString();
+                        string idPermiso = item.IdRol; 
+
                         if (!bllFamilia.TienePermiso(idFamilia, idPermiso))
                         {
                             bllFamilia.AsignarPermiso(idFamilia, idPermiso);
@@ -368,9 +537,9 @@ namespace IU
                         }
                         else
                         {
-
-                            MessageBox.Show(string.Format(TraducirTexto("msg_FamiliaYaPoseePermiso"), item["Nombre"].ToString()));
-
+                            MessageBox.Show(string.Format(
+                                TraducirTexto("msg_FamiliaYaPoseePermiso"),
+                                item.Nombre));
                         }
                     }
 
@@ -844,6 +1013,7 @@ namespace IU
         private void btnCrear_Click_1(object sender, EventArgs e)
         {
             modoActual = "CREAR";
+            treeView1.Enabled = false;
             listBox1.Items.Clear();
             //listBox1.Items.Add("Modo CREAR");
             //listBox1.Items.Add("1. Elegir Rol/Familia.");
@@ -872,6 +1042,7 @@ namespace IU
 
         private void radioBtn_Rol_CheckedChanged_1(object sender, EventArgs e)
         {
+            BloquearBotonesSegunPermisos();
             if (modoActual == "CREAR" && radioBtn_Rol.Checked)
             {
                 listBox1.Items.Clear();
@@ -933,6 +1104,7 @@ namespace IU
 
         private void radioBtn_Familia_CheckedChanged(object sender, EventArgs e)
         {
+            BloquearBotonesSegunPermisos();
             if (modoActual == "CREAR" && radioBtn_Familia.Checked)
             {
                 listBox1.Items.Clear();
@@ -1027,35 +1199,42 @@ namespace IU
         }
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            switch (modoActual)
+            try
             {
-                case "CREAR":
-                    if (radioBtn_Rol.Checked)
-                        CrearRol();
-                    else
-                        CrearFamilia();
-                    break;
-                case "MODIFICAR":
-                    if (tipoNodoSeleccionado == "ROL")
-                        ModificarRol();
-                    else
-                        ModificarFamilia();
-                    break;
-                case "ELIMINAR":
-                    if (tipoNodoSeleccionado == "ROL")
-                        EliminarPerfil();
-                    else
-                        EliminarFamilia();
-                    break;
-                case "ASIGNAR_PERMISO":
-                    AsignarPermiso();
-                    break;
-                case "ASIGNAR_FAMILIA":
-                    AsignarFamilia();
-                    break;
-                case "DESASIGNAR":
-                    DesasignarElemento();
-                    break;
+                switch (modoActual)
+                {
+                    case "CREAR":
+                        if (radioBtn_Rol.Checked)
+                            CrearRol();
+                        else
+                            CrearFamilia();
+                        break;
+                    case "MODIFICAR":
+                        if (tipoNodoSeleccionado == "ROL")
+                            ModificarRol();
+                        else
+                            ModificarFamilia();
+                        break;
+                    case "ELIMINAR":
+                        if (tipoNodoSeleccionado == "ROL")
+                            EliminarPerfil();
+                        else
+                            EliminarFamilia();
+                        break;
+                    case "ASIGNAR_PERMISO":
+                        AsignarPermiso();
+                        break;
+                    case "ASIGNAR_FAMILIA":
+                        AsignarFamilia();
+                        break;
+                    case "DESASIGNAR":
+                        DesasignarElemento();
+                        break;
+                }
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
             }
 
             CargarCombos();
@@ -1088,6 +1267,7 @@ namespace IU
             btnAplicar.Enabled = false;
             treeView1.SelectedNode = null;
             treeViewVistaPrevia.Nodes.Clear();
+            treeView1.Enabled = true;
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -1124,10 +1304,7 @@ namespace IU
 
         public void ActualizarIdioma()
         {
-            string idIdioma =
-          SessionManager.GetInstancia()
-          .GetUsuarioActual()
-          .Id_Idioma;
+            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -1172,10 +1349,7 @@ namespace IU
 
         private string TraducirTexto(string clave)
         {
-            string idIdioma =
-                SessionManager.GetInstancia()
-                .GetUsuarioActual()
-                .Id_Idioma;
+            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -1188,30 +1362,15 @@ namespace IU
 
             return etiqueta != null ? etiqueta.Texto : clave;
         }
-
-
-
-        private const int PANEL_ANCHO_BASE = 1057;
-        private const int PANEL_ALTO_BASE = 892;
-        private const float ESCALA_MAXIMA = 1.3f;
         private void FormGestionPerfil_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized) return;
+            if (WindowState == FormWindowState.Minimized)
+                return;
 
-            int altoDisponible = this.ClientSize.Height - panelInferior.Height;
-
-            float escalaAncho = (float)this.ClientSize.Width / 1110f;
-            float escalaAlto = (float)altoDisponible / 892f;
-            float escala = Math.Min(escalaAncho, escalaAlto);
-            escala = Math.Max(1.0f, Math.Min(escala, ESCALA_MAXIMA));
-
-            panel1.Size = new Size(
-                (int)(PANEL_ANCHO_BASE * escala),
-                (int)(PANEL_ALTO_BASE * escala)
-            );
+            int altoDisponible = ClientSize.Height - panelInferior.Height;
 
             panel1.Location = new Point(
-                (this.ClientSize.Width - panel1.Width) / 2,
+                (ClientSize.Width - panel1.Width) / 2,
                 (altoDisponible - panel1.Height) / 2
             );
         }

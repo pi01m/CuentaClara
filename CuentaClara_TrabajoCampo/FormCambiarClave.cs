@@ -48,12 +48,6 @@ namespace CuentaClara_TrabajoCampo
                 string ClaveNueva = txtNuevaClave.Text;
                 bool resultado = _bllUsuario.CambiarClave(ClaveVieja, ClaveNueva);
 
-                _bllBitacoraEvento.RegistrarBitacora(
-                        "Cambio Clave",
-                        SessionManager.GetInstancia().GetUsuarioActual().Login,
-                        "Administracion",
-                        3);
-
                 if (resultado)
                 {
                     MessageBox.Show("Contraseña modificada de forma permanente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

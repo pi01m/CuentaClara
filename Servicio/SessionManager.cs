@@ -9,7 +9,7 @@ namespace Servicio
         private static readonly SessionManager _instancia = new SessionManager();
 
         private Servicio_Usuario _usuarioActual;
-
+        
    
         private SessionManager() { }
 
@@ -31,5 +31,8 @@ namespace Servicio
         {
             _usuarioActual = null;
         }
+
+        
+
     }
 }

@@ -135,7 +135,7 @@ namespace BLL
             {
                 this.ReiniciarIntentos(login);
 
-                _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login, "Administración", 1);
+                _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login, "Seguridad", 1);
                 return true;
             }
             catch
@@ -187,6 +187,7 @@ namespace BLL
 
 
             List<Servicio_Permiso> permisosDirectos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+
             if (permisosDirectos != null)
             {
                 foreach (Servicio_Permiso permiso in permisosDirectos)
@@ -194,7 +195,7 @@ namespace BLL
                     usuario.Permisos.AgregarRol(permiso);
                 }
             }
-
+            
 
             List<Servicio_Familia> familiasDelRol = bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
             if (familiasDelRol != null)
@@ -213,15 +214,66 @@ namespace BLL
 
 
             _sm.CrearSesion(usuario);
+           
 
-            
             _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login, "Seguridad", 1);
 
             return true;
 
         }
 
+        private Servicio_Usuario ConstruirPermisos(Servicio_Usuario usuario)
+        {
+            BLL_Rol bllRol = new BLL_Rol();
+            BLL_Familia bllFamilia = new BLL_Familia();
+            BLL_Permiso bllPermiso = new BLL_Permiso();
 
+            usuario.Permisos =
+                new Servicio_Familia(usuario.IdRol, "Raíz_Permisos_" + usuario.Login);
+
+            var permisos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+            if (permisos != null)
+                foreach (var p in permisos)
+                    usuario.Permisos.AgregarRol(p);
+
+            var familias = bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+            if (familias != null)
+                foreach (var f in familias)
+                {
+                    var familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(f.IdRol);
+                    usuario.Permisos.AgregarRol(familiaCompleta);
+                }
+
+            return usuario;
+        }
+
+        public Servicio_Usuario RecargarUsuarioSesion(string login)
+        {
+            Servicio_Usuario usuario = _dalUsuario.ObtenerUsuarioPorLogin(login);
+
+            if (usuario == null) return null;
+
+            BLL_Rol bllRol = new BLL_Rol();
+            BLL_Familia bllFamilia = new BLL_Familia();
+            BLL_Permiso bllPermiso = new BLL_Permiso();
+
+            usuario.Permisos = new Servicio_Familia(usuario.IdRol, "ROOT_" + login);
+
+            var permisos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+            if (permisos != null)
+                foreach (var p in permisos)
+                    usuario.Permisos.AgregarRol(p);
+
+            var familias = bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+            if (familias != null)
+                foreach (var f in familias)
+                {
+                    var familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(f.IdRol);
+                    usuario.Permisos.AgregarRol(familiaCompleta);
+                }
+
+            return usuario;
+        }
 
 
         public void CerrarSesion()
@@ -242,9 +294,7 @@ namespace BLL
             
             if (!string.IsNullOrEmpty(idiomaAnterior) && idiomaAnterior != idiomaActual)
             {
-                _bitacoraServicio.RegistrarBitacora("Actualización de Idioma", usuario.Login,"Administración", 2
-
-                );
+                _bitacoraServicio.RegistrarBitacora("Actualización de Idioma", usuario.Login,"Administración", 3);
             }
 
             _bitacoraServicio.RegistrarBitacora( "Cerrar Sesión",usuario.Login,"Seguridad",1);
@@ -253,8 +303,6 @@ namespace BLL
 
             _sm.CerrarSesion();
         }
-        
-        
         
 
         public int ObtenerIntentos(string login)
@@ -287,7 +335,7 @@ namespace BLL
                 _dalUsuario.CambiarEstadoUsuario(dni, activo);
 
                
-                _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario", ObtenerUsuario(dni).Login, "Seguridad", 1);
+                _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario", ObtenerUsuario(dni).Login, "Administración", 3);
 
                 //Faltaría agregar acá el recálculo del Dígito Verificador
 
@@ -351,7 +399,7 @@ namespace BLL
             string nuevoHash = _encriptadorServicio.CifrarContraseña(claveNueva);
 
             bool actualizacionExitosa = _dalUsuario.ActualizarClave(usuarioActual.Login, nuevoHash);
-            _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuarioActual.Login, "Administración", 3);
+            _bitacoraServicio.RegistrarBitacora("Cambio Clave", SessionManager.GetInstancia().GetUsuarioActual().Login, "Seguridad", 1);
             return actualizacionExitosa;
         }
 
@@ -366,7 +414,7 @@ namespace BLL
 
             if (idiomaAnterior != idIdioma)
             {
-                _bitacoraServicio.RegistrarBitacora( "Cambio de Idioma en Sesión", usuario.Login,"Administración",2);                    
+                _bitacoraServicio.RegistrarBitacora( "Cambio de Idioma en Sesión", usuario.Login,"Administración",3);                    
                
             }
 

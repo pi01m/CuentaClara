@@ -364,19 +364,12 @@ namespace DAL
         public bool ExisteFamiliaEnRol( string idRol,string idFamilia)
    
         {
-            using (SqlDataAdapter da =
-                new SqlDataAdapter(
-                @"SELECT *
-              FROM Familia_Rol
-              WHERE IdRol=@Rol
-              AND IdFamilia=@Familia",
-                _connectionString))
-            {
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Rol", idRol);
+            using (SqlDataAdapter da = new SqlDataAdapter( @"SELECT *FROM Familia_Rol WHERE IdRol=@Rol AND IdFamilia=@Familia",_connectionString))
 
-                da.SelectCommand.Parameters.AddWithValue(
-                    "@Familia", idFamilia);
+            {
+                da.SelectCommand.Parameters.AddWithValue( "@Rol", idRol);
+
+                da.SelectCommand.Parameters.AddWithValue("@Familia", idFamilia);
 
                 DataTable dt = new DataTable();
 

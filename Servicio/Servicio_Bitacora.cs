@@ -13,6 +13,6 @@ namespace Servicio
         public string id_Evento { get; set; }
         public string Login { get; set; }
         public string Modulo { get; set; }
-        public string Usuario { get; set; }
+        
     }
 }

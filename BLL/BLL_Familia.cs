@@ -46,9 +46,7 @@ namespace BLL
             }
 
             dal.Guardar( familia.IdRol,familia.Nombre);
-            bllBitacora.RegistrarBitacora("Alta Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
-
-
+            bllBitacora.RegistrarBitacora("Alta Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
         
 
@@ -88,7 +86,7 @@ namespace BLL
             }
 
             dal.Modificar(familia); 
-            bllBitacora.RegistrarBitacora("Modificación Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Modificación Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
 
@@ -103,7 +101,7 @@ namespace BLL
                    
 
             dal.Eliminar(idFamilia);
-            bllBitacora.RegistrarBitacora("Baja Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Baja Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public void AsignarPermiso( string idFamilia,string idPermiso)
@@ -116,7 +114,7 @@ namespace BLL
                     
 
             dal.AsignarPermiso(idFamilia,idPermiso);
-            bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+            bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autoriz ación", 1);
 
         }
 
@@ -133,9 +131,12 @@ namespace BLL
 
             if (idPadre == idHija)
                 throw new Exception( "No puede asignarse a sí misma.");
+           
+            if (TieneFamilia(idHija, idPadre))
+                throw new Exception("Error: Esto crearía un ciclo infinito de familias.");
 
-    
-           Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
+
+            Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
 
     
            if (familiaHijaCompleta != null && familiaHijaCompleta.ObtenerHijos() != null)
@@ -157,7 +158,7 @@ namespace BLL
            }  
 
             dal.AsignarSubFamilia(idPadre, idHija); 
-            bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+            bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
 
@@ -276,9 +277,8 @@ namespace BLL
                 throw new Exception("Una familia no puede quedar con un solo elemento. Si desea desarmarla, debe eliminar la familia por completo.");
             }
 
-            
             dal.DesasignarPermiso(idFamilia, idPermiso);
-            bllBitacora.RegistrarBitacora("Permiso desasignado de Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Permiso desasignado de Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public void DesasignarSubFamilia(string padre, string hija)
@@ -292,7 +292,7 @@ namespace BLL
             }
 
             dal.DesasignarSubFamilia(padre, hija);
-            bllBitacora.RegistrarBitacora("Subfamilia desasignada de Familia ID: " + padre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Subfamilia desasignada de Familia ID: " + padre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
     } 
 }

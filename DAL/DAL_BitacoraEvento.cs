@@ -30,12 +30,7 @@ namespace DAL
                 bit.Login = fila["Login"].ToString();
                 bit.Modulo = fila["Modulo"].ToString();
                 bit.Criticidad = Convert.ToInt32(fila["Criticidad"]);
-
-                // Mapeo de tiempo
                 bit.Fecha = Convert.ToDateTime(fila["Fecha"]);
-
-                // Como antes cambiamos la columna Hora a nvarchar en SQL Server, 
-                // acá la leemos directo como un string.
                 bit.Hora = fila["Hora"].ToString();
 
                 listaEventos.Add(bit);
@@ -49,8 +44,8 @@ namespace DAL
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
-                    SqlDataAdapter adapter =
-                        new SqlDataAdapter("SELECT * FROM Bitacora WHERE 1 = 0", conn);
+                    SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Bitacora WHERE 1 = 0", conn);
+                        
 
                     DataSet ds = new DataSet();
                     adapter.Fill(ds, "Bitacora");
@@ -87,13 +82,11 @@ namespace DAL
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter("SELECT * FROM Bitacora ORDER BY Fecha DESC, Hora DESC", conn);
+                SqlDataAdapter adapter =new SqlDataAdapter("SELECT * FROM Bitacora ORDER BY Fecha DESC, Hora DESC", conn);
+                    
 
                 DataTable tablaVirtual = new DataTable();
                 adapter.Fill(tablaVirtual);
-
-                // ¡Acá llamamos a la magia del formateo!
                 return MapearTablaALista(tablaVirtual);
             }
         }
@@ -102,75 +95,67 @@ namespace DAL
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string sql = @"SELECT * FROM Bitacora WHERE Fecha >= DATEADD(DAY, -3, GETDATE()) ORDER BY Fecha DESC, Hora DESC";
+              
+                string sql = @"SELECT * FROM Bitacora WHERE Fecha >= CONVERT(DATE, DATEADD(DAY, -3, GETDATE())) ORDER BY Fecha DESC, Hora DESC";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
-
                 DataTable tablaVirtual = new DataTable();
                 adapter.Fill(tablaVirtual);
 
-                // Devolvemos los objetos listos para usar
                 return MapearTablaALista(tablaVirtual);
             }
         }
 
         public List<Servicio_Bitacora> FiltrarBitacora(string login, DateTime desde, DateTime hasta, string modulo, string evento, int? criticidad)
         {
+            if (hasta < desde) hasta = desde;
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                StringBuilder sql = new StringBuilder();
-                sql.Append("SELECT * FROM Bitacora WHERE 1=1 ");
-
+                StringBuilder sql = new StringBuilder("SELECT * FROM Bitacora WHERE 1=1 ");
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
 
-
-                if (!string.IsNullOrEmpty(login))
+                if (!string.IsNullOrWhiteSpace(login))
                 {
-                    sql.Append("AND Login = @Login ");
-                    cmd.Parameters.AddWithValue("@Login", login);
+                    sql.Append("AND Login LIKE @Login ");
+                    cmd.Parameters.AddWithValue("@Login", "%" + login.Trim() + "%");
                 }
 
-                if (!string.IsNullOrEmpty(modulo))
+                if (!string.IsNullOrWhiteSpace(modulo))
                 {
-                    sql.Append("AND Modulo = @Modulo ");
-                    cmd.Parameters.AddWithValue("@Modulo", modulo);
+                    sql.Append("AND Modulo LIKE @Modulo ");
+                    cmd.Parameters.AddWithValue("@Modulo", "%" + modulo.Trim() + "%");
                 }
 
-                if (!string.IsNullOrEmpty(evento))
+                if (!string.IsNullOrWhiteSpace(evento))
                 {
                     sql.Append("AND Evento LIKE @Evento ");
-                    cmd.Parameters.AddWithValue("@Evento", "%" + evento + "%");
+                    cmd.Parameters.AddWithValue("@Evento", "%" + evento.Trim() + "%");
                 }
 
-
+                // Criticidad sigue siendo igual (es un número exacto)
                 if (criticidad.HasValue)
                 {
                     sql.Append("AND Criticidad = @Criticidad ");
                     cmd.Parameters.AddWithValue("@Criticidad", criticidad.Value);
                 }
 
-
+                // Filtro de fechas (es obligatorio)
                 sql.Append("AND Fecha BETWEEN @Desde AND @Hasta ");
-
-
                 cmd.Parameters.AddWithValue("@Desde", desde.Date);
-
-
-                DateTime fechaHastaAjustada = hasta.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-                cmd.Parameters.AddWithValue("@Hasta", fechaHastaAjustada);
+                cmd.Parameters.AddWithValue("@Hasta", hasta.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 
                 sql.Append("ORDER BY Fecha DESC, Hora DESC");
 
                 cmd.CommandText = sql.ToString();
+                cmd.Connection = conn;
 
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable tablaVirtual = new DataTable();
                 adapter.Fill(tablaVirtual);
 
-
                 return MapearTablaALista(tablaVirtual);
             }
         }
+
     }
 }

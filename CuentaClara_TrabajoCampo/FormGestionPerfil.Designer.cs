@@ -344,6 +344,7 @@
             panel1.Size = new Size(1057, 892);
             panel1.TabIndex = 41;
             panel1.Paint += panel1_Paint;
+            panel1.Anchor = AnchorStyles.None;
             // 
             // treeViewVistaPrevia
             // 

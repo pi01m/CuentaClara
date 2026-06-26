@@ -17,20 +17,27 @@ namespace IU
     {
         private string accion = ""; //nos ayuda a saber en que accion estamos 
         BLL_Idioma bllIdioma;
-
+        private BLL_Rol bllRol = new BLL_Rol();
 
         public FormGestionIdioma()
         {
             InitializeComponent();
             GestorIdioma.GetInstancia().Suscribir(this);
         }
-
+        private void DeshabilitarBotones()
+        {
+            btnAplicar.Enabled = false;
+            btnModificarEtiqueta.Enabled = false;
+            btnAgregarEtiqueta.Enabled = false;
+            btnSalir.Enabled = true;
+        }
         private void FormGestionIdioma_Load(object sender, EventArgs e)
         {
             bllIdioma = new BLL_Idioma();
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            BLL_Rol bllRol = new BLL_Rol();
+            RefrescarSesionUsuario();
 
+            BloquearBotonesSegunPermisos(usuarioActual);
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
@@ -40,6 +47,33 @@ namespace IU
             CargarIdiomas();
         }
 
+        private void RefrescarSesionUsuario()
+        {
+            var login = SessionManager.GetInstancia().GetUsuarioActual().Login;
+
+            var bllUsuario = new BLL_Usuario();
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion(login);
+
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);
+        }
+
+        private void BloquearBotonesSegunPermisos(Servicio_Usuario usuarioActual)
+        {
+            if (usuarioActual == null || usuarioActual.Permisos == null)
+            {
+                DeshabilitarBotones();
+                return;
+            }
+
+            
+            btnAgregarEtiqueta.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P30");
+
+            btnModificarEtiqueta.Enabled =  bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P31");
+
+            btnNuevoIdioma.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P29");
+
+            btnSalir.Enabled = true;
+        }
 
         #region nuevo idioma
         private void btnNuevoIdioma_Click(object sender, EventArgs e)

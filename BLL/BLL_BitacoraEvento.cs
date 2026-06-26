@@ -32,7 +32,6 @@ namespace BLL
 
             bool guardadoExitoso = _dal.GuardarBitacora(bitacora);
 
-            
             if (!guardadoExitoso)
             {
               

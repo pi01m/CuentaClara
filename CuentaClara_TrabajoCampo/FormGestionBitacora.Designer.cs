@@ -53,11 +53,11 @@
             btnAplicar = new Button();
             btnImprimir = new Button();
             btnSalir = new Button();
-            lblCantidadEventos = new Label();
-            lblTotalEventos = new Label();
             panelInferior = new Panel();
             lblUsuarioValor = new Label();
             lblUsuarioActivo = new Label();
+            label1 = new Label();
+            label2 = new Label();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBitacora).BeginInit();
             panelInferior.SuspendLayout();
@@ -65,7 +65,10 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Anchor = AnchorStyles.None;
             panelContenedor.BackColor = Color.White;
+            panelContenedor.Controls.Add(label2);
+            panelContenedor.Controls.Add(label1);
             panelContenedor.Controls.Add(lblTitulo);
             panelContenedor.Controls.Add(dgvBitacora);
             panelContenedor.Controls.Add(lblNombre);
@@ -89,14 +92,10 @@
             panelContenedor.Controls.Add(btnAplicar);
             panelContenedor.Controls.Add(btnImprimir);
             panelContenedor.Controls.Add(btnSalir);
-            panelContenedor.Controls.Add(lblCantidadEventos);
-            panelContenedor.Controls.Add(lblTotalEventos);
-            panelContenedor.Anchor = AnchorStyles.None;
             panelContenedor.Location = new Point(12, 12);
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1102, 620);
             panelContenedor.TabIndex = 1;
-            panelContenedor.Paint += panelContenedor_Paint;
             // 
             // lblTitulo
             // 
@@ -264,7 +263,7 @@
             // 
             cboModulo.DropDownStyle = ComboBoxStyle.DropDownList;
             cboModulo.Font = new Font("Segoe UI", 10F);
-            cboModulo.Items.AddRange(new object[] { "Administración", "Seguridad" });
+            cboModulo.Items.AddRange(new object[] { "Administración", "Seguridad", "Gestión de Perfiles y Autorización" });
             cboModulo.Location = new Point(630, 435);
             cboModulo.Name = "cboModulo";
             cboModulo.Size = new Size(120, 25);
@@ -286,10 +285,10 @@
             // 
             cboEvento.DropDownStyle = ComboBoxStyle.DropDownList;
             cboEvento.Font = new Font("Segoe UI", 10F);
-            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Imprimir", "Cambio Clave", "Asignación familia a rol", "Asignación familia a familia", "Asignación permiso a rol", "Asignación permiso a familia", "Modificacion Familia", "Baja Familia", "Alta Familia", "Desasignación en Perfiles", "Cambio de Idioma en Sesión", "Actualización de Idioma" });
+            cboEvento.Items.AddRange(new object[] { "Login Correcto", "Login Incorrecto", "Logout", "Usuario Desbloqueado", "Intento de login bloqueado", "Usuario Bloqueado o Inactivo", "Usuario Modificado", "Usuario Creado", "Modificar Usuario", "Activar Usuario", "Desactivar Usuario", "Impresión/Exportación de Bitácora", "Cambio Clave", "Asignación familia a rol", "Asignación familia a familia", "Asignación permiso a rol", "Asignación permiso a familia", "Modificacion Familia", "Baja Familia", "Alta Familia", "Desasignación en Perfiles", "Cambio de Idioma en Sesión", "Actualización de Idioma" });
             cboEvento.Location = new Point(780, 435);
             cboEvento.Name = "cboEvento";
-            cboEvento.Size = new Size(144, 25);
+            cboEvento.Size = new Size(159, 25);
             cboEvento.TabIndex = 15;
             // 
             // lblCriticidad
@@ -385,30 +384,6 @@
             btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
-            // lblCantidadEventos
-            // 
-            lblCantidadEventos.AutoSize = true;
-            lblCantidadEventos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblCantidadEventos.ForeColor = Color.FromArgb(15, 45, 75);
-            lblCantidadEventos.Location = new Point(860, 330);
-            lblCantidadEventos.Name = "lblCantidadEventos";
-            lblCantidadEventos.Size = new Size(64, 19);
-            lblCantidadEventos.TabIndex = 23;
-            lblCantidadEventos.Tag = "lbl_CantidadEventos";
-            lblCantidadEventos.Text = "Eventos:";
-            // 
-            // lblTotalEventos
-            // 
-            lblTotalEventos.AutoSize = true;
-            lblTotalEventos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTotalEventos.ForeColor = Color.FromArgb(18, 87, 150);
-            lblTotalEventos.Location = new Point(940, 330);
-            lblTotalEventos.Name = "lblTotalEventos";
-            lblTotalEventos.Size = new Size(17, 19);
-            lblTotalEventos.TabIndex = 24;
-            lblTotalEventos.Text = "0";
-            lblTotalEventos.Click += lblTotalEventos_Click;
-            // 
             // panelInferior
             // 
             panelInferior.BackColor = Color.FromArgb(18, 87, 150);
@@ -443,6 +418,30 @@
             lblUsuarioActivo.Tag = "lbl_Usuario";
             lblUsuarioActivo.Text = "Usuario activo: ";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(15, 45, 75);
+            label1.Location = new Point(644, 330);
+            label1.Name = "label1";
+            label1.Size = new Size(145, 19);
+            label1.TabIndex = 23;
+            label1.Tag = "";
+            label1.Text = "Cantidad de Eventos";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label2.ForeColor = Color.FromArgb(15, 45, 75);
+            label2.Location = new Point(817, 330);
+            label2.Name = "label2";
+            label2.Size = new Size(17, 19);
+            label2.TabIndex = 24;
+            label2.Tag = "";
+            label2.Text = "0";
+            // 
             // FormGestionBitacora
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -452,8 +451,6 @@
             Controls.Add(panelInferior);
             Controls.Add(panelContenedor);
             Font = new Font("Segoe UI", 9F);
-            FormBorderStyle = FormBorderStyle.Sizable;
-            MaximizeBox = true;
             Name = "FormGestionBitacora";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Gestión de Bitácora";
@@ -507,11 +504,10 @@
         private System.Windows.Forms.Button btnImprimir;
         private System.Windows.Forms.Button btnSalir;
 
-        private System.Windows.Forms.Label lblCantidadEventos;
-        private System.Windows.Forms.Label lblTotalEventos;
-
         private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Label lblUsuarioActivo;
         private Label lblUsuarioValor;
+        private Label label2;
+        private Label label1;
     }
 }

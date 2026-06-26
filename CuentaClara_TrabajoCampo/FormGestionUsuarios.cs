@@ -24,9 +24,29 @@ namespace CuentaClara_TrabajoCampo
 
             dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
             GestorIdioma.GetInstancia().Suscribir(this);
-            //CargarUsuarios();
+      
         }
 
+        
+
+        private void RefrescarSesionUsuario()
+        {
+            var login = SessionManager.GetInstancia().GetUsuarioActual().Login;
+
+            var bllUsuario = new BLL_Usuario();
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion(login);
+
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);
+
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+
+           
+            BloquearBotonesSegunPermisos(usuarioActual);
+
+           
+            string nombreRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
+            label1.Text = $"{usuarioActual.Login} - {nombreRol}";
+        }
 
         private void CargarUsuarios()
         {
@@ -42,12 +62,41 @@ namespace CuentaClara_TrabajoCampo
             dgvUsuarios.Refresh();
 
         }
+
+        private void BloquearBotonesSegunPermisos(Servicio_Usuario usuarioActual)
+        {
+            if (usuarioActual == null || usuarioActual.Permisos == null)
+            {
+                DeshabilitarBotonesEdicion();
+                return;
+            }
+           
+            btnCrear.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P1");
+            btnModificar.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
+            btnActivarDesactivar.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P3");
+            btnDesbloquear.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P4");
+                
+            bool puedeEditar = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
+
+        }
+
+        private void DeshabilitarBotonesEdicion()
+        {
+            btnCrear.Enabled = false;
+            btnModificar.Enabled = false;
+            btnDesbloquear.Enabled = false;
+            btnActivarDesactivar.Enabled = false;
+            btnAplicar.Enabled = false;
+        }
         private void FormGestionUsuarios_Load_1(object sender, EventArgs e)
         {
             FormGestionUsuarios_Resize(null, null);
             radioBtnTodosUser.Checked = true;
-            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
 
+            RefrescarSesionUsuario();
+
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            BloquearBotonesSegunPermisos(usuarioActual);
             string nombreRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
             label1.Text = $"{usuarioActual.Login}-{nombreRol}";
 
@@ -177,8 +226,6 @@ namespace CuentaClara_TrabajoCampo
             cmbRol.Text = bllRol.ObtenerNombreRol(idRol);
             chkActivo.Checked = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Activo"].Value) == 1;
 
-
-
         }
 
 
@@ -202,7 +249,7 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            if (modoActual == "Modo Modificar")
+            if (modoActual == "ModoModificar")
             {
                 string nuevoIdRol = cmbRol.SelectedValue.ToString();
                 bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text, nuevoIdRol);
@@ -212,7 +259,7 @@ namespace CuentaClara_TrabajoCampo
 
             }
 
-            else if (modoActual == "Modo Desbloquear")
+            else if (modoActual == "ModoDesbloquear")
             {
                 int intentos = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Bloqueo"].Value);
 
@@ -284,15 +331,11 @@ namespace CuentaClara_TrabajoCampo
         {
             GestorIdioma.GetInstancia().Desuscribir(this);
 
-
         }
 
         public void ActualizarIdioma()
         {
-            string idIdioma =
-            SessionManager.GetInstancia()
-            .GetUsuarioActual()
-            .Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 

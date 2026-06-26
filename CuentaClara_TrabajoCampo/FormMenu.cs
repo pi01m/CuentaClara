@@ -126,11 +126,7 @@ namespace CuentaClara_TrabajoCampo
 
         public void ActualizarIdioma()
         {
-            string idIdioma =
-            SessionManager.GetInstancia()
-            .GetUsuarioActual()
-            .Id_Idioma;
-
+            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 

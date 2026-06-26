@@ -12,7 +12,14 @@ namespace Servicio
 
         public Servicio_Familia(string idFamilia, string nombre): base(idFamilia, nombre) { }
 
-        public void AgregarRol(Servicio_Rol permiso) => _listaPermisos.Add(permiso);
+        public void AgregarRol(Servicio_Rol item)
+        {
+            if (_listaPermisos.Any(x => x.IdRol == item.IdRol))
+                return;
+
+            _listaPermisos.Add(item);
+        }
+
         public void EliminarRol(Servicio_Rol permiso) => _listaPermisos.Remove(permiso);
         public List<Servicio_Rol> ObtenerHijos() => _listaPermisos;
 

@@ -14,7 +14,7 @@ namespace BLL
     {
         private DAL_Rol dal;
         private BLL_BitacoraEvento bllBitacora = new BLL_BitacoraEvento();
-
+      
         public BLL_Rol()
         {
             string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
@@ -24,11 +24,11 @@ namespace BLL
 
         public void CrearRol(Servicio_Rol rol)
         {
-            if (string.IsNullOrWhiteSpace(rol.Nombre))
-                throw new Exception("Ingrese un nombre.");
+            if (string.IsNullOrWhiteSpace(rol.Nombre)) throw new Exception("Ingrese un nombre.");
+               
 
             dal.CrearRol(rol.IdRol, rol.Nombre);
-            bllBitacora.RegistrarBitacora("Alta Perfil (Rol): " + rol.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+            bllBitacora.RegistrarBitacora("Alta Perfil (Rol): " + rol.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
 
@@ -40,18 +40,16 @@ namespace BLL
         public void AsignarPermiso(string idRol, string idPermiso)
 
         {
-            if (string.IsNullOrWhiteSpace(idRol))
-                throw new Exception("Seleccione un rol.");
+            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un rol.");
+                
 
-            if (string.IsNullOrWhiteSpace(idPermiso))
-                throw new Exception("Seleccione un permiso.");
+            if (string.IsNullOrWhiteSpace(idPermiso)) throw new Exception("Seleccione un permiso.");
+                
 
-            if (dal.ExistePermiso(idRol, idPermiso))
-                throw new Exception(
-                    "El rol ya posee ese permiso.");
+            if (dal.ExistePermiso(idRol, idPermiso)) throw new Exception("El rol ya posee ese permiso.");
 
             dal.AsignarPermiso(idRol, idPermiso);
-            bllBitacora.RegistrarBitacora("Permiso asignado al Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
+            bllBitacora.RegistrarBitacora("Permiso asignado al Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
 
@@ -127,9 +125,7 @@ namespace BLL
             }
 
             dal.AsignarFamilia(idRol, idFamilia);
-            bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 1);
-
-
+            bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
 
@@ -144,13 +140,13 @@ namespace BLL
         {
 
             dal.DesasignarPermiso(idRol, idPermiso);
-            bllBitacora.RegistrarBitacora("Permiso desasignado del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Permiso desasignado del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public void DesasignarFamilia(string idRol, string idFamilia)
         {
             dal.DesasignarFamilia(idRol, idFamilia);
-            bllBitacora.RegistrarBitacora("Familia desasignada del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Familia desasignada del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public void ModificarRol(string idRol, string nombre)
@@ -162,19 +158,18 @@ namespace BLL
                 throw new Exception("Ingrese un nombre.");
 
             dal.ModificarRol(idRol, nombre);
-            bllBitacora.RegistrarBitacora("Modificación de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Modificación de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public void EliminarRol(string idRol)
         {
             if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un Rol.");
 
-
             string nombre = ObtenerNombreRol(idRol);
             dal.EliminarRelacionesRol(idRol);
 
             dal.EliminarRol(idRol);
-            bllBitacora.RegistrarBitacora("Baja de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Administración", 2);
+            bllBitacora.RegistrarBitacora("Baja de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
         public bool ExisteNombre(string nombre)
@@ -231,30 +226,68 @@ namespace BLL
         }
 
 
-    public bool ValidarPermisoEnArbol(Servicio_Rol componente, string idPermisoBuscado)
+        public bool ValidarPermisoEnArbol(Servicio_Rol componente, string idPermisoBuscado)
         {
-        
+            return ValidarRecursivo(componente, idPermisoBuscado, 0);
+        }
+
+        public bool EsRedundanteAsignar(string idRol, string idFamiliaHija)
+        {
+     
+            List<Servicio_Familia> familiasDelRol = dal.ObtenerFamiliasPorRol(idRol);
+            BLL_Familia bllFam = new BLL_Familia();
+
+            foreach (Servicio_Familia familiaEnRol in familiasDelRol)
+            {
+             
+                if (familiaEnRol.IdRol == idFamiliaHija) return true;
+                Servicio_Familia famCompleta = bllFam.ObtenerFamiliaCompleta(familiaEnRol.IdRol);
+                if (FamiliaContieneFamilia(famCompleta, idFamiliaHija))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool ValidarRecursivo(Servicio_Rol componente,  string permisoBuscado, int profundidad)
+        {
+            if (profundidad > 10) return false;
+
             if (componente == null) return false;
 
-           
-            if (componente.IdRol == idPermisoBuscado)
+            if (string.Equals(componente.IdRol, permisoBuscado, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(componente.Nombre, permisoBuscado, StringComparison.OrdinalIgnoreCase))
+            {
                 return true;
+            }
 
-           
             if (componente is Servicio_Familia familia)
             {
                 foreach (Servicio_Rol hijo in familia.ObtenerHijos())
                 {
-                    // Llamada recursiva
-                    if (ValidarPermisoEnArbol(hijo, idPermisoBuscado))
-                    {
+                    if (ValidarRecursivo(hijo, permisoBuscado, profundidad + 1))
                         return true;
-                    }
                 }
             }
 
-         
             return false;
         }
-    } 
+
+        private bool FamiliaContieneFamilia(Servicio_Familia familia, string idFamiliaBuscada)
+        {
+            if (familia != null && familia.ObtenerHijos() != null)
+            {
+                foreach (Servicio_Rol hijo in familia.ObtenerHijos())
+                {
+                    if (hijo is Servicio_Familia subFamilia)
+                    {
+                        if (subFamilia.IdRol == idFamiliaBuscada) return true;
+                        if (FamiliaContieneFamilia(subFamilia, idFamiliaBuscada)) return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 }

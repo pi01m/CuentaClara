@@ -54,8 +54,8 @@ namespace CuentaClara_TrabajoCampo
                 if (loginExitoso)
                 {
                     string idIdioma = comboBox1.SelectedValue.ToString();
-
-                    SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = idIdioma;
+                    _bllUsuario.CambiarIdiomaEnSesion(idIdioma);
+                    //SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = idIdioma;
 
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();

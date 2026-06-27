@@ -253,6 +253,13 @@ namespace BLL
 
             if (usuario == null) return null;
 
+            Servicio_Usuario usuarioSesion = _sm.GetUsuarioActual();
+
+            if (usuarioSesion != null)
+            {
+                usuario.Id_Idioma = usuarioSesion.Id_Idioma;
+            }
+
             BLL_Rol bllRol = new BLL_Rol();
             BLL_Familia bllFamilia = new BLL_Familia();
             BLL_Permiso bllPermiso = new BLL_Permiso();

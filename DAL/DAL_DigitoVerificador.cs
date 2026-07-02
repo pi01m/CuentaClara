@@ -1,0 +1,130 @@
+﻿using Microsoft.Data.SqlClient;
+using Servicio;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL
+{
+    public class DAL_DigitoVerificador
+    {
+        private string cadenaConexion = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+
+        // =================================================================
+        // Obtener Registro (Desconectado)
+        // =================================================================
+        public Servicio_DigitoVerificadorVertical ObtenerRegistroDigito(string nombre)
+        {
+            Servicio_DigitoVerificadorVertical entidad = null;
+
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = "SELECT Nombre, DVV, DVH FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                da.SelectCommand.Parameters.AddWithValue("@Nombre", nombre);
+
+                DataTable dt = new DataTable();
+
+                // 1. Fill: Se conecta, trae los datos y se desconecta
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    DataRow row = dt.Rows[0];
+                    entidad = new Servicio_DigitoVerificadorVertical();
+                    entidad.Nombre = row["Nombre"].ToString();
+                    entidad.DVV = row["DVV"] != DBNull.Value ? row["DVV"].ToString() : null;
+                    entidad.DVH = row["DVH"] != DBNull.Value ? row["DVH"].ToString() : null;
+                }
+            }
+
+            return entidad;
+        }
+
+
+        public void GuardarDVH(Servicio_DigitoVerificadorVertical registro)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string selectQuery = "SELECT Nombre, DVV, DVH FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre";
+                SqlDataAdapter da = new SqlDataAdapter(selectQuery, conn);
+                da.SelectCommand.Parameters.AddWithValue("@Nombre", registro.Nombre);
+
+                // Configuración de comandos parametrizados para el Update
+                da.InsertCommand = new SqlCommand("INSERT INTO DIGITOVERIFICADOR (Nombre, DVH) VALUES (@Nombre, @DVH)", conn);
+                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
+                da.InsertCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 50, "DVH");
+
+                da.UpdateCommand = new SqlCommand("UPDATE DIGITOVERIFICADOR SET DVH = @DVH WHERE Nombre = @Nombre", conn);
+                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
+                da.UpdateCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 50, "DVH");
+
+                DataTable dt = new DataTable();
+
+                // 1. Fill (Estado conectado brevemente)
+                da.Fill(dt);
+
+                // 2. ModificarFilaLocal (Estado desconectado)
+                if (dt.Rows.Count > 0)
+                {
+                    dt.Rows[0]["DVH"] = registro.DVH; // Actualiza la fila existente
+                }
+                else
+                {
+                    DataRow nuevaFila = dt.NewRow(); // Crea una nueva fila
+                    nuevaFila["Nombre"] = registro.Nombre;
+                    nuevaFila["DVH"] = registro.DVH;
+                    dt.Rows.Add(nuevaFila);
+                }
+
+                // 3. Update (Se reconecta y sincroniza los cambios)
+                da.Update(dt);
+            }
+        }
+
+        // =================================================================
+        // Guardar DVV (Maestro)
+        // =================================================================
+        public void GuardarDVV(Servicio_DigitoVerificadorVertical registroMaestro)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string selectQuery = "SELECT Nombre, DVV, DVH FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre";
+                SqlDataAdapter da = new SqlDataAdapter(selectQuery, conn);
+                da.SelectCommand.Parameters.AddWithValue("@Nombre", registroMaestro.Nombre);
+
+                da.InsertCommand = new SqlCommand("INSERT INTO DIGITOVERIFICADOR (Nombre, DVV) VALUES (@Nombre, @DVV)", conn);
+                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
+                da.InsertCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 50, "DVV");
+
+                da.UpdateCommand = new SqlCommand("UPDATE DIGITOVERIFICADOR SET DVV = @DVV WHERE Nombre = @Nombre", conn);
+                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
+                da.UpdateCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 50, "DVV");
+
+                DataTable dt = new DataTable();
+
+                // 1. Fill
+                da.Fill(dt);
+
+                // 2. ModificarRegistroMaestro (Estado desconectado)
+                if (dt.Rows.Count > 0)
+                {
+                    dt.Rows[0]["DVV"] = registroMaestro.DVV;
+                }
+                else
+                {
+                    DataRow nuevaFila = dt.NewRow();
+                    nuevaFila["Nombre"] = registroMaestro.Nombre;
+                    nuevaFila["DVV"] = registroMaestro.DVV;
+                    dt.Rows.Add(nuevaFila);
+                }
+
+                // 3. Update
+                da.Update(dt);
+            }
+        }
+    }
+}

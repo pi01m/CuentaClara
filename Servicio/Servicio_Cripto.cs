@@ -7,11 +7,11 @@ namespace Servicio
 {
     public class Servicio_Cripto
     {
-        public string CifrarContraseña(string contraseña)
+        public string CalcularHash(string cadena)
         {
             using (SHA256 sha = SHA256.Create())
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(contraseña);
+                byte[] bytes = Encoding.UTF8.GetBytes(cadena);
                 byte[] hashBytes = sha.ComputeHash(bytes);
 
                 StringBuilder sb = new StringBuilder();

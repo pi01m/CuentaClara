@@ -290,7 +290,7 @@ namespace CuentaClara_TrabajoCampo
                 RestaurarModoConsulta();
             }
 
-            else if (modoActual == "Modo Activar / Desactivar")
+            else if (modoActual == "ModoActivarDesactivar")
             {
                 int activo = chkActivo.Checked ? 1 : 0;
 

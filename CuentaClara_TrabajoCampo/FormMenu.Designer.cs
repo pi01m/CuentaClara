@@ -63,6 +63,7 @@
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            button7 = new Button();
             panelMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             panelUsuario.SuspendLayout();
@@ -73,6 +74,7 @@
             // panelMenu
             // 
             panelMenu.BackColor = Color.White;
+            panelMenu.Controls.Add(button7);
             panelMenu.Controls.Add(button6);
             panelMenu.Controls.Add(lblTitulo);
             panelMenu.Controls.Add(button2);
@@ -90,7 +92,7 @@
             panelMenu.Controls.Add(button1);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(1, 1, 1, 1);
+            panelMenu.Margin = new Padding(1);
             panelMenu.Name = "panelMenu";
             panelMenu.Size = new Size(220, 807);
             panelMenu.TabIndex = 2;
@@ -146,7 +148,7 @@
             // 
             picLogo.BorderStyle = BorderStyle.FixedSingle;
             picLogo.Location = new Point(10, 10);
-            picLogo.Margin = new Padding(1, 1, 1, 1);
+            picLogo.Margin = new Padding(1);
             picLogo.Name = "picLogo";
             picLogo.Size = new Size(71, 57);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -392,7 +394,7 @@
             panelMovimientos.Controls.Add(lblEstadoSaldos);
             panelMovimientos.Controls.Add(btnNuevoEgreso);
             panelMovimientos.Location = new Point(269, 74);
-            panelMovimientos.Margin = new Padding(1, 1, 1, 1);
+            panelMovimientos.Margin = new Padding(1);
             panelMovimientos.Name = "panelMovimientos";
             panelMovimientos.Size = new Size(803, 705);
             panelMovimientos.TabIndex = 0;
@@ -541,6 +543,23 @@
             dataGridViewTextBoxColumn3.ReadOnly = true;
             dataGridViewTextBoxColumn3.Width = 250;
             // 
+            // button7
+            // 
+            button7.BackColor = Color.White;
+            button7.FlatAppearance.BorderSize = 0;
+            button7.FlatStyle = FlatStyle.Flat;
+            button7.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            button7.Location = new Point(11, 579);
+            button7.Margin = new Padding(2, 3, 2, 3);
+            button7.Name = "button7";
+            button7.Size = new Size(198, 37);
+            button7.TabIndex = 15;
+            button7.Tag = "btn_GestionDeIdioma";
+            button7.Text = "Gestión de Respaldo\r\n";
+            button7.TextAlign = ContentAlignment.MiddleLeft;
+            button7.UseVisualStyleBackColor = false;
+            button7.Click += button7_Click;
+            // 
             // FormMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -552,7 +571,7 @@
             Controls.Add(panelMovimientos);
             Controls.Add(lblSaldoGeneral);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(1, 1, 1, 1);
+            Margin = new Padding(1);
             Name = "FormMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Tag = "lbl_Usuario";
@@ -613,5 +632,6 @@
         private Label lblUsuarioValor;
         private Label lblUsuario;
         private Label lblBD;
+        private Button button7;
     }
 }

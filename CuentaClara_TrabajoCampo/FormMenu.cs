@@ -221,6 +221,12 @@ namespace CuentaClara_TrabajoCampo
         {
 
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            FormGestionRespaldo frm = new FormGestionRespaldo();
+            frm.ShowDialog();
+        }
     }
 }
 

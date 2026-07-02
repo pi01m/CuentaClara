@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Servicio
+{
+    public class Servicio_DigitoVerificadorVertical
+    {
+        public string Nombre { get; set; }
+        public string DVV { get; set; }
+        public string DVH { get; set; }
+
+        // Constructor vacío por defecto
+        public Servicio_DigitoVerificadorVertical() { }
+
+        // Constructor que marca el diagrama de secuencia: Crear(DVV, Nombre)
+        public Servicio_DigitoVerificadorVertical(string dvv, string nombre)
+        {
+            this.DVV = dvv;
+            this.Nombre = nombre;
+            this.DVH = null; // Para el registro maestro, el DVH no se usa
+        }
+
+        // Podés agregar otro constructor si necesitás guardar un DVH de una fila
+        public Servicio_DigitoVerificadorVertical(string nombre, string dvh, bool esFila)
+        {
+            this.Nombre = nombre;
+            this.DVH = dvh;
+            this.DVV = null;
+        }
+    }
+}

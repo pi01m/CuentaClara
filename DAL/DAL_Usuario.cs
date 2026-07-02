@@ -244,19 +244,36 @@ namespace DAL
                 return false;
             }
         }
-        public DataTable ListarUsuarios()
+        public List<Servicio_Usuario> ListarUsuarios()
         {
+            List<Servicio_Usuario> lista = new List<Servicio_Usuario>();
+
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
+                // 1. Usamos SqlDataAdapter para el modelo desconectado
                 SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario", conn);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
 
-                DataSet ds = new DataSet();
-                adapter.Fill(ds);
+                // 2. Mapeamos cada fila a un objeto Servicio_Usuario
+                foreach (DataRow row in dt.Rows)
+                {
+                    Servicio_Usuario u = new Servicio_Usuario();
+                    u.Login = row["Login"].ToString();
+                    u.Password = row["Password"].ToString();
+                    u.Nombre = row["Nombre"].ToString();
+                    u.Apellido = row["Apellido"].ToString();
+                    u.email = row["Email"].ToString();
+                    u.IdRol = row["IdRol"].ToString();
+                    u.Activo = Convert.ToInt32(row["Activo"]);
+                    u.DNI = row["DNI"].ToString();
+                    // ... asigná los otros campos que tengas ...
 
-                return ds.Tables[0].Copy(); 
+                    lista.Add(u);
+                }
             }
+            return lista;
         }
-
         public void ReiniciarIntentos(string login)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))

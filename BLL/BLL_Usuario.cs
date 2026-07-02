@@ -15,6 +15,7 @@ namespace BLL
         private readonly DAL_Familia _dalFamiliaPermiso;
         private readonly Servicio_Cripto _encriptadorServicio;
         private readonly SessionManager _sm;
+        private readonly BLL_DigitoVerificador _bllDV;
 
         public BLL_Usuario()
         {
@@ -25,6 +26,7 @@ namespace BLL
             _encriptadorServicio = new Servicio_Cripto();
 
             _bitacoraServicio = new BLL_BitacoraEvento();
+            _bllDV = new BLL_DigitoVerificador();
 
 
 
@@ -48,7 +50,7 @@ namespace BLL
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 throw new Exception("El formato del correo electrónico no es válido.");
         }
-        public DataTable ListarUsuarios()
+        public List<Servicio_Usuario> ListarUsuarios()
         {
             return _dalUsuario.ListarUsuarios();
         }
@@ -66,7 +68,7 @@ namespace BLL
 
         public bool CargarCredenciales(string nombreUsuario, string contraseña) {
 
-            string hash = _encriptadorServicio.CifrarContraseña(contraseña);
+            string hash = _encriptadorServicio.CalcularHash(contraseña);
             return IniciarSesion(nombreUsuario, hash);
         }
 
@@ -103,7 +105,7 @@ namespace BLL
                 string contraseñaInicial = usuario.Apellido + usuario.DNI;
 
 
-                usuario.Password = _encriptadorServicio.CifrarContraseña(contraseñaInicial);
+                usuario.Password = _encriptadorServicio.CalcularHash(contraseñaInicial);
 
                 usuario.Bloqueo = 0;
 
@@ -112,6 +114,8 @@ namespace BLL
 
                 if (resultado)
                 {
+                    List<Servicio_Usuario> todos = this.ListarUsuarios(); // Necesitas este método en tu DAL
+                    _bllDV.ActualizarDigitos(usuario, todos, "Usuario");
                     _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuario.Login, "Administración", 3);
 
 
@@ -134,7 +138,9 @@ namespace BLL
             try
             {
                 this.ReiniciarIntentos(login);
-
+                Servicio_Usuario usuarioActualizado = _dalUsuario.ObtenerUsuarioPorLogin(login);
+                List<Servicio_Usuario> todos = this.ListarUsuarios();
+                _bllDV.ActualizarDigitos(usuarioActualizado, todos, "Usuario");
                 _bitacoraServicio.RegistrarBitacora("Usuario Desbloqueado", login, "Seguridad", 1);
                 return true;
             }
@@ -148,6 +154,30 @@ namespace BLL
         private bool IniciarSesion(string nombreUsuario, string hash)
         {
 
+            try
+            {
+                BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
+                List<Servicio_Usuario> todos = _dalUsuario.ListarUsuarios();
+                bllDV.ValidarIntegridad(todos, "Usuario");
+            }
+            catch (Exception ex)
+            {
+                Servicio_Usuario usuarioAdmin = _dalUsuario.ObtenerUsuarioPorLogin(nombreUsuario);
+
+                if (usuarioAdmin.IdRol != null && usuarioAdmin.IdRol == "R1")
+                {
+                    // Creamos la sesión en ModoEmergencia
+                    usuarioAdmin.ModoEmergencia = true; // Asegurate que esta propiedad exista en Servicio_Usuario
+                    _sm.CrearSesion(usuarioAdmin);
+
+                    _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 3);
+                    return true;
+                }
+
+                // Si hay una alteración, el sistema se detiene aquí y no deja ni intentar el login
+                _bitacoraServicio.RegistrarBitacora("Violación de integridad detectada: " + ex.Message, nombreUsuario, "Seguridad", 3);
+                throw new Exception("Seguridad del sistema comprometida. Contacte al administrador.");
+            }
 
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
             if (intentos >= 3)
@@ -341,10 +371,10 @@ namespace BLL
                 
                 _dalUsuario.CambiarEstadoUsuario(dni, activo);
 
-               
+                Servicio_Usuario usuario = _dalUsuario.ObtenerUsuario(dni);
+                List<Servicio_Usuario> todos = this.ListarUsuarios();
+                _bllDV.ActualizarDigitos(usuario, todos, "Usuario");
                 _bitacoraServicio.RegistrarBitacora(activo == 1 ? "Activar Usuario" : "Desactivar Usuario", ObtenerUsuario(dni).Login, "Administración", 3);
-
-                //Faltaría agregar acá el recálculo del Dígito Verificador
 
                 return true; 
             }
@@ -374,6 +404,8 @@ namespace BLL
 
                 Servicio_Usuario admin =_sm.GetUsuarioActual();
 
+                List<Servicio_Usuario> todos = this.ListarUsuarios();
+                _bllDV.ActualizarDigitos(usuario, todos, "Usuario");
                 _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administración",3);
 
                 return true;
@@ -396,16 +428,23 @@ namespace BLL
             Servicio_Usuario usuarioActual = session.GetUsuarioActual();
 
             if (usuarioActual == null) return false;
-            string hashActual = _encriptadorServicio.CifrarContraseña(claveActual);
+            string hashActual = _encriptadorServicio.CalcularHash(claveActual);
 
             Servicio_Usuario usuarioValidado = _dalUsuario.AutenticarUsuario(usuarioActual.Login, hashActual);
             if (usuarioValidado == null)
             {
                 return false; 
             }
-            string nuevoHash = _encriptadorServicio.CifrarContraseña(claveNueva);
+            string nuevoHash = _encriptadorServicio.CalcularHash(claveNueva);
 
             bool actualizacionExitosa = _dalUsuario.ActualizarClave(usuarioActual.Login, nuevoHash);
+            if (actualizacionExitosa)
+            {
+
+                Servicio_Usuario usuario = _dalUsuario.ObtenerUsuarioPorLogin(usuarioActual.Login);
+                List<Servicio_Usuario> todos = this.ListarUsuarios();
+                _bllDV.ActualizarDigitos(usuario, todos, "Usuario");
+            }
             _bitacoraServicio.RegistrarBitacora("Cambio Clave", SessionManager.GetInstancia().GetUsuarioActual().Login, "Seguridad", 1);
             return actualizacionExitosa;
         }

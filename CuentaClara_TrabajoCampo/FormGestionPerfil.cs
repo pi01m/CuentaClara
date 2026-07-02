@@ -596,8 +596,9 @@ namespace IU
                     return;
                 }
 
-                string idFamilia = idNodoSeleccionado;
-                string nombreActual = nombreNodoSeleccionado;
+                Servicio_Familia familiaSeleccionada = (Servicio_Familia)clbFamilia.CheckedItems[0];
+                string idFamilia = familiaSeleccionada.IdRol;
+                string nombreActual = familiaSeleccionada.Nombre;
 
                 //string nuevoNombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el nuevo nombre", "Modificar Familia", nombreActual);
                 string nuevoNombre = Microsoft.VisualBasic.Interaction.InputBox(TraducirTexto("msg_IngreseNuevoNombre"), TraducirTexto("msg_ModificarFamilia"), nombreActual);
@@ -832,24 +833,29 @@ namespace IU
                     MessageBox.Show("Por favor, seleccione un rol del combo.");
                     return;
                 }
+                Servicio_Familia rolSeleccionado = (Servicio_Familia)cmbRol.SelectedItem;
 
+                string idRol = rolSeleccionado.IdRol;
+                string nombreActual = rolSeleccionado.Nombre;
                 //string nuevoNombre = Microsoft.VisualBasic.Interaction.InputBox("Nuevo nombre del Rol", "Modificar Rol", nombreNodoSeleccionado);
                 string nuevoNombre = Microsoft.VisualBasic.Interaction.InputBox(
                         TraducirTexto("msg_NuevoNombreRol"),
                         TraducirTexto("msg_ModificarRol"),
-                        nombreNodoSeleccionado
+                        nombreActual
                     );
 
                 if (string.IsNullOrWhiteSpace(nuevoNombre)) return;
 
-                if (nuevoNombre.ToUpper() != nombreNodoSeleccionado.ToUpper() && bllRol.ExisteNombre(nuevoNombre))
+                if (string.IsNullOrWhiteSpace(nuevoNombre) || nuevoNombre == nombreActual) return;
+
+                if (nuevoNombre.ToUpper() != nombreActual.ToUpper() && bllRol.ExisteNombre(nuevoNombre))
                 {
                     //MessageBox.Show("Ya existe un Rol con ese nombre. Elija otro.");
                     MessageBox.Show(TraducirTexto("msg_RolYaExisteNombre"));
                     return;
                 }
 
-                bllRol.ModificarRol(idNodoSeleccionado, nuevoNombre);
+                bllRol.ModificarRol(idRol, nuevoNombre);
 
                 //MessageBox.Show("Rol modificado correctamente.");
                 MessageBox.Show(TraducirTexto("msg_RolModificadoCorrectamente"));
@@ -1233,10 +1239,9 @@ namespace IU
                             CrearFamilia();
                         break;
                     case "MODIFICAR":
-                        if (tipoNodoSeleccionado == "ROL")
-                            ModificarRol();
-                        else
-                            ModificarFamilia();
+                        if (radioBtn_Rol.Checked) ModificarRol();
+                        else ModificarFamilia();
+                        
                         break;
                     case "ELIMINAR":
                         if (tipoNodoSeleccionado == "ROL")

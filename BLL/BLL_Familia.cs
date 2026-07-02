@@ -27,28 +27,67 @@ namespace BLL
             bllPermiso = new BLL_Permiso();
         }
 
-        public void Guardar(Servicio_Familia familia)
-            
+        public void Guardar(Servicio_Familia familia, List<string> itemsAsignadosIniciales)
         {
             if (string.IsNullOrWhiteSpace(familia.Nombre))
-
-            {
-               
                 throw new Exception("Ingrese un nombre.");
-            }
-                    
 
-            if (dal.ExisteNombre( familia.Nombre))
-               
-            {
+            if (dal.ExisteNombre(familia.Nombre))
                 throw new Exception("Ya existe una familia con ese nombre.");
-                    
+
+            if (itemsAsignadosIniciales == null || itemsAsignadosIniciales.Count < 2)
+            {
+                throw new Exception("Una familia no puede crearse vacía. Debe seleccionar al menos dos permisos o subfamilias iniciales.");
             }
 
-            dal.Guardar( familia.IdRol,familia.Nombre);
+            List<string> permisosVistos = new List<string>();
+
+            foreach (string idItem in itemsAsignadosIniciales)
+            {
+                Servicio_Familia subFam = this.BuscarFamilia(idItem);
+
+                if (subFam != null)
+                {
+      
+                    Servicio_Familia famCompleta = this.ObtenerFamiliaCompleta(idItem);
+                    List<Servicio_Permiso> permisosDeSubfamilia = ObtenerTodosLosPermisos(famCompleta);
+
+                    foreach (Servicio_Permiso p in permisosDeSubfamilia)
+                    {
+                        if (permisosVistos.Contains(p.IdRol))
+                        {
+                            throw new Exception($"Error de integridad: La selección es redundante. El permiso '{p.Nombre}' está repetido dentro de las familias seleccionadas.");
+                        }
+                        permisosVistos.Add(p.IdRol);
+                    }
+                }
+                else
+                {
+ 
+                    if (permisosVistos.Contains(idItem))
+                    {
+                        throw new Exception("Error de integridad: Ha seleccionado un permiso suelto que ya está contenido dentro de una de las familias seleccionadas.");
+                    }
+                    permisosVistos.Add(idItem);
+                }
+            }
+
+            dal.Guardar(familia.IdRol, familia.Nombre);
+
+            foreach (string idItem in itemsAsignadosIniciales)
+            {
+                if (this.BuscarFamilia(idItem) != null)
+                {
+                    this.AsignarSubFamilia(familia.IdRol, idItem);
+                }
+                else
+                {
+                    this.AsignarPermiso(familia.IdRol, idItem);
+                }
+            }
+
             bllBitacora.RegistrarBitacora("Alta Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
-        
 
         private void CargarHijosRecursivo(Servicio_Familia familia)
         {
@@ -90,79 +129,221 @@ namespace BLL
 
         }
 
-        public void Eliminar(string idFamilia)
-            
+        public void Eliminar(string idFamilia)  
         {
-            if (string.IsNullOrWhiteSpace( idFamilia))
-               
+            if (string.IsNullOrWhiteSpace(idFamilia))
+                throw new Exception("Seleccione una familia para eliminar.");
+
+            List<string> usosDetectados = new List<string>();
+
+            List<Servicio_Familia> todosLosRoles = dalRol.ListarRoles();
+            foreach (var rol in todosLosRoles)
             {
-                throw new Exception( "Seleccione una familia.");
+                List<Servicio_Familia> familiasDelRol = dalRol.ObtenerFamiliasPorRol(rol.IdRol);
+                if (familiasDelRol.Any(f => f.IdRol == idFamilia))
+                {
+                    usosDetectados.Add($"Rol: {rol.Nombre}");
+                }
             }
-                   
+
+            List<Servicio_Familia> todasLasFamilias = dal.ListarFamilias();
+            foreach (var padre in todasLasFamilias)
+            {
+
+                if (padre.IdRol == idFamilia) continue;
+
+                Servicio_Familia famCompleta = this.ObtenerFamiliaCompleta(padre.IdRol);
+                if (BuscarFamiliaRecursiva(famCompleta, idFamilia))
+                {
+                    usosDetectados.Add($"Familia Padre: {padre.Nombre}");
+                }
+            }
+
+            if (usosDetectados.Count > 0)
+            {
+                throw new Exception("No se puede eliminar la familia porque está siendo utilizada por:\n"
+                                    + string.Join("\n", usosDetectados.Distinct()));
+            }
 
             dal.Eliminar(idFamilia);
             bllBitacora.RegistrarBitacora("Baja Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
         }
 
-        public void AsignarPermiso( string idFamilia,string idPermiso)
- 
+        public void AsignarPermiso(string idFamilia, string idPermiso)
+
         {
-            if (string.IsNullOrWhiteSpace(idFamilia))throw new Exception("Seleccione una familia.");
+            if (string.IsNullOrWhiteSpace(idFamilia)) throw new Exception("Seleccione una familia.");
 
             if (string.IsNullOrWhiteSpace(idPermiso))
                 throw new Exception("Seleccione un permiso.");
-                    
 
-            dal.AsignarPermiso(idFamilia,idPermiso);
+            if (this.TienePermiso(idFamilia, idPermiso))
+            {
+                throw new Exception("Error de redundancia: La familia ya contiene este permiso (directamente o heredado de una subfamilia).");
+            }
+            List<string> idsRolesAfectados = ObtenerRolesQueContienenFamilia(idFamilia); /////// REDUNDANCIA PARA ARRIBA ROLLLLLL
+            List<string> rolesConConflicto = new List<string>();
+
+            foreach (string idRol in idsRolesAfectados)
+            {
+                // Si el rol que usa esta familia ya tiene este permiso por otro lado... ¡Choque!
+                if (RolTienePermiso(idRol, idPermiso))
+                {
+                    rolesConConflicto.Add(dalRol.ObtenerNombreRol(idRol));
+                }
+            }
+
+            if (rolesConConflicto.Count > 0)
+            {
+                throw new Exception($"Operación cancelada. Si agrega este permiso a la familia, generará redundancia en los siguientes Roles que ya lo poseen por otra vía: {string.Join(", ", rolesConConflicto)}.");
+            }
+            dal.AsignarPermiso(idFamilia, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autoriz ación", 1);
 
         }
+        private List<Servicio_Permiso> ObtenerPermisosDeFamiliaRecursivo(Servicio_Familia familia)
+        {
+            List<Servicio_Permiso> lista = new List<Servicio_Permiso>();
+            if (familia.ObtenerHijos() == null) return lista;
 
-        public void AsignarSubFamilia(string idPadre,string idHija)
- 
+            foreach (var hijo in familia.ObtenerHijos())
+            {
+                if (hijo is Servicio_Permiso p) lista.Add(p);
+                else if (hijo is Servicio_Familia f) lista.AddRange(ObtenerPermisosDeFamiliaRecursivo(f));
+            }
+            return lista;
+        }
+        private List<Servicio_Permiso> ObtenerTodosLosPermisos(Servicio_Familia familia)
+        {
+            List<Servicio_Permiso> listaPlana = new List<Servicio_Permiso>();
+
+            if (familia.ObtenerHijos() != null)
+            {
+                foreach (Servicio_Rol hijo in familia.ObtenerHijos())
+                {
+                    if (hijo is Servicio_Permiso permiso)
+                    {
+                        listaPlana.Add(permiso);
+                    }
+                    else if (hijo is Servicio_Familia subFamilia)
+                    {
+
+                        listaPlana.AddRange(ObtenerTodosLosPermisos(subFamilia));
+                    }
+                }
+            }
+            return listaPlana;
+        }
+        public void AsignarSubFamilia(string idPadre, string idHija)
+
         {
             if (string.IsNullOrWhiteSpace(idPadre))
                 throw new Exception("Seleccione familia padre.");
-                    
+
 
             if (string.IsNullOrWhiteSpace(idHija))
-                throw new Exception( "Seleccione familia hija.");
-                   
+                throw new Exception("Seleccione familia hija.");
+
 
             if (idPadre == idHija)
-                throw new Exception( "No puede asignarse a sí misma.");
-           
+                throw new Exception("No puede asignarse a sí misma.");
+
             if (TieneFamilia(idHija, idPadre))
                 throw new Exception("Error: Esto crearía un ciclo infinito de familias.");
 
-
             Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
+            List<string> permisosRedundantes = new List<string>();
+            List<Servicio_Permiso> todosLosPermisosHija = ObtenerTodosLosPermisos(familiaHijaCompleta);
 
-    
-           if (familiaHijaCompleta != null && familiaHijaCompleta.ObtenerHijos() != null)
-           {
-
-              foreach (Servicio_Rol itemHijo in familiaHijaCompleta.ObtenerHijos())
-              {
-            
-               if (!(itemHijo is Servicio_Familia))
-               {
-                
-                  if (this.TienePermiso(idPadre, itemHijo.IdRol))
-                  {
-                    
-                    this.DesasignarPermiso(idPadre, itemHijo.IdRol);
-                  }
+            if (todosLosPermisosHija != null)
+            {
+                foreach (Servicio_Permiso permiso in todosLosPermisosHija)
+                {
+                    // Verificamos si el padre ya tiene ese permiso en cualquier nivel
+                    if (this.TienePermiso(idPadre, permiso.IdRol))
+                    {
+                        // Agregamos Contains para que no lo sume 2 veces si hay un error previo en BD
+                        if (!permisosRedundantes.Contains(permiso.Nombre))
+                        {
+                            permisosRedundantes.Add(permiso.Nombre);
+                        }
+                    }
                 }
-              }
-           }  
+            }
+            List<string> idsRolesAfectados = ObtenerRolesQueContienenFamilia(idPadre);
+            List<string> rolesConConflicto = new List<string>();
 
-            dal.AsignarSubFamilia(idPadre, idHija); 
+            foreach (string idRol in idsRolesAfectados)
+            {
+                foreach (var permiso in todosLosPermisosHija)
+                {
+                    if (RolTienePermiso(idRol, permiso.IdRol))
+                    {
+                        string nombreRol = dalRol.ObtenerNombreRol(idRol);
+                        if (!rolesConConflicto.Contains(nombreRol))
+                        {
+                            rolesConConflicto.Add(nombreRol);
+                        }
+                    }
+                }
+            }
+
+            if (rolesConConflicto.Count > 0)
+            {
+                throw new Exception($"Operación cancelada. La familia hija contiene permisos que ya existen en los siguientes Roles (los cuales usan la familia padre): {string.Join(", ", rolesConConflicto)}.");
+            }
+            if (permisosRedundantes.Count > 0)
+            {
+                string mensaje = "No se puede realizar la asignación. Los siguientes permisos de la familia hija ya están presentes en el padre: "
+                                 + string.Join(", ", permisosRedundantes) + ".";
+
+                throw new Exception(mensaje);
+            }
+
+            dal.AsignarSubFamilia(idPadre, idHija);
             bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
         }
+        private bool RolTienePermiso(string idRol, string idPermiso)
+        {
+            if (dalRol.ExistePermiso(idRol, idPermiso)) return true;
 
-       
+            List<Servicio_Familia> familiasDelRol = dalRol.ObtenerFamiliasPorRol(idRol);
+            foreach (var fam in familiasDelRol)
+            {
+                Servicio_Familia famCompleta = this.ObtenerFamiliaCompleta(fam.IdRol);
+                if (this.TienePermisoRecursivo(famCompleta, idPermiso)) return true;
+            }
+            return false;
+        }
+        private List<string> ObtenerRolesQueContienenFamilia(string idFamiliaBuscada)
+        {
+            List<string> rolesAfectados = new List<string>();
+
+            List<Servicio_Familia> todosLosRoles = dalRol.ListarRoles();
+
+            foreach (var rol in todosLosRoles)
+            {
+                List<Servicio_Familia> familiasDelRol = dalRol.ObtenerFamiliasPorRol(rol.IdRol);
+                foreach (var fam in familiasDelRol)
+                {
+                    if (fam.IdRol == idFamiliaBuscada)
+                    {
+                        rolesAfectados.Add(rol.IdRol);
+                        break;
+                    }
+
+                    Servicio_Familia famCompleta = this.ObtenerFamiliaCompleta(fam.IdRol);
+                    if (this.BuscarFamiliaRecursiva(famCompleta, idFamiliaBuscada))
+                    {
+                        rolesAfectados.Add(rol.IdRol);
+                        break;
+                    }
+                }
+            }
+            return rolesAfectados;
+        }
+
         private Servicio_Familia BuscarFamilia(string idFamilia)
         {
             List<Servicio_Familia> familias = dal.ListarFamilias();

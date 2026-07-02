@@ -126,7 +126,7 @@ namespace CuentaClara_TrabajoCampo
 
         public void ActualizarIdioma()
         {
-            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -135,7 +135,7 @@ namespace CuentaClara_TrabajoCampo
             if (idioma == null)
                 return;
 
-           TraducirControles(this.Controls, idioma);
+            TraducirControles(this.Controls, idioma);
 
         }
 
@@ -213,6 +213,11 @@ namespace CuentaClara_TrabajoCampo
         }
 
         private void btnVencimientos_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelUsuario_Paint(object sender, PaintEventArgs e)
         {
 
         }

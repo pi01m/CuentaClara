@@ -54,19 +54,19 @@ namespace IU
             bllFamilia = new BLL_Familia();
             bllPermiso = new BLL_Permiso();
             bllRol = new BLL_Rol();
-           
-            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual(); 
+
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
             RefrescarSesionUsuario();
             BloquearBotonesSegunPermisos();
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
             var bllUsuario = new BLL_Usuario();
 
-            
 
-            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion( SessionManager.GetInstancia().GetUsuarioActual().Login);
-            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);   
- 
+
+            var usuarioActualizado = bllUsuario.RecargarUsuarioSesion(SessionManager.GetInstancia().GetUsuarioActual().Login);
+            SessionManager.GetInstancia().SetUsuarioActual(usuarioActualizado);
+
             label5.Text = $"{usuarioActual.Login} -  {nombreLegibleDelRol}";
 
             CargarCombos();
@@ -83,23 +83,23 @@ namespace IU
         }
         private void DeshabilitarBotones()
         {
-        
+
             btnCrear.Enabled = false;
             btnModificar.Enabled = false;
             btnEliminar.Enabled = false;
 
             btnAsignarPermiso.Enabled = false;
             btnAsignarFamilia.Enabled = false;
-            button1.Enabled = false; 
+            button1.Enabled = false;
             btnAplicar.Enabled = false;
 
-            btnSalir.Enabled = true; 
+            btnSalir.Enabled = true;
 
-  
+
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
 
-          
+
             cmbRol.Enabled = false;
             cmbFamilia.Enabled = false;
             cmbFamiliaHija.Enabled = false;
@@ -107,11 +107,11 @@ namespace IU
             clbPermiso.Enabled = false;
             clbFamilia.Enabled = false;
 
-    
+
             treeView1.Enabled = false;
             treeViewVistaPrevia.Enabled = false;
 
-       
+
             DesmarcarCheckedLists();
 
             modoActual = "";
@@ -145,7 +145,7 @@ namespace IU
                 modoActual == "ELIMINAR" ||
                 modoActual == "DESASIGNAR";
 
-         
+
 
             btnCrear.Enabled =
                 Tiene("Rol_Crear") || Tiene("Familia_Crear");
@@ -176,12 +176,12 @@ namespace IU
             btnAplicar.Enabled =
                 enModoEdicion || enModoAsignacion;
 
-         
+
 
             radioBtn_Rol.Enabled = enModoEdicion || enModoAsignacion;
             radioBtn_Familia.Enabled = enModoEdicion || enModoAsignacion;
 
-        
+
 
             cmbRol.Enabled = (modoActual == "ASIGNAR_PERMISO" && radioBtn_Rol.Checked);
             cmbFamilia.Enabled = radioBtn_Familia.Checked &&
@@ -370,13 +370,13 @@ namespace IU
 
             TreeNode nodo = treeView1.SelectedNode;
 
-            
+
             while (nodo.Parent != null)
             {
                 nodo = nodo.Parent;
             }
 
-           
+
             if (nodo.Text.StartsWith("[ROL]"))
             {
                 return nodo.Tag.ToString();
@@ -388,21 +388,30 @@ namespace IU
         {
             try
             {
-                if (clbFamilia.CheckedItems.Count == 0)
-                {
-                    //MessageBox.Show("Seleccione al menos una familia de la lista.");
-                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamilia"));
-                    return;
-                }
 
-                if (radioBtn_Rol.Checked)
+
+                if (radioBtn_Rol.Checked) //Asignar Familia a ROL
                 {
+
+                    if (clbFamilia.CheckedItems.Count == 0)
+                    {
+                        //MessageBox.Show("Seleccione al menos una familia de la lista.");
+                        MessageBox.Show(TraducirTexto("msg_SeleccioneFamilia"));
+                        return;
+                    }
+
                     BLL_Rol bllRol = new BLL_Rol();
                     string idRol = cmbRol.SelectedValue.ToString();
 
                     foreach (Servicio_Familia item in clbFamilia.CheckedItems)
                     {
                         string idFamilia = item.IdRol;
+                        if (bllRol.ExisteRedundanciaPermisos(idRol, idFamilia))
+                        {
+                            MessageBox.Show("Error de integridad: La familia seleccionada contiene permisos que ya posee este Rol. Por favor, elimine la redundancia antes de asignar.",
+                                            "Redundancia detectada", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            continue; // Saltamos este elemento
+                        }
                         string nombreFamilia = item.Nombre;
 
                         string conflictos = bllRol.VerificarRedundanciasRol(idRol, idFamilia);
@@ -410,15 +419,8 @@ namespace IU
 
                         if (!string.IsNullOrEmpty(conflictos))
                         {
-                            DialogResult r = MessageBox.Show(
-                                 string.Format(
-                                     TraducirTexto("msg_FamiliaContienePermisos"),
-                                     nombreFamilia,
-                                     conflictos),
-                                 TraducirTexto("msg_ConflictoPermisos"),
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
-
+                            DialogResult r = MessageBox.Show(string.Format(TraducirTexto("msg_FamiliaContienePermisos"), nombreFamilia, conflictos), TraducirTexto("msg_ConflictoPermisos"), MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
                             if (r == DialogResult.Yes)
                             {
                                 limpiar = true;
@@ -427,7 +429,6 @@ namespace IU
                             {
                                 continue;
                             }
-
 
                         }
                         bllRol.AsignarFamiliaARol(idRol, idFamilia, limpiar);
@@ -439,31 +440,52 @@ namespace IU
                 }
                 else if (radioBtn_Familia.Checked)
                 {
+                    if (cmbFamilia.SelectedValue == null || cmbFamiliaHija.SelectedValue == null)
+                    {
+                        MessageBox.Show("Por favor, seleccione una familia padre y una hija en los combos.");
+                        return;
+                    }
                     BLL_Familia bllFamilia = new BLL_Familia();
                     string idPadre = cmbFamilia.SelectedValue.ToString();
                     string idHija = cmbFamiliaHija.SelectedValue.ToString();
 
-                    // 2. Buscamos el contexto del Rol (el padre de toda la jerarquía)
-                    string idRolContexto = ObtenerIdRolDesdeArbol();
-
-                    if (string.IsNullOrEmpty(idRolContexto))
+                    if (idPadre == idHija)
                     {
-                        MessageBox.Show("Por favor, seleccione un nodo dentro de un Rol en el árbol.");
+                        MessageBox.Show("Una familia no puede asignarse a sí misma.");
                         return;
                     }
 
-                    // 3. VALIDAMOS ANTES DE HACER NADA EN LA BASE DE DATOS
-                    BLL_Rol bllRolValidacion = new BLL_Rol();
-                    if (bllRolValidacion.EsRedundanteAsignar(idRolContexto, idHija))
+                    // Validación de redundancia antes de asignar
+                    if (bllFamilia.TieneFamilia(idPadre, idHija))
                     {
-                        MessageBox.Show("Error: La familia ya existe en la jerarquía de este perfil.",
-                                        "Error de integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Esta relación ya existe o causaría un ciclo.");
                         return;
                     }
+
                     bllFamilia.AsignarSubFamilia(idPadre, idHija);
-
                     MessageBox.Show(TraducirTexto("msg_FamiliaAsignadaCorrectamente"));
                     LimpiarModo();
+                    //// 2. Buscamos el contexto del Rol (el padre de toda la jerarquía)
+                    //string idRolContexto = ObtenerIdRolDesdeArbol();
+
+                    //if (string.IsNullOrEmpty(idRolContexto))
+                    //{
+                    //    MessageBox.Show("Por favor, seleccione un nodo dentro de un Rol en el árbol.");
+                    //    return;
+                    //}
+
+                    //// 3. VALIDAMOS ANTES DE HACER NADA EN LA BASE DE DATOS
+                    //BLL_Rol bllRolValidacion = new BLL_Rol();
+                    //if (bllRolValidacion.EsRedundanteAsignar(idRolContexto, idHija))
+                    //{
+                    //    MessageBox.Show("Error: La familia ya existe en la jerarquía de este perfil.",
+                    //                    "Error de integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //    return;
+                    //}
+                    //bllFamilia.AsignarSubFamilia(idPadre, idHija);
+
+                    //MessageBox.Show(TraducirTexto("msg_FamiliaAsignadaCorrectamente"));
+                    //LimpiarModo();
                 }
                 else
                 {
@@ -528,7 +550,7 @@ namespace IU
 
                     foreach (Servicio_Permiso item in clbPermiso.CheckedItems)
                     {
-                        string idPermiso = item.IdRol; 
+                        string idPermiso = item.IdRol;
 
                         if (!bllFamilia.TienePermiso(idFamilia, idPermiso))
                         {
@@ -563,17 +585,14 @@ namespace IU
         {
             try
             {
-                if (tipoNodoSeleccionado != "FAMILIA")
+                if (clbFamilia.CheckedItems.Count == 0)
                 {
-
-                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaArbol"));
+                    MessageBox.Show("Por favor, seleccione una familia en la lista de la izquierda.");
                     return;
                 }
-
-                if (string.IsNullOrEmpty(idNodoSeleccionado))
+                if (clbFamilia.CheckedItems.Count > 1)
                 {
-                    //MessageBox.Show("Seleccione una familia del árbol.");
-                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaArbolSimple"));
+                    MessageBox.Show("Por favor, seleccione solo una familia a la vez para modificar.");
                     return;
                 }
 
@@ -607,29 +626,37 @@ namespace IU
             }
         }
 
+    
+
         private void EliminarFamilia()
         {
             try
             {
-                if (tipoNodoSeleccionado != "FAMILIA")
+                if (clbFamilia.CheckedItems.Count == 0)
                 {
-                    //MessageBox.Show("Por favor, seleccione una Familia [F] del árbol para eliminar.");
-                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaArbolEliminar"));
+                    MessageBox.Show("Por favor, seleccione al menos una familia en la lista de la izquierda.");
                     return;
                 }
 
-                string idFamilia = idNodoSeleccionado;
-                string nombre = nombreNodoSeleccionado;
+                if (clbFamilia.CheckedItems.Count > 1)
+                {
+                    MessageBox.Show("Por favor, seleccione solo una familia a la vez para eliminar.");
+                    return;
+                }
+
+                Servicio_Familia familiaAEliminar = (Servicio_Familia)clbFamilia.CheckedItems[0];
 
                 BLL_Familia bllFamilia = new BLL_Familia();
-                bllFamilia.Eliminar(idFamilia);
+                bllFamilia.Eliminar(familiaAEliminar.IdRol);
 
                 MessageBox.Show(TraducirTexto("msg_FamiliaEliminadaCorrectamente"));
                 LimpiarModo();
+                CargarCombos();
+                MostrarArbol();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -637,51 +664,49 @@ namespace IU
         {
             try
             {
-
+                // 1. Validación en la Interfaz: Controlamos que haya tildado mínimo 2 elementos 
+                // para no hacer trabajar a la BLL innecesariamente.
                 if ((clbPermiso.CheckedItems.Count + clbFamilia.CheckedItems.Count) < 2)
                 {
-                    //MessageBox.Show("Una familia debe contener al menos 2 componentes desde su creación. Tilde más elementos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    MessageBox.Show(
-                         TraducirTexto("msg_FamiliaMinComponentes"),
-                         TraducirTexto("msg_Validacion"),
-                         MessageBoxButtons.OK,
-                         MessageBoxIcon.Warning);
+                    MessageBox.Show(TraducirTexto("msg_FamiliaMinComponentes"), TraducirTexto("msg_Validacion"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     return;
                 }
 
-                //string nombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese nombre de la familia", "Nueva Familia");
-                string nombre = Microsoft.VisualBasic.Interaction.InputBox(
-                        TraducirTexto("msg_IngreseNombreFamilia"),
-                        TraducirTexto("msg_NuevaFamilia")
-                    );
+                // 2. Pedimos el nombre al usuario
+                string nombre = Microsoft.VisualBasic.Interaction.InputBox(TraducirTexto("msg_IngreseNombreFamilia"), TraducirTexto("msg_NuevaFamilia"));
 
                 if (string.IsNullOrWhiteSpace(nombre)) return;
 
-                BLL_Familia bllFamilia = new BLL_Familia();
-                if (bllFamilia.ExisteNombre(nombre))
-                {
-                    //MessageBox.Show("Ya existe una familia con ese nombre.");
-                    MessageBox.Show(TraducirTexto("msg_FamiliaYaExiste"));
-                    return;
-                }
+                // 3. Ya no validamos el nombre acá, de eso se encarga la BLL. 
+                // Tampoco instanciamos y guardamos la familia acá. 
+                // Vamos a preparar la "caja" con todo lo que el usuario eligió.
 
+                List<string> elementosSeleccionados = new List<string>();
 
-                string idNuevaFamilia = Guid.NewGuid().ToString();
-                Servicio_Familia familia = new Servicio_Familia(idNuevaFamilia, nombre);
-                bllFamilia.Guardar(familia);
-
-
+                // Agregamos los IDs de los Permisos
                 foreach (Servicio_Permiso perm in clbPermiso.CheckedItems)
                 {
-                    bllFamilia.AsignarPermiso(idNuevaFamilia, perm.IdRol);
+                    elementosSeleccionados.Add(perm.IdRol);
                 }
 
-                // CORREGIDO: Guardar Subfamilias (Recursividad)
+                // Agregamos los IDs de las Familias (Subfamilias)
                 foreach (Servicio_Familia subFam in clbFamilia.CheckedItems)
                 {
-                    bllFamilia.AsignarSubFamilia(idNuevaFamilia, subFam.IdRol);
+                    elementosSeleccionados.Add(subFam.IdRol);
                 }
 
+                // 4. Preparamos el objeto Familia principal
+                string idNuevaFamilia = Guid.NewGuid().ToString();
+                Servicio_Familia familia = new Servicio_Familia(idNuevaFamilia, nombre);
+
+                // 5. Instanciamos la BLL y le mandamos el paquete completo
+                BLL_Familia bllFamilia = new BLL_Familia();
+
+                // Llamamos al nuevo método Guardar que armamos (Familia + Lista de IDs)
+                bllFamilia.Guardar(familia, elementosSeleccionados);
+
+                // Si la BLL no arrojó ninguna Excepción, significa que TODO salió bien
                 MessageBox.Show(TraducirTexto("msg_FamiliaGuardadaCorrectamente"));
                 LimpiarModo();
                 CargarCombos();
@@ -689,7 +714,9 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                // Si falló el nombre, si falló la cantidad mínima en la BLL, o si hubo una 
+                // redundancia no resuelta, el error salta acá y LA FAMILIA NO SE CREÓ EN LA BD.
+                MessageBox.Show(ex.Message, TraducirTexto("msg_Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -756,52 +783,29 @@ namespace IU
         {
             try
             {
-
                 if (clbPermiso.CheckedItems.Count == 0 && clbFamilia.CheckedItems.Count == 0)
                 {
-                    //MessageBox.Show("No se permiten Roles vacíos. Tilde al menos un Permiso o una Familia inicial antes de continuar.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    MessageBox.Show(
-                          TraducirTexto("msg_RolVacioNoPermitido"),
-                          TraducirTexto("msg_Validacion"),
-                          MessageBoxButtons.OK,
-                          MessageBoxIcon.Warning
-                      );
-                    return;
+                    MessageBox.Show(TraducirTexto("msg_RolVacioNoPermitido"), TraducirTexto("msg_Validacion"), MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
                 }
 
-                //string nombre = Microsoft.VisualBasic.Interaction.InputBox("Ingrese nombre del Rol", "Nuevo Rol");
                 string nombre = Microsoft.VisualBasic.Interaction.InputBox(TraducirTexto("msg_IngreseNombreRol"), TraducirTexto("msg_NuevoRol"));
-
-
                 if (string.IsNullOrWhiteSpace(nombre)) return;
-                if (bllRol.ExisteNombre(nombre))
-                {
-                    //MessageBox.Show("Ya existe un rol con ese nombre.");
-                    MessageBox.Show(TraducirTexto("msg_RolYaExiste"));
-                    return;
-                }
 
-                string idNuevoPerfil = Guid.NewGuid().ToString();
-                Servicio_Familia perfil = new Servicio_Familia(idNuevoPerfil, nombre);
-                bllRol.CrearRol(perfil);
-
-
-
-                foreach (Servicio_Familia fam in clbFamilia.CheckedItems)
-                {
-                    bllRol.AsignarFamiliaARol(idNuevoPerfil, fam.IdRol, false);
-                }
-
-                // CORREGIDO: Asignar permisos sueltos iniciales al nuevo Rol
+                List<string> permisosSeleccionados = new List<string>();
                 foreach (Servicio_Permiso perm in clbPermiso.CheckedItems)
                 {
-                    if (!bllRol.RolTienePermisoRecursivo(idNuevoPerfil, perm.IdRol))
-                    {
-                        bllRol.AsignarPermiso(idNuevoPerfil, perm.IdRol);
-                    }
+                    permisosSeleccionados.Add(perm.IdRol);
                 }
+                List<string> familiasSeleccionadas = new List<string>();
+                foreach (Servicio_Familia fam in clbFamilia.CheckedItems)
+                {
+                    familiasSeleccionadas.Add(fam.IdRol);
+                }
+                string idNuevoPerfil = Guid.NewGuid().ToString();
+                Servicio_Familia perfil = new Servicio_Familia(idNuevoPerfil, nombre);
 
-                // MessageBox.Show("Rol creado con éxito. El sistema omitió los permisos redundantes de forma automática.");
+                bllRol.CrearRol(perfil, familiasSeleccionadas, permisosSeleccionados);
+
                 MessageBox.Show(TraducirTexto("msg_RolCreadoExito"));
                 LimpiarModo();
                 CargarCombos();
@@ -809,7 +813,7 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error al crear Rol", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -817,10 +821,15 @@ namespace IU
         {
             try
             {
-                if (tipoNodoSeleccionado != "ROL")
+                //if (tipoNodoSeleccionado != "ROL")
+                //{
+                //    //MessageBox.Show("Seleccione un Perfil [ROL]");
+                //    MessageBox.Show(TraducirTexto("msg_SeleccionePerfilRol"));
+                //    return;
+                //}
+                if (cmbRol.SelectedItem == null)
                 {
-                    //MessageBox.Show("Seleccione un Perfil [ROL]");
-                    MessageBox.Show(TraducirTexto("msg_SeleccionePerfilRol"));
+                    MessageBox.Show("Por favor, seleccione un rol del combo.");
                     return;
                 }
 
@@ -871,11 +880,7 @@ namespace IU
                 //        "Confirmación",
                 //        MessageBoxButtons.YesNo);
 
-                DialogResult r =
-                    MessageBox.Show(
-                        TraducirTexto("msg_EliminarPerfil"),
-                        TraducirTexto("msg_Confirmacion"),
-                        MessageBoxButtons.YesNo);
+                DialogResult r = MessageBox.Show(TraducirTexto("msg_EliminarPerfil"), TraducirTexto("msg_Confirmacion"), MessageBoxButtons.YesNo);
 
                 bllRol.EliminarRol(idNodoSeleccionado);
 
@@ -933,7 +938,6 @@ namespace IU
             radioBtn_Rol.Checked = false;
             radioBtn_Familia.Checked = false;
 
-
             btnAsignarPermiso.Enabled = false;
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
@@ -963,13 +967,13 @@ namespace IU
 
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
-            radioBtn_Rol.Checked = false;
-            radioBtn_Familia.Checked = false;
+            radioBtn_Rol.Checked = true;
+            radioBtn_Familia.Checked = true;
 
             btnAsignarFamilia.Enabled = false;
             btnAsignarPermiso.Enabled = false;
             btnEliminar.Enabled = false;
-
+            btnCrear.Enabled = false;
             button1.Enabled = false;
 
             clbFamilia.Enabled = true;
@@ -992,21 +996,16 @@ namespace IU
             listBox1.Items.Add(TraducirTexto("lst_EliminarPaso1"));
             listBox1.Items.Add(TraducirTexto("lst_EliminarPaso2"));
 
+            treeView1.Enabled = false;
+            cmbFamilia.Enabled = false;
+            cmbFamiliaHija.Enabled = false;
+            cmbRol.Enabled = false;
+            clbPermiso.Enabled = false;
             radioBtn_Rol.Enabled = false;
             radioBtn_Familia.Enabled = false;
-            radioBtn_Rol.Checked = false;
-            radioBtn_Familia.Checked = false;
-
-            btnAsignarFamilia.Enabled = false;
-            btnAsignarPermiso.Enabled = false;
-            btnCrear.Enabled = false;
-            btnModificar.Enabled = false;
-            button1.Enabled = false;
 
             clbFamilia.Enabled = true;
-            cmbRol.Enabled = false;
-
-            cmbFamiliaHija.Enabled = false;
+            btnAplicar.Enabled = true;
             btnAplicar.Enabled = true;
         }
 
@@ -1100,6 +1099,18 @@ namespace IU
                 cmbFamiliaHija.Enabled = false;
 
             }
+            if ((modoActual == "MODIFICAR" & radioBtn_Rol.Checked))
+                {
+                listBox1.Items.Clear();
+                //listBox1.Items.Add("Modo modificar ROL");
+                //listBox1.Items.Add("1. Elija el ROL del ComboBox.");
+                //listBox1.Items.Add("3. Presione Aplicar.");
+
+                cmbRol.Enabled = true;
+                btnAplicar.Enabled = true;
+
+            }
+
         }
 
         private void radioBtn_Familia_CheckedChanged(object sender, EventArgs e)
@@ -1150,20 +1161,32 @@ namespace IU
             {
                 listBox1.Items.Clear();
                 //listBox1.Items.Add("Modo asignar familia a FAMILIA");
-                //listBox1.Items.Add("1. Elija la Familia CONTENEDORA la lista desplegable determinada.");
-                //listBox1.Items.Add("2. Elija la Familia a INSERTAR la lista desplegable determinada.");
+                //listBox1.Items.Add("1. Elija la Familia CONTENEDORA del ComboBox.");
+                //listBox1.Items.Add("2. Elija la Familia a INSERTAR del ComboBox.");
                 //listBox1.Items.Add("3. Presione Aplicar.");
 
                 listBox1.Items.Add(TraducirTexto("lst_ModoAsignarFamiliaFamilia"));
                 listBox1.Items.Add(TraducirTexto("lst_AsignarFamiliaFamiliaPaso1"));
-                listBox1.Items.Add(TraducirTexto("lst_AsignarFamiliaFamiliaPaso2"));
-                listBox1.Items.Add(TraducirTexto("lst_AsignarFamiliaFamiliaPaso3"));
+                listBox1.Items.Add(TraducirTexto("lst_AsignarFamiliaFamiliaPaso2"));//
+                listBox1.Items.Add(TraducirTexto("lst_AsignarFamiliaFamiliaPaso3"));//
 
                 cmbFamilia.Enabled = true;
                 cmbFamiliaHija.Enabled = true;
                 cmbRol.Enabled = false;
-                clbFamilia.Enabled = true;
+                clbFamilia.Enabled = false;
                 clbPermiso.Enabled = false;
+
+            }
+
+            if ((modoActual == "MODIFICAR" & radioBtn_Familia.Checked))
+            {
+                listBox1.Items.Clear();
+                //listBox1.Items.Add("Modo modificar FAMILIA");
+                //listBox1.Items.Add("1. Elija la FAMILIA de la lista.");
+                //listBox1.Items.Add("3. Presione Aplicar.");
+
+                clbFamilia.Enabled = true;
+                btnAplicar.Enabled = true;
 
             }
         }
@@ -1232,7 +1255,7 @@ namespace IU
                         break;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -1304,7 +1327,7 @@ namespace IU
 
         public void ActualizarIdioma()
         {
-            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -1349,7 +1372,7 @@ namespace IU
 
         private string TraducirTexto(string clave)
         {
-            string idIdioma =SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
 
@@ -1373,6 +1396,11 @@ namespace IU
                 (ClientSize.Width - panel1.Width) / 2,
                 (altoDisponible - panel1.Height) / 2
             );
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -252,6 +252,36 @@ namespace DAL
 
         }
 
+        public bool EstaEnUso(string idFamilia)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                // La consulta suma las apariciones en ambas tablas
+                string query = @"SELECT  (SELECT COUNT(*) FROM Familia_Rol WHERE IdFamilia = @IdFamilia) + (SELECT COUNT(*) FROM Familia_Familia WHERE IdFamiliaHija = @IdFamilia) AS TotalUsos";
+
+                // Instanciamos el DataAdapter (ADO Desconectado)
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+
+                // Agregamos el parámetro de forma segura
+                adapter.SelectCommand.Parameters.AddWithValue("@IdFamilia", idFamilia);
+
+                // Creamos la tabla en memoria
+                DataTable tabla = new DataTable();
+
+                // Fill abre la conexión, trae el resultado, vuelca en la tabla y CIERRA la conexión automáticamente
+                adapter.Fill(tabla);
+
+                // Verificamos el resultado en memoria
+                if (tabla.Rows.Count > 0)
+                {
+                    int cantidadUsos = Convert.ToInt32(tabla.Rows[0]["TotalUsos"]);
+                    return cantidadUsos > 0; // Si es mayor a 0, está en uso
+                }
+
+                return false;
+            }
+        }
+
         public bool Modificar(Servicio_Familia familia)
         {
             using (SqlConnection conn =new SqlConnection(_connectionString))

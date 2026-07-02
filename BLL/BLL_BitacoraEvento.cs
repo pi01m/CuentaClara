@@ -31,12 +31,6 @@ namespace BLL
             };
 
             bool guardadoExitoso = _dal.GuardarBitacora(bitacora);
-
-            if (!guardadoExitoso)
-            {
-              
-                throw new Exception("ALERTA CRÍTICA: No se pudo registrar el evento de seguridad en la base de datos de Auditoría. Contacte a soporte técnico.");
-            }
         }
 
         public List<Servicio_Bitacora> ListarBitacora()

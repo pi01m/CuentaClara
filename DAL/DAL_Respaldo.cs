@@ -135,12 +135,7 @@ namespace DAL
             return ruta;
         }
 
-        private string ConstruirRestoreSQL(
-            string rutaBackup,
-            string logicalData,
-            string logicalLog,
-            string archivoMDF,
-            string archivoLDF)
+        private string ConstruirRestoreSQL( string rutaBackup,string logicalData,string logicalLog, string archivoMDF,string archivoLDF)
         {
             return $@"
                 ALTER DATABASE [BD_CuentaClara]

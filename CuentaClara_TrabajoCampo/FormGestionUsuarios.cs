@@ -53,6 +53,9 @@ namespace CuentaClara_TrabajoCampo
             if (radioBtnTodosUser.Checked)
             {
                 dgvUsuarios.DataSource = bll.ListarUsuarios();
+                dgvUsuarios.Columns["Permisos"].Visible = false;
+                dgvUsuarios.Columns["ModoEmergencia"].Visible = false;
+                dgvUsuarios.Columns["ErrorIntegridad"].Visible = false;
             }
             else if (radioBtnUserActivos.Checked)
             {

@@ -14,6 +14,11 @@ namespace Servicio
             IdRol = idRol;
             Nombre = nombre;
         }
+        public virtual string ObtenerIdentificadorFila() => this.IdRol;
 
+        public virtual string ObtenerCadenaParaHash()
+        {
+            return $"{IdRol}|{Nombre}";
+        }
     }
 }

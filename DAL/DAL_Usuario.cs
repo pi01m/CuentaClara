@@ -15,8 +15,11 @@ namespace DAL
         {
             _connectionString = connectionString;
         }
+        public DAL_Usuario()
+        {
+            
+        }
 
-        
         public Servicio_Usuario AutenticarUsuario(string login, string hash)
         {
             const string sql =
@@ -250,28 +253,34 @@ namespace DAL
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                // 1. Usamos SqlDataAdapter para el modelo desconectado
                 SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario", conn);
+
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
 
-                // 2. Mapeamos cada fila a un objeto Servicio_Usuario
                 foreach (DataRow row in dt.Rows)
                 {
                     Servicio_Usuario u = new Servicio_Usuario();
-                    u.Login = row["Login"].ToString();
-                    u.Password = row["Password"].ToString();
+
                     u.Nombre = row["Nombre"].ToString();
                     u.Apellido = row["Apellido"].ToString();
-                    u.email = row["Email"].ToString();
-                    u.IdRol = row["IdRol"].ToString();
-                    u.Activo = Convert.ToInt32(row["Activo"]);
                     u.DNI = row["DNI"].ToString();
-                    // ... asigná los otros campos que tengas ...
+                    u.email = row["Email"].ToString();
+                    u.Login = row["Login"].ToString();
+                    u.Password = row["Password"].ToString();
+
+                    u.Activo = Convert.ToInt32(row["Activo"]);
+                    u.Bloqueo = Convert.ToInt32(row["Bloqueo"]);
+
+                    u.IdRol = row["IdRol"].ToString();
+
+                    if (row["Id_Idioma"] != DBNull.Value)
+                        u.Id_Idioma = row["Id_Idioma"].ToString();
 
                     lista.Add(u);
                 }
             }
+
             return lista;
         }
         public void ReiniciarIntentos(string login)

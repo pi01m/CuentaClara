@@ -12,15 +12,15 @@ namespace BLL
     {
         private Servicio_Calcular servicioCalcular;
         private BLL_BitacoraEvento bllBitacora;
-
-        // Asumiendo que tenés una DAL para acceder a la tabla DigitoVerificador
         private DAL_DigitoVerificador dalDigito;
-
+        private DAL_Usuario dalUsuario;
+        private BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
         public BLL_DigitoVerificador()
         {
             servicioCalcular = new Servicio_Calcular();
             bllBitacora = new BLL_BitacoraEvento();
             dalDigito = new DAL_DigitoVerificador();
+            dalUsuario = new DAL_Usuario();
         }
 
         // =================================================================
@@ -30,8 +30,11 @@ namespace BLL
         {
             string cadenaAcumuladaParaDVV = "";
 
-            // 1. Bucle: Por cada registro de la lista (Comprobación DVH - Fila por fila)
-            foreach (T registro in listaRegistros)
+            // CRÍTICO: Ordenar la lista siempre por el identificador para asegurar el mismo resultado
+            var listaOrdenada = listaRegistros.OrderBy(x => x.ObtenerIdentificadorFila()).ToList();
+
+            // 1. Bucle: Por cada registro de la lista ordenada (Comprobación DVH - Fila por fila)
+            foreach (T registro in listaOrdenada)
             {
                 // Llama al servicio para calcular el hash del registro
                 string dvhCalculado = servicioCalcular.CalcularDVH(registro);
@@ -46,7 +49,7 @@ namespace BLL
                     string msjError = $"Violación de integridad en la tabla '{nombreTabla}'. La fila alterada corresponde a: '{registro.ObtenerIdentificadorFila()}'.";
 
                     bllBitacora.RegistrarBitacora(msjError, "SISTEMA", "Módulo Verif DV", 3);
-                    throw new Exception(msjError);
+                    throw new ExcepcionIntegridad(nombreTabla, registro.ObtenerIdentificadorFila(), false, msjError);
                 }
 
                 // Concatena el hash válido para el posterior cálculo del DVV
@@ -65,7 +68,7 @@ namespace BLL
                 string msjError = $"Violación de integridad crítica. La tabla '{nombreTabla}' ha perdido registros o sufrió una alteración estructural masiva.";
 
                 bllBitacora.RegistrarBitacora(msjError, "SISTEMA", "Módulo Verif DV", 3);
-                throw new Exception(msjError);
+                throw new ExcepcionIntegridad(nombreTabla, "", true, msjError);
             }
 
             return true;
@@ -86,9 +89,12 @@ namespace BLL
 
             dalDigito.GuardarDVH(nuevoDVH); // Equivale a "ModificarFilaLocal" en el diagrama
 
+            // CRÍTICO: Ordenar la lista completa antes de recalcular el maestro
+            var listaOrdenada = listaCompleta.OrderBy(x => x.ObtenerIdentificadorFila()).ToList();
+
             // 2. Recalcular el DVV Maestro con todos los registros actuales
             string cadenaAcumulada = "";
-            foreach (T registro in listaCompleta)
+            foreach (T registro in listaOrdenada)
             {
                 // Se debe sumar el hash de cada entidad para armar el gran total
                 cadenaAcumulada += servicioCalcular.CalcularDVH(registro);
@@ -101,6 +107,55 @@ namespace BLL
             Servicio_DigitoVerificadorVertical nuevoDVV = new Servicio_DigitoVerificadorVertical(dvvFinal, nombreMaestro);
 
             dalDigito.GuardarDVV(nuevoDVV); // Equivale a "ModificarRegistroMaestro" en el diagrama
+        }
+
+        public void RecalcularDigitos()
+        {
+            RecalcularUsuarios();
+
+            // después agregás
+            // RecalcularRoles();
+            // RecalcularFamilias();
+            // RecalcularPermisos();
+        }
+
+        private void RecalcularUsuarios()
+        {
+            // CRÍTICO: Ordenar la lista de usuarios al traerla de la BD
+            List<Servicio_Usuario> usuarios = dalUsuario.ListarUsuarios()
+                                                        .OrderBy(u => u.ObtenerIdentificadorFila())
+                                                        .ToList();
+
+            string cadenaDVV = "";
+
+            foreach (Servicio_Usuario usuario in usuarios)
+            {
+                string dvh = servicioCalcular.CalcularDVH(usuario);
+
+                Servicio_DigitoVerificadorVertical reg = new Servicio_DigitoVerificadorVertical();
+
+                reg.Nombre = "Usuario_" + usuario.ObtenerIdentificadorFila();
+                reg.DVH = dvh;
+
+                dalDigito.GuardarDVH(reg);
+
+                cadenaDVV += dvh;
+            }
+
+            string dvv = servicioCalcular.CalcularHash(cadenaDVV);
+
+            Servicio_DigitoVerificadorVertical maestro = new Servicio_DigitoVerificadorVertical();
+
+            maestro.Nombre = "Usuario_MAESTRO";
+            maestro.DVV = dvv;
+
+            dalDigito.GuardarDVV(maestro);
+
+            bllBitacora.RegistrarBitacora(
+                "Recalculo de Dígitos Verificadores de Usuario",
+                "Sistema",
+                "Seguridad",
+                2);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,40 +10,151 @@ namespace DAL
 {
     public class DAL_Respaldo
     {
-        private readonly string connStr = $"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
-        public DAL_Respaldo(string connectionString)
+        private readonly string connMaster =
+            @"Data Source=.;Initial Catalog=master;Integrated Security=True;Trust Server Certificate=True";
+
+        private readonly string connBD =
+            @"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
+
+        public DAL_Respaldo()
         {
-            connStr = connectionString;
+
         }
+
         public void EjecutarBackup(string rutaCompleta)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(connBD))
             {
-                // Usamos un parámetro @path para evitar inyección en la ruta
                 string sql = "BACKUP DATABASE [BD_CuentaClara] TO DISK = @path";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@path", rutaCompleta);
 
                 conn.Open();
+                cmd.CommandTimeout = 0;
+
                 cmd.ExecuteNonQuery();
             }
         }
+
         public void EjecutarRestore(string rutaCompleta)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            try
             {
-                // El comando RESTORE no acepta parámetros para el DISK.
-                // La seguridad aquí se garantiza porque la BLL ya validó que es un archivo real.
-                string sql = $@"
-                ALTER DATABASE [BD_CuentaClara] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                RESTORE DATABASE [BD_CuentaClara] FROM DISK = '{rutaCompleta}' WITH REPLACE;
-                ALTER DATABASE [BD_CuentaClara] SET MULTI_USER;";
+                using (SqlConnection conn = new SqlConnection(connMaster))
+                {
+                    conn.Open();
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                    // Obtiene los nombres lógicos del backup
+                    DataTable archivos = ObtenerLogicalNames(conn, rutaCompleta);
+
+                    if (archivos.Rows.Count < 2)
+                        throw new Exception("El archivo de respaldo no es válido o está dañado.");
+
+                    string logicalData = archivos.Rows[0]["LogicalName"].ToString();
+                    string logicalLog = archivos.Rows[1]["LogicalName"].ToString();
+
+                    // Obtiene la carpeta donde SQL Server guarda las bases
+                    string rutaDatos = ObtenerRutaDatosSQL(conn);
+
+                    string archivoMDF = Path.Combine(rutaDatos, "BD_CuentaClara.mdf");
+                    string archivoLDF = Path.Combine(rutaDatos, "BD_CuentaClara_log.ldf");
+
+                    string sqlRestore = ConstruirRestoreSQL(
+                        rutaCompleta,
+                        logicalData,
+                        logicalLog,
+                        archivoMDF,
+                        archivoLDF);
+
+                    SqlCommand cmd = new SqlCommand(sqlRestore, conn);
+                    cmd.CommandTimeout = 0;
+
+                    cmd.ExecuteNonQuery();
+                }
             }
+            catch (SqlException ex)
+            {
+                // Si falló el restore intentamos volver la BD a MULTI_USER
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connMaster))
+                    {
+                        conn.Open();
+
+                        SqlCommand cmd = new SqlCommand(
+                            "ALTER DATABASE [BD_CuentaClara] SET MULTI_USER",
+                            conn);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    // Si también falla, ignoramos este error
+                }
+
+                throw new Exception(
+                    "No fue posible restaurar la base de datos.\n\n" +
+                    ex.Message);
+            }
+        }
+
+        private DataTable ObtenerLogicalNames(SqlConnection conn, string rutaCompleta)
+        {
+            DataTable archivos = new DataTable();
+
+            string sql =
+                $"RESTORE FILELISTONLY FROM DISK = '{rutaCompleta}'";
+
+            SqlDataAdapter da = new SqlDataAdapter(sql, conn);
+
+            da.Fill(archivos);
+
+            return archivos;
+        }
+
+        private string ObtenerRutaDatosSQL(SqlConnection conn)
+        {
+            SqlCommand cmd = new SqlCommand( "SELECT SERVERPROPERTY('InstanceDefaultDataPath')", conn);
+               
+            string ruta = cmd.ExecuteScalar()?.ToString();
+
+            if (string.IsNullOrEmpty(ruta))
+            {
+                cmd = new SqlCommand(@"
+                SELECT SUBSTRING(physical_name,1,
+                LEN(physical_name)-CHARINDEX('\',REVERSE(physical_name))+1)
+                FROM sys.master_files
+                WHERE database_id = DB_ID('master')
+                AND file_id = 1", conn);
+
+                ruta = cmd.ExecuteScalar().ToString();
+            }
+
+            return ruta;
+        }
+
+        private string ConstruirRestoreSQL(
+            string rutaBackup,
+            string logicalData,
+            string logicalLog,
+            string archivoMDF,
+            string archivoLDF)
+        {
+            return $@"
+                ALTER DATABASE [BD_CuentaClara]
+                SET SINGLE_USER
+                WITH ROLLBACK IMMEDIATE;
+
+                RESTORE DATABASE [BD_CuentaClara]
+                FROM DISK = '{rutaBackup}'
+                WITH REPLACE,
+                MOVE '{logicalData}' TO '{archivoMDF}',
+                MOVE '{logicalLog}' TO '{archivoLDF}';
+
+                ALTER DATABASE [BD_CuentaClara]
+                SET MULTI_USER;";
         }
     }
 }

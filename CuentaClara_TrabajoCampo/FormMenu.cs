@@ -174,9 +174,43 @@ namespace CuentaClara_TrabajoCampo
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+
+            if (usuarioActual != null && usuarioActual.ModoEmergencia && usuarioActual.ErrorIntegridad != null)
+            {
+                string mensaje =
+                 $@"ATENCIÓN
+
+                 El sistema detectó una violación de integridad.
+
+                 Tabla: {usuarioActual.ErrorIntegridad.Tabla}
+                ";
+
+                if (!usuarioActual.ErrorIntegridad.EsDVV)
+                {
+                    mensaje +=$@"Registro: {usuarioActual.ErrorIntegridad.Registro}
+            
+
+";
+                }
+
+                mensaje += 
+                $@"Detalle:{usuarioActual.ErrorIntegridad.Message}
+
+                 El sistema está funcionando en Modo Emergencia.
+
+                 Revise la base de datos antes de continuar.";
+
+                MessageBox.Show( mensaje,"Modo Emergencia",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                  
+                usuarioActual.ErrorIntegridad = null;
+                SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);
+            }
+
+
+
+
+
             BLL_Rol bllRol = new BLL_Rol();
-
-
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
             lblUsuario.Text = $"Usuario:";

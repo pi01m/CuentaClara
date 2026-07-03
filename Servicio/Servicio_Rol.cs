@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Servicio
 {
-    public abstract class Servicio_Rol
+    public abstract class Servicio_Rol: IVerificable
     {
         public string IdRol { get; set; }
         public string Nombre { get; set; }

@@ -20,15 +20,6 @@ namespace BLL
             dal = new DAL_Permiso(conn);
         }
 
-        public void CrearPermiso(Servicio_Permiso permiso)
-        {
-            if (string.IsNullOrWhiteSpace(permiso.Nombre))
-                throw new Exception("Ingrese un nombre.");
-
-            dal.CrearPermiso( permiso.IdRol,permiso.Nombre);
-                
-               
-        }
         public List<Servicio_Permiso> ObtenerPermisosPorFamilia(string idFamilia)
         {
             

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DAL
 {
@@ -55,12 +56,12 @@ namespace DAL
 
                 // Configuración de comandos parametrizados para el Update
                 da.InsertCommand = new SqlCommand("INSERT INTO DIGITOVERIFICADOR (Nombre, DVH) VALUES (@Nombre, @DVH)", conn);
-                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
-                da.InsertCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 50, "DVH");
+                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100, "Nombre");
+                da.InsertCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 100, "DVH");
 
                 da.UpdateCommand = new SqlCommand("UPDATE DIGITOVERIFICADOR SET DVH = @DVH WHERE Nombre = @Nombre", conn);
-                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
-                da.UpdateCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 50, "DVH");
+                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100, "Nombre");
+                da.UpdateCommand.Parameters.Add("@DVH", SqlDbType.NVarChar, 100, "DVH");
 
                 DataTable dt = new DataTable();
 
@@ -97,12 +98,12 @@ namespace DAL
                 da.SelectCommand.Parameters.AddWithValue("@Nombre", registroMaestro.Nombre);
 
                 da.InsertCommand = new SqlCommand("INSERT INTO DIGITOVERIFICADOR (Nombre, DVV) VALUES (@Nombre, @DVV)", conn);
-                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
-                da.InsertCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 50, "DVV");
+                da.InsertCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100, "Nombre");
+                da.InsertCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 100, "DVV");
 
                 da.UpdateCommand = new SqlCommand("UPDATE DIGITOVERIFICADOR SET DVV = @DVV WHERE Nombre = @Nombre", conn);
-                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50, "Nombre");
-                da.UpdateCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 50, "DVV");
+                da.UpdateCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100, "Nombre");
+                da.UpdateCommand.Parameters.Add("@DVV", SqlDbType.NVarChar, 100, "DVV");
 
                 DataTable dt = new DataTable();
 

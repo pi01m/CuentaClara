@@ -160,7 +160,7 @@ namespace BLL
                 List<Servicio_Usuario> todos = _dalUsuario.ListarUsuarios();
                 bllDV.ValidarIntegridad(todos, "Usuario");
             }
-            catch (Exception ex)
+            catch (ExcepcionIntegridad ex)
             {
                 Servicio_Usuario usuarioAdmin = _dalUsuario.ObtenerUsuarioPorLogin(nombreUsuario);
 
@@ -168,6 +168,7 @@ namespace BLL
                 {
                     // Creamos la sesión en ModoEmergencia
                     usuarioAdmin.ModoEmergencia = true; // Asegurate que esta propiedad exista en Servicio_Usuario
+                    usuarioAdmin.ErrorIntegridad = ex;
                     _sm.CrearSesion(usuarioAdmin);
 
                     _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 3);
@@ -176,7 +177,8 @@ namespace BLL
 
                 // Si hay una alteración, el sistema se detiene aquí y no deja ni intentar el login
                 _bitacoraServicio.RegistrarBitacora("Violación de integridad detectada: " + ex.Message, nombreUsuario, "Seguridad", 3);
-                throw new Exception("Seguridad del sistema comprometida. Contacte al administrador.");
+                throw new Exception("Se detectó un problema de integridad en la base de datos. Contacte al administrador.");
+
             }
 
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);

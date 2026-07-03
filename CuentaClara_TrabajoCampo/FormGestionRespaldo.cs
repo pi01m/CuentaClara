@@ -19,7 +19,7 @@ namespace IU
             InitializeComponent();
         }
 
-        private void btnAplicar_Click(object sender, EventArgs e)
+        private void btnAplicar_Click(object sender, EventArgs e) //boton de restaurar
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Archivos de Backup (*.bak)|*.bak";
@@ -32,7 +32,12 @@ namespace IU
                     try
                     {
                         bllRespaldo.HacerRestore(ofd.FileName);
-                        MessageBox.Show("Restauración completa. El sistema se cerrará.");
+                        MessageBox.Show(
+                        "La base de datos fue restaurada correctamente.\n\nLa aplicación se cerrará para aplicar los cambios.",
+                        "Restauración",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                         Application.Exit();
                     }
                     catch (Exception ex)
@@ -80,6 +85,33 @@ namespace IU
                 textBox1.Text = fbd.SelectedPath;
             }
 
+        }
+
+        private void btn_RecalcularDv_Click(object sender, EventArgs e)
+        {
+            DialogResult r = MessageBox.Show(
+        "Se recalcularán todos los Dígitos Verificadores.\n\n¿Desea continuar?",
+        "Confirmación",
+        MessageBoxButtons.YesNo,
+        MessageBoxIcon.Warning);
+
+            if (r != DialogResult.Yes)
+                return;
+
+            try
+            {
+                bllRespaldo.RecalcularDigitos();
+
+                MessageBox.Show(
+                    "Los Dígitos Verificadores fueron recalculados correctamente.",
+                    "Éxito",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

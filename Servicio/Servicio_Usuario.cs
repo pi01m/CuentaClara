@@ -21,15 +21,15 @@ namespace Servicio
         public string Id_Idioma { get; set; }
 
         public bool ModoEmergencia { get; set; } = false;
-        public string ObtenerIdentificadorFila()
+        public ExcepcionIntegridad ErrorIntegridad { get; set; }
+        public string ObtenerIdentificadorFila() 
         {
             return this.Login; // Usamos el Login como identificador de fila
         }
 
         public string ObtenerCadenaParaHash()
         {
-            // Incluimos campos que afectan la seguridad y el estado del usuario
-            return this.Login + this.Password + this.Nombre + this.Apellido + this.IdRol + this.Activo + this.email;
+            return $"{Login}|{Password}|{Nombre}|{Apellido}|{DNI}|{email}|{Activo}|{Bloqueo}|{IdRol}|{Id_Idioma}";
         }
     }
 }

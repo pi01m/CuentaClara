@@ -1,7 +1,9 @@
 ﻿using DAL;
 using Microsoft.Data.SqlClient;
+using Servicio;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +14,10 @@ namespace BLL
     {
         private DAL_Respaldo dal;
         private BLL_BitacoraEvento _bitacora;
+        private BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
         public  BLL_Respaldo()
         {
-            string connStr = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            dal = new DAL_Respaldo(connStr);
+             dal = new DAL_Respaldo();
             _bitacora = new BLL_BitacoraEvento();
         }
 
@@ -32,33 +34,21 @@ namespace BLL
 
         public void HacerRestore(string rutaArchivo)
         {
-     
-            if (!System.IO.File.Exists(rutaArchivo)) throw new Exception("Archivo no encontrado.");
+
+            if (!System.IO.File.Exists(rutaArchivo))
+                throw new Exception("No existe el archivo seleccionado.");
+
+            if (System.IO.Path.GetExtension(rutaArchivo).ToLower() != ".bak")
+                throw new Exception("Debe seleccionar un archivo .bak");
 
             dal.EjecutarRestore(rutaArchivo);
-            _bitacora.RegistrarBitacora("Restauración de base de datos realizada", "Sistema", "Seguridad", 3);
+            //_bitacora.RegistrarBitacora("Restauración de base de datos realizada", "Sistema", "Seguridad", 3);
         }
 
-        public void EjecutarRestore(string rutaCompleta)
+        public void RecalcularDigitos()
         {
-            string connStrMaster = "Data Source=.;Initial Catalog=master;Integrated Security=True;Trust Server Certificate=True";
-
-            using (SqlConnection cn = new SqlConnection(connStrMaster))
-            {
-                cn.Open();
-
-                
-                string sqlSetSingleUser = @"ALTER DATABASE [BD_CuentaClara] SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
-                new SqlCommand(sqlSetSingleUser, cn).ExecuteNonQuery();
-
-                
-                string sqlRestore = $@"RESTORE DATABASE [BD_CuentaClara] FROM DISK = '{rutaCompleta}' WITH REPLACE";
-                new SqlCommand(sqlRestore, cn).ExecuteNonQuery();
-
-                
-                string sqlSetMultiUser = @"ALTER DATABASE [BD_CuentaClara] SET MULTI_USER";
-                new SqlCommand(sqlSetMultiUser, cn).ExecuteNonQuery();
-            }
+            BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
+            bllDV.RecalcularDigitos();
         }
     }
 }

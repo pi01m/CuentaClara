@@ -23,12 +23,6 @@ namespace Servicio
             this.DVH = null; // Para el registro maestro, el DVH no se usa
         }
 
-        // Podés agregar otro constructor si necesitás guardar un DVH de una fila
-        public Servicio_DigitoVerificadorVertical(string nombre, string dvh, bool esFila)
-        {
-            this.Nombre = nombre;
-            this.DVH = dvh;
-            this.DVV = null;
-        }
+        
     }
 }

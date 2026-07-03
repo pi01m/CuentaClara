@@ -1,4 +1,5 @@
 ﻿using BLL;
+using Servicio;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,12 +12,13 @@ using System.Windows.Forms;
 
 namespace IU
 {
-    public partial class FormGestionRespaldo : Form
+    public partial class FormGestionRespaldo : Form, IObserverIdioma
     {
         private BLL_Respaldo bllRespaldo = new BLL_Respaldo();
         public FormGestionRespaldo()
         {
             InitializeComponent();
+            GestorIdioma.GetInstancia().Suscribir(this);
         }
 
         private void btnAplicar_Click(object sender, EventArgs e) //boton de restaurar
@@ -74,7 +76,7 @@ namespace IU
 
         private void FormGestionRespaldo_Load(object sender, EventArgs e)
         {
-
+            ActualizarIdioma();
         }
 
         private void btnSeleccionar_Click(object sender, EventArgs e)
@@ -112,6 +114,59 @@ namespace IU
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+
+        public void ActualizarIdioma()
+        {
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return;
+
+            TraducirControles(this.Controls, idioma);
+
+        }
+
+
+        private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
+        {
+            foreach (Control c in controles)
+            {
+                if (c.Tag != null)
+                {
+                    string clave = c.Tag.ToString();
+
+                    var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+                    if (etiqueta != null) c.Text = etiqueta.Texto;
+
+                }
+
+                if (c is DataGridView dgv)
+                {
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        string clave = col.Name;
+
+                        var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+                        if (etiqueta != null) col.HeaderText = etiqueta.Texto;
+
+                    }
+                }
+
+                if (c.HasChildren)
+                    TraducirControles(c.Controls, idioma);
+            }
+        }
+
+        private void FormGestionRespaldo_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GestorIdioma.GetInstancia().Desuscribir(this);
         }
     }
 }

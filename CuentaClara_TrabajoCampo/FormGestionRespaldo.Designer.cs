@@ -49,7 +49,7 @@
             btnAplicar.Name = "btnAplicar";
             btnAplicar.Size = new Size(340, 115);
             btnAplicar.TabIndex = 7;
-            btnAplicar.Tag = "btn_Aplicar";
+            btnAplicar.Tag = "btn_Restaurar";
             btnAplicar.Text = "Restaurar\r\n";
             btnAplicar.UseVisualStyleBackColor = false;
             btnAplicar.Click += btnAplicar_Click;
@@ -66,7 +66,7 @@
             button1.Name = "button1";
             button1.Size = new Size(340, 115);
             button1.TabIndex = 8;
-            button1.Tag = "btn_Aplicar";
+            button1.Tag = "btn_BackUp";
             button1.Text = "BackUp\r\n";
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
@@ -98,7 +98,7 @@
             btnSeleccionar.Name = "btnSeleccionar";
             btnSeleccionar.Size = new Size(340, 115);
             btnSeleccionar.TabIndex = 11;
-            btnSeleccionar.Tag = "btn_Cancelar";
+            btnSeleccionar.Tag = "btn_Seleccionar";
             btnSeleccionar.Text = "Seleccionar\r\n";
             btnSeleccionar.UseVisualStyleBackColor = false;
             btnSeleccionar.Click += btnSeleccionar_Click;
@@ -115,8 +115,8 @@
             btn_RecalcularDv.Name = "btn_RecalcularDv";
             btn_RecalcularDv.Size = new Size(340, 115);
             btn_RecalcularDv.TabIndex = 12;
-            btn_RecalcularDv.Tag = "btn_Aplicar";
-            btn_RecalcularDv.Text = "Recalcular Dígitos Verificadores";
+            btn_RecalcularDv.Tag = "btn_RecalcularDigitosVerificadores";
+            btn_RecalcularDv.Text = "Recalcular Digitos Verificadores";
             btn_RecalcularDv.UseVisualStyleBackColor = false;
             btn_RecalcularDv.Click += btn_RecalcularDv_Click;
             // 
@@ -124,7 +124,7 @@
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1066, 995);
+            ClientSize = new Size(1055, 1019);
             Controls.Add(btn_RecalcularDv);
             Controls.Add(btnSeleccionar);
             Controls.Add(progresoBackup);
@@ -134,6 +134,7 @@
             Margin = new Padding(7, 8, 7, 8);
             Name = "FormGestionRespaldo";
             Text = "FormGestionRespaldo";
+            FormClosed += FormGestionRespaldo_FormClosed;
             Load += FormGestionRespaldo_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -81,13 +81,19 @@ namespace BLL
         {
             try
             {
-                _dalUsuario.IncrementarIntentos(login);
+               _dalUsuario.IncrementarIntentos(login);
+ 
+                Servicio_Usuario usuarioActualizado = _dalUsuario.ObtenerUsuarioPorLogin(login);
+                List<Servicio_Usuario> todos = _dalUsuario.ListarUsuarios();
 
-                _bitacoraServicio.RegistrarBitacora("Login Incorrecto", login, "Seguridad", 1);
+                _bllDV.ActualizarDigitos(usuarioActualizado, todos, "Usuario");
+
+                _bitacoraServicio.RegistrarBitacora("Login Incorrecto - DV Actualizado", login, "Seguridad", 1);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                // Loguea el error real para saber si falló el DAL o el DV
                 return false;
             }
         }

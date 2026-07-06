@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Servicio
 {
-    public class Servicio_Familia : Servicio_Rol, IVerificable
+    public class Servicio_Familia : Servicio_Rol
     {
         private readonly List<Servicio_Rol> _listaPermisos = new List<Servicio_Rol>();
 
@@ -30,10 +30,12 @@ namespace Servicio
             return this.IdRol; // Acá usamos el ID porque las familias no tienen Login
         }
 
-        public string ObtenerCadenaParaHash()
+        // Sobrescribimos para incluir la lista de hijos en la validación
+        public override string ObtenerCadenaParaHash()
         {
-            // Si alguien le cambia el nombre a la familia por base de datos, salta el error
-            return this.IdRol + this.Nombre;
+            // Ordenamos los IDs de los hijos para que el hash sea determinista
+            string hijos = string.Join(",", _listaPermisos.OrderBy(x => x.IdRol).Select(x => x.IdRol));
+            return $"{base.ObtenerCadenaParaHash()}|{hijos}";
         }
     }
 }

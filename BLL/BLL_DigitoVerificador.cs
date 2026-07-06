@@ -14,7 +14,7 @@ namespace BLL
         private BLL_BitacoraEvento bllBitacora;
         private DAL_DigitoVerificador dalDigito;
         private DAL_Usuario dalUsuario;
-        private BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
+        
         public BLL_DigitoVerificador()
         {
             servicioCalcular = new Servicio_Calcular();
@@ -112,11 +112,9 @@ namespace BLL
         public void RecalcularDigitos()
         {
             RecalcularUsuarios();
-
-            // después agregás
-            // RecalcularRoles();
-            // RecalcularFamilias();
-            // RecalcularPermisos();
+            RecalcularRoles();
+            RecalcularFamilias();
+            
         }
 
         private void RecalcularUsuarios()
@@ -156,6 +154,64 @@ namespace BLL
                 "Sistema",
                 "Seguridad",
                 2);
+        }
+
+        private void RecalcularRoles()
+        {
+            DAL_Rol dalRol = new DAL_Rol("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            List<Servicio_Familia> roles = dalRol.ListarRoles()
+                                                 .OrderBy(r => r.ObtenerIdentificadorFila())
+                                                 .ToList();
+
+            string cadenaDVV = "";
+
+            foreach (Servicio_Familia rol in roles)
+            {
+                string dvh = servicioCalcular.CalcularDVH(rol);
+                Servicio_DigitoVerificadorVertical reg = new Servicio_DigitoVerificadorVertical
+                {
+                    Nombre = "Rol_" + rol.ObtenerIdentificadorFila(),
+                    DVH = dvh
+                };
+
+                dalDigito.GuardarDVH(reg);
+                cadenaDVV += dvh;
+            }
+
+            string dvv = servicioCalcular.CalcularHash(cadenaDVV);
+            Servicio_DigitoVerificadorVertical maestro = new Servicio_DigitoVerificadorVertical("Rol_MAESTRO", dvv);
+            dalDigito.GuardarDVV(maestro);
+
+            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Roles", "Sistema", "Seguridad", 2);
+        }
+
+        private void RecalcularFamilias()
+        {
+            DAL_Familia dalFam = new DAL_Familia("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            List<Servicio_Familia> familias = dalFam.ListarFamilias()
+                                                    .OrderBy(f => f.ObtenerIdentificadorFila())
+                                                    .ToList();
+
+            string cadenaDVV = "";
+
+            foreach (Servicio_Familia familia in familias)
+            {
+                string dvh = servicioCalcular.CalcularDVH(familia);
+                Servicio_DigitoVerificadorVertical reg = new Servicio_DigitoVerificadorVertical
+                {
+                    Nombre = "Familia_" + familia.ObtenerIdentificadorFila(),
+                    DVH = dvh
+                };
+
+                dalDigito.GuardarDVH(reg);
+                cadenaDVV += dvh;
+            }
+
+            string dvv = servicioCalcular.CalcularHash(cadenaDVV);
+            Servicio_DigitoVerificadorVertical maestro = new Servicio_DigitoVerificadorVertical("Familia_MAESTRO", dvv);
+            dalDigito.GuardarDVV(maestro);
+
+            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Familias", "Sistema", "Seguridad", 2);
         }
     }
 }

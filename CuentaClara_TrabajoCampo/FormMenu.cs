@@ -74,6 +74,7 @@ namespace CuentaClara_TrabajoCampo
             btnVencimientos.Enabled = false;
             btnTransacciones.Enabled = false;
             btnSaldos.Enabled = false;
+            button7.Enabled = false;
         }
 
         private bool ValidarPermisoEnArbol(Servicio_Rol componente, string idPermisoBuscado)
@@ -109,19 +110,19 @@ namespace CuentaClara_TrabajoCampo
             }
 
 
-            ////button1.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P1");
-            ////button2.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
-            ////button3.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P3");
+            button1.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P1");
+            button2.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
+            button3.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P3");
 
-            ////btnInicio.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INICIO");
-            ////btnCategorias.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_CATEGORIAS");
-            ////btnGraficos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_GRAFICOS");
-            ////btnNuevoEgreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_EGRESOS");
-            ////btnNuevoIngreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INGRESOS");
-            ////btnVencimientos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_VENCIMIENTOS");
-            ////btnTransacciones.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_TRANSACCIONES");
-            ////btnSaldos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_SALDOS");
-
+            btnInicio.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INICIO");
+            btnCategorias.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_CATEGORIAS");
+            btnGraficos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_GRAFICOS");
+            btnNuevoEgreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_EGRESOS");
+            btnNuevoIngreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INGRESOS");
+            btnVencimientos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_VENCIMIENTOS");
+            btnTransacciones.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_TRANSACCIONES");
+            btnSaldos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_SALDOS");
+            button7.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Acceso a Gestión de Respaldo");
         }
 
         public void ActualizarIdioma()

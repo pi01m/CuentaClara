@@ -175,6 +175,7 @@ namespace BLL
                     // Creamos la sesión en ModoEmergencia
                     usuarioAdmin.ModoEmergencia = true; // Asegurate que esta propiedad exista en Servicio_Usuario
                     usuarioAdmin.ErrorIntegridad = ex;
+                    usuarioAdmin = ConstruirPermisos(usuarioAdmin);
                     _sm.CrearSesion(usuarioAdmin);
 
                     _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 3);

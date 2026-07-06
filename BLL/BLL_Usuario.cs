@@ -172,19 +172,18 @@ namespace BLL
 
                 if (usuarioAdmin.IdRol != null && usuarioAdmin.IdRol == "R1")
                 {
-                    // Creamos la sesión en ModoEmergencia
-                    usuarioAdmin.ModoEmergencia = true; // Asegurate que esta propiedad exista en Servicio_Usuario
+                    
+                    usuarioAdmin.ModoEmergencia = true; 
                     usuarioAdmin.ErrorIntegridad = ex;
                     usuarioAdmin = ConstruirPermisos(usuarioAdmin);
                     _sm.CrearSesion(usuarioAdmin);
 
-                    _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 3);
+                    _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 1);
                     return true;
                 }
 
-                // Si hay una alteración, el sistema se detiene aquí y no deja ni intentar el login
-                _bitacoraServicio.RegistrarBitacora("Violación de integridad detectada: " + ex.Message, nombreUsuario, "Seguridad", 3);
-                throw new Exception("Se detectó un problema de integridad en la base de datos. Contacte al administrador.");
+                _bitacoraServicio.RegistrarBitacora("Violación de integridad detectada: " + ex.Message, nombreUsuario, "Seguridad", 1);
+                throw new Exception("Sistema en mantenimiento. Espere unos segundos...");
 
             }
 

@@ -92,7 +92,7 @@
             panelMenu.Controls.Add(button1);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(1, 1, 1, 1);
+            panelMenu.Margin = new Padding(1);
             panelMenu.Name = "panelMenu";
             panelMenu.Size = new Size(220, 764);
             panelMenu.TabIndex = 2;
@@ -165,7 +165,7 @@
             // 
             picLogo.BorderStyle = BorderStyle.FixedSingle;
             picLogo.Location = new Point(10, 10);
-            picLogo.Margin = new Padding(1, 1, 1, 1);
+            picLogo.Margin = new Padding(1);
             picLogo.Name = "picLogo";
             picLogo.Size = new Size(71, 57);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -410,10 +410,10 @@
             panelMovimientos.Controls.Add(btnNuevoIngreso);
             panelMovimientos.Controls.Add(lblEstadoSaldos);
             panelMovimientos.Controls.Add(btnNuevoEgreso);
-            panelMovimientos.Location = new Point(269, 74);
-            panelMovimientos.Margin = new Padding(1, 1, 1, 1);
+            panelMovimientos.Location = new Point(250, 69);
+            panelMovimientos.Margin = new Padding(1);
             panelMovimientos.Name = "panelMovimientos";
-            panelMovimientos.Size = new Size(1239, 1045);
+            panelMovimientos.Size = new Size(968, 678);
             panelMovimientos.TabIndex = 0;
             // 
             // lblHistorial
@@ -453,13 +453,13 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvMovimientos.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvMovimientos.Location = new Point(15, 60);
+            dgvMovimientos.Location = new Point(38, 70);
             dgvMovimientos.Margin = new Padding(2, 3, 2, 3);
             dgvMovimientos.Name = "dgvMovimientos";
             dgvMovimientos.ReadOnly = true;
             dgvMovimientos.RowHeadersVisible = false;
             dgvMovimientos.RowHeadersWidth = 102;
-            dgvMovimientos.Size = new Size(1204, 856);
+            dgvMovimientos.Size = new Size(892, 443);
             dgvMovimientos.TabIndex = 1;
             dgvMovimientos.Tag = "dgv_Menu";
             // 
@@ -489,7 +489,7 @@
             btnNuevoIngreso.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnNuevoIngreso.FlatStyle = FlatStyle.Flat;
             btnNuevoIngreso.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnNuevoIngreso.Location = new Point(1029, 935);
+            btnNuevoIngreso.Location = new Point(570, 537);
             btnNuevoIngreso.Margin = new Padding(2, 3, 2, 3);
             btnNuevoIngreso.Name = "btnNuevoIngreso";
             btnNuevoIngreso.Size = new Size(190, 45);
@@ -502,7 +502,7 @@
             lblEstadoSaldos.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblEstadoSaldos.AutoSize = true;
             lblEstadoSaldos.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEstadoSaldos.Location = new Point(15, 1006);
+            lblEstadoSaldos.Location = new Point(15, 639);
             lblEstadoSaldos.Margin = new Padding(2, 0, 2, 0);
             lblEstadoSaldos.Name = "lblEstadoSaldos";
             lblEstadoSaldos.Size = new Size(393, 21);
@@ -515,7 +515,7 @@
             btnNuevoEgreso.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnNuevoEgreso.FlatStyle = FlatStyle.Flat;
             btnNuevoEgreso.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnNuevoEgreso.Location = new Point(15, 935);
+            btnNuevoEgreso.Location = new Point(181, 537);
             btnNuevoEgreso.Margin = new Padding(2, 3, 2, 3);
             btnNuevoEgreso.Name = "btnNuevoEgreso";
             btnNuevoEgreso.Size = new Size(190, 45);
@@ -571,7 +571,7 @@
             Controls.Add(panelMovimientos);
             Controls.Add(lblSaldoGeneral);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(1, 1, 1, 1);
+            Margin = new Padding(1);
             Name = "FormMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Tag = "lbl_Usuario";

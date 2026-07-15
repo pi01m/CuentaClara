@@ -378,7 +378,35 @@ namespace DAL
                 return dt.Rows.Count > 0;
             }
         }
-       
-        
+
+        public List<Servicio_Permiso> ObtenerPermisosPorRol(string idRol)
+        {
+            List<Servicio_Permiso> lista = new List<Servicio_Permiso>();
+
+            using (SqlDataAdapter da = new SqlDataAdapter(@"
+                SELECT P.IdPermiso, P.Nombre
+                FROM Permiso P
+                INNER JOIN Rol_Permiso RP
+                    ON RP.IdPermiso = P.IdPermiso
+                WHERE RP.IdRol = @Rol", _connectionString))
+                    {
+                da.SelectCommand.Parameters.AddWithValue("@Rol", idRol);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    lista.Add(new Servicio_Permiso(
+                        fila["IdPermiso"].ToString(),
+                        fila["Nombre"].ToString()));
+                }
+            }
+
+            return lista;
+        }
+
+
+
     }
 }

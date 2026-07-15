@@ -336,8 +336,8 @@ namespace DAL
                 usuario.Password = fila["Password"].ToString();
                 usuario.Activo = Convert.ToInt32(fila["Activo"]);
                 usuario.Bloqueo = Convert.ToInt32(fila["Bloqueo"]);
-                //usuario.Rol = fila["Rol"].ToString();
-
+                usuario.IdRol = fila["IdRol"].ToString();
+                usuario.Id_Idioma =fila["Id_Idioma"] == DBNull.Value? null: fila["Id_Idioma"].ToString();
                 return usuario;
             }
         }
@@ -367,7 +367,10 @@ namespace DAL
                     Login = row["Login"].ToString(),
                     Activo = Convert.ToInt32(row["Activo"]),
                     Bloqueo = Convert.ToInt32(row["Bloqueo"]),
-                    IdRol = row["IdRol"].ToString()
+                    IdRol = row["IdRol"].ToString(),
+                    Password = row["Password"].ToString(),
+                    Id_Idioma = row["Id_Idioma"] == DBNull.Value ? null: row["Id_Idioma"].ToString()
+   
                 };
             }
         }

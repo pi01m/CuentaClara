@@ -178,27 +178,42 @@ namespace CuentaClara_TrabajoCampo
             if (usuarioActual != null && usuarioActual.ModoEmergencia && usuarioActual.ErrorIntegridad != null)
             {
                 string mensaje =
-                 $@"ATENCIÓN
+                @"ATENCIÓN
 
-                 El sistema detectó una violación de integridad.
+                El sistema detectó una violación de integridad.
 
-                 Tabla: {usuarioActual.ErrorIntegridad.Tabla}
                 ";
 
-                if (!usuarioActual.ErrorIntegridad.EsDVV)
+                if (string.IsNullOrWhiteSpace(usuarioActual.ErrorIntegridad.Tabla))
                 {
-                    mensaje +=$@"Registro: {usuarioActual.ErrorIntegridad.Registro}
-            
+                    // Hay varias tablas con problemas
+                    mensaje += usuarioActual.ErrorIntegridad.Message + Environment.NewLine;
+                } 
+                else
+                {
+                    // Hay un único error
+                    mensaje += $"Tabla: {usuarioActual.ErrorIntegridad.Tabla}{Environment.NewLine}";
 
-";
+                    if (!usuarioActual.ErrorIntegridad.EsDVV)
+                    {
+                        mensaje += $"Registro: {usuarioActual.ErrorIntegridad.Registro}{Environment.NewLine}";
+                    }
+                    else
+                    {
+                        mensaje += "Se detectó que un registro fue eliminado o se modificó la estructura de la tabla."
+                                 + Environment.NewLine;
+                    }
+
+                    mensaje += Environment.NewLine;
+                    mensaje += $"Detalle: {usuarioActual.ErrorIntegridad.Message}{Environment.NewLine}";
                 }
 
-                mensaje += 
-                $@"Detalle:{usuarioActual.ErrorIntegridad.Message}
+                mensaje +=
+                $@"
 
-                 El sistema está funcionando en Modo Emergencia.
+                El sistema está funcionando en Modo Emergencia.
 
-                 Revise la base de datos antes de continuar.";
+                Revise la base de datos antes de continuar.";
 
                 MessageBox.Show( mensaje,"Modo Emergencia",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                   

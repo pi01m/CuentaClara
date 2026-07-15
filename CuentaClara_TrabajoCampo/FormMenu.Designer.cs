@@ -94,7 +94,7 @@
             panelMenu.Location = new Point(0, 0);
             panelMenu.Margin = new Padding(2, 3, 2, 3);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(534, 2012);
+            panelMenu.Size = new Size(220, 764);
             panelMenu.TabIndex = 2;
             // 
             // button7
@@ -103,10 +103,10 @@
             button7.FlatAppearance.BorderSize = 0;
             button7.FlatStyle = FlatStyle.Flat;
             button7.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            button7.Location = new Point(27, 1583);
-            button7.Margin = new Padding(5, 8, 5, 8);
+            button7.Location = new Point(11, 579);
+            button7.Margin = new Padding(2, 3, 2, 3);
             button7.Name = "button7";
-            button7.Size = new Size(481, 101);
+            button7.Size = new Size(198, 37);
             button7.TabIndex = 15;
             button7.Tag = "btn_GestionDeRespaldo";
             button7.Text = "Gestión de Respaldo\r\n";
@@ -121,8 +121,8 @@
             button6.FlatAppearance.BorderSize = 0;
             button6.FlatStyle = FlatStyle.Flat;
             button6.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            button6.Location = new Point(24, 1834);
-            button6.Margin = new Padding(5, 8, 5, 8);
+            button6.Location = new Point(10, 699);
+            button6.Margin = new Padding(2, 3, 2, 3);
             button6.Name = "button6";
             button6.Size = new Size(481, 101);
             button6.TabIndex = 14;
@@ -361,10 +361,10 @@
             panelUsuario.Controls.Add(lblUsuario);
             panelUsuario.Controls.Add(lblBD);
             panelUsuario.Dock = DockStyle.Bottom;
-            panelUsuario.Location = new Point(0, 2012);
-            panelUsuario.Margin = new Padding(5, 8, 5, 8);
+            panelUsuario.Location = new Point(0, 764);
+            panelUsuario.Margin = new Padding(2, 3, 2, 3);
             panelUsuario.Name = "panelUsuario";
-            panelUsuario.Size = new Size(2681, 96);
+            panelUsuario.Size = new Size(1228, 35);
             panelUsuario.TabIndex = 3;
             panelUsuario.Paint += panelUsuario_Paint;
             // 
@@ -410,10 +410,10 @@
             panelMovimientos.Controls.Add(btnNuevoIngreso);
             panelMovimientos.Controls.Add(lblEstadoSaldos);
             panelMovimientos.Controls.Add(btnNuevoEgreso);
-            panelMovimientos.Location = new Point(653, 202);
-            panelMovimientos.Margin = new Padding(2, 3, 2, 3);
+            panelMovimientos.Location = new Point(250, 69);
+            panelMovimientos.Margin = new Padding(1);
             panelMovimientos.Name = "panelMovimientos";
-            panelMovimientos.Size = new Size(1950, 1734);
+            panelMovimientos.Size = new Size(968, 678);
             panelMovimientos.TabIndex = 0;
             // 
             // lblHistorial
@@ -453,13 +453,13 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvMovimientos.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvMovimientos.Location = new Point(36, 164);
-            dgvMovimientos.Margin = new Padding(5, 8, 5, 8);
+            dgvMovimientos.Location = new Point(38, 70);
+            dgvMovimientos.Margin = new Padding(2, 3, 2, 3);
             dgvMovimientos.Name = "dgvMovimientos";
             dgvMovimientos.ReadOnly = true;
             dgvMovimientos.RowHeadersVisible = false;
             dgvMovimientos.RowHeadersWidth = 102;
-            dgvMovimientos.Size = new Size(1865, 1215);
+            dgvMovimientos.Size = new Size(892, 443);
             dgvMovimientos.TabIndex = 1;
             dgvMovimientos.Tag = "dgv_Menu";
             // 
@@ -489,8 +489,8 @@
             btnNuevoIngreso.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnNuevoIngreso.FlatStyle = FlatStyle.Flat;
             btnNuevoIngreso.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnNuevoIngreso.Location = new Point(1440, 1433);
-            btnNuevoIngreso.Margin = new Padding(5, 8, 5, 8);
+            btnNuevoIngreso.Location = new Point(570, 537);
+            btnNuevoIngreso.Margin = new Padding(2, 3, 2, 3);
             btnNuevoIngreso.Name = "btnNuevoIngreso";
             btnNuevoIngreso.Size = new Size(461, 123);
             btnNuevoIngreso.TabIndex = 2;
@@ -502,8 +502,8 @@
             lblEstadoSaldos.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblEstadoSaldos.AutoSize = true;
             lblEstadoSaldos.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblEstadoSaldos.Location = new Point(36, 1625);
-            lblEstadoSaldos.Margin = new Padding(5, 0, 5, 0);
+            lblEstadoSaldos.Location = new Point(15, 639);
+            lblEstadoSaldos.Margin = new Padding(2, 0, 2, 0);
             lblEstadoSaldos.Name = "lblEstadoSaldos";
             lblEstadoSaldos.Size = new Size(963, 54);
             lblEstadoSaldos.TabIndex = 4;
@@ -515,8 +515,8 @@
             btnNuevoEgreso.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnNuevoEgreso.FlatStyle = FlatStyle.Flat;
             btnNuevoEgreso.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnNuevoEgreso.Location = new Point(36, 1433);
-            btnNuevoEgreso.Margin = new Padding(5, 8, 5, 8);
+            btnNuevoEgreso.Location = new Point(181, 537);
+            btnNuevoEgreso.Margin = new Padding(2, 3, 2, 3);
             btnNuevoEgreso.Name = "btnNuevoEgreso";
             btnNuevoEgreso.Size = new Size(461, 123);
             btnNuevoEgreso.TabIndex = 3;
@@ -565,7 +565,7 @@
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(2681, 2108);
+            ClientSize = new Size(1228, 799);
             Controls.Add(panelMenu);
             Controls.Add(panelUsuario);
             Controls.Add(panelMovimientos);

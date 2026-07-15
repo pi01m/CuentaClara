@@ -80,8 +80,8 @@
             groupBox1.Location = new Point(1183, 128);
             groupBox1.Margin = new Padding(0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 3, 2, 3);
-            groupBox1.Size = new Size(461, 189);
+            groupBox1.Padding = new Padding(1, 1, 1, 1);
+            groupBox1.Size = new Size(190, 69);
             groupBox1.TabIndex = 32;
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
@@ -340,8 +340,8 @@
             panel1.Controls.Add(groupBox1);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnAplicar);
-            panel1.Location = new Point(49, 27);
-            panel1.Margin = new Padding(2, 3, 2, 3);
+            panel1.Location = new Point(10, 10);
+            panel1.Margin = new Padding(1, 1, 1, 1);
             panel1.Name = "panel1";
             panel1.Size = new Size(3619, 2438);
             panel1.TabIndex = 41;
@@ -406,20 +406,20 @@
             // clbFamilia
             // 
             clbFamilia.FormattingEnabled = true;
-            clbFamilia.Location = new Point(629, 538);
-            clbFamilia.Margin = new Padding(2, 3, 2, 3);
+            clbFamilia.Location = new Point(259, 197);
+            clbFamilia.Margin = new Padding(1, 1, 1, 1);
             clbFamilia.Name = "clbFamilia";
-            clbFamilia.Size = new Size(419, 1324);
+            clbFamilia.Size = new Size(175, 472);
             clbFamilia.TabIndex = 43;
             clbFamilia.SelectedIndexChanged += clbFamilia_SelectedIndexChanged;
             // 
             // clbPermiso
             // 
             clbPermiso.FormattingEnabled = true;
-            clbPermiso.Location = new Point(104, 538);
-            clbPermiso.Margin = new Padding(2, 3, 2, 3);
+            clbPermiso.Location = new Point(43, 197);
+            clbPermiso.Margin = new Padding(1, 1, 1, 1);
             clbPermiso.Name = "clbPermiso";
-            clbPermiso.Size = new Size(419, 1324);
+            clbPermiso.Size = new Size(175, 472);
             clbPermiso.TabIndex = 42;
             // 
             // btnSalir
@@ -444,10 +444,10 @@
             panelInferior.Controls.Add(label5);
             panelInferior.Controls.Add(lblUsuarioActivo);
             panelInferior.Dock = DockStyle.Bottom;
-            panelInferior.Location = new Point(0, 1999);
-            panelInferior.Margin = new Padding(2, 3, 2, 3);
+            panelInferior.Location = new Point(0, 423);
+            panelInferior.Margin = new Padding(1, 1, 1, 1);
             panelInferior.Name = "panelInferior";
-            panelInferior.Size = new Size(3670, 109);
+            panelInferior.Size = new Size(783, 40);
             panelInferior.TabIndex = 42;
             // 
             // label5
@@ -482,11 +482,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(3670, 2108); 
+            ClientSize = new Size(783, 463);
             Controls.Add(panelInferior);
             Controls.Add(panel1);
-            Margin = new Padding(2, 3, 2, 3);
-            MinimumSize = new Size(2689, 2058);
+            Margin = new Padding(1, 1, 1, 1);
+            MinimumSize = new Size(799, 402);
             Name = "FormGestionPerfil";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CuentaClara - Gestión de Perfiles";

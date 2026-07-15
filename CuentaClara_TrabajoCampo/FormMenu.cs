@@ -109,20 +109,19 @@ namespace CuentaClara_TrabajoCampo
                 return;
             }
 
-
-            button1.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P1");
-            button2.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P2");
-            button3.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P3");
-
-            btnInicio.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INICIO");
-            btnCategorias.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_CATEGORIAS");
-            btnGraficos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_GRAFICOS");
-            btnNuevoEgreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_EGRESOS");
-            btnNuevoIngreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_INGRESOS");
-            btnVencimientos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_VENCIMIENTOS");
-            btnTransacciones.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_TRANSACCIONES");
-            btnSaldos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "PERMISO_SALDOS");
-            button7.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Acceso a Gestión de Respaldo");
+            button1.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P41");
+            button3.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P42");
+            button2.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P43");
+            button5.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P44");
+            btnInicio.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "InicioMenu");
+            btnCategorias.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Categorias");
+            btnGraficos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Graficos");
+            btnNuevoEgreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Egreso");
+            btnNuevoIngreso.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Ingreso");
+            btnVencimientos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Vencimientos");
+            btnTransacciones.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "Transacciones");
+            btnSaldos.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "SaldosCruzados");
+            button7.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P36");
         }
 
         public void ActualizarIdioma()
@@ -206,9 +205,6 @@ namespace CuentaClara_TrabajoCampo
                 usuarioActual.ErrorIntegridad = null;
                 SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);
             }
-
-
-
 
 
             BLL_Rol bllRol = new BLL_Rol();

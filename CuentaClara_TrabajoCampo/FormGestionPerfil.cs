@@ -410,7 +410,7 @@ namespace IU
                         {
                             MessageBox.Show("Error de integridad: La familia seleccionada contiene permisos que ya posee este Rol. Por favor, elimine la redundancia antes de asignar.",
                                             "Redundancia detectada", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            continue; // Saltamos este elemento
+                            return; // Saltamos este elemento
                         }
                         string nombreFamilia = item.Nombre;
 

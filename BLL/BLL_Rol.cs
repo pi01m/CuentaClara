@@ -500,5 +500,27 @@ namespace BLL
 
             familiasEnCamino.Remove(idFamilia);
         }
+
+        public Servicio_Familia ObtenerRolCompleto(string idRol)
+        {
+            Servicio_Familia rol =
+                this.ObtenerRoles()
+                    .First(r => r.IdRol == idRol);
+
+            // permisos directos
+            foreach (var permiso in dal.ObtenerPermisosPorRol(idRol))
+            {
+                rol.AgregarRol(permiso);
+            }
+
+            // familias completas
+            foreach (var familia in dal.ObtenerFamiliasPorRol(idRol))
+            {
+                rol.AgregarRol(
+                    bllFamilia.ObtenerFamiliaCompleta(familia.IdRol));
+            }
+
+            return rol;
+        }
     }
 }

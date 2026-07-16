@@ -126,6 +126,68 @@ namespace DAL
                 da.Update(dt);
             }
         }
+        public List<string> ObtenerRegistrosDVH(string nombreTabla)
+        {
+            List<string> registros = new List<string>();
+
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = @"SELECT Nombre
+                         FROM DIGITOVERIFICADOR
+                         WHERE Nombre LIKE @Tabla
+                         AND Nombre <> @Maestro";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+
+                da.SelectCommand.Parameters.AddWithValue("@Tabla", nombreTabla + "_%");
+                da.SelectCommand.Parameters.AddWithValue("@Maestro", nombreTabla + "_MAESTRO");
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    registros.Add(fila["Nombre"].ToString());
+                }
+            }
+
+            return registros;
+        }
+
+
+        public void EliminarDVHDeTabla(string nombreTabla)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string select = @"SELECT Nombre, DVV, DVH
+                          FROM DIGITOVERIFICADOR
+                          WHERE Nombre LIKE @Tabla
+                          AND Nombre <> @Maestro";
+
+                SqlDataAdapter da = new SqlDataAdapter(select, conn);
+
+                da.SelectCommand.Parameters.AddWithValue("@Tabla", nombreTabla + "_%");
+                da.SelectCommand.Parameters.AddWithValue("@Maestro", nombreTabla + "_MAESTRO");
+
+                da.DeleteCommand = new SqlCommand(
+                    "DELETE FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre", conn);
+
+                da.DeleteCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 255, "Nombre");
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    fila.Delete();
+                }
+
+                da.Update(dt);
+            }
+        }
+
+
 
 
         //using (SqlConnection conn = new SqlConnection(cadenaConexion))

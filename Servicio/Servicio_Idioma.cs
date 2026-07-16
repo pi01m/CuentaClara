@@ -17,5 +17,7 @@ namespace Servicio
         {
             Etiquetas = new List<Servicio_Etiqueta>();
         }
+
+       
     }
 }

@@ -159,7 +159,6 @@ namespace BLL
 
         private bool IniciarSesion(string nombreUsuario, string hash)
         {
-
             try
             {
                 BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
@@ -171,84 +170,111 @@ namespace BLL
 
                 if (usuarioAdmin != null && usuarioAdmin.IdRol == "R1")
                 {
-
                     usuarioAdmin.ModoEmergencia = true;
-
-                    if (ex.TieneMultiplesErrores)
-                    {
-                        string detalle = "";
-
-                        foreach (var error in ex.Errores)
-                        {
-                            detalle += $"Tabla: {error.Tabla}";
-
-                            if (!error.EsDVV)
-                                detalle += $" | Registro: {error.Registro}";
-
-                            detalle += Environment.NewLine;
-                        }
-
-                        usuarioAdmin.ErrorIntegridad = new ExcepcionIntegridad(
-                            "",
-                            "",
-                            false,
-                            detalle);
-                    }
-                    else
-                    {
-                        usuarioAdmin.ErrorIntegridad = ex;
-                    }
+                    usuarioAdmin.ErrorIntegridad = ex;
 
                     usuarioAdmin = ConstruirPermisos(usuarioAdmin);
+
                     _sm.CrearSesion(usuarioAdmin);
 
-                    _bitacoraServicio.RegistrarBitacora("Acceso de emergencia por violación de integridad", nombreUsuario, "Seguridad", 1);
+                    _bitacoraServicio.RegistrarBitacora(
+                        "Acceso de emergencia por violación de integridad",
+                        nombreUsuario,
+                        "Seguridad",
+                        1);
+
                     return true;
                 }
 
-                _bitacoraServicio.RegistrarBitacora("Violación de integridad detectada: " + ex.Message, nombreUsuario, "Seguridad", 1);
-                throw new Exception("Sistema en mantenimiento. Espere unos segundos...");
+                _bitacoraServicio.RegistrarBitacora(
+                    "Violación de integridad detectada: " + ex.Message,
+                    nombreUsuario,
+                    "Seguridad",
+                    1);
 
+                throw new Exception("Sistema en mantenimiento. Espere unos segundos...");
             }
 
+
+
+
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
+
             if (intentos >= 3)
             {
-                _bitacoraServicio.RegistrarBitacora("Intento de login bloqueado", nombreUsuario, "Seguridad", 1);
+                _bitacoraServicio.RegistrarBitacora(
+                    "Intento de login bloqueado",
+                    nombreUsuario,
+                    "Seguridad",
+                    1);
+
                 throw new Exception("Usuario bloqueado por múltiples intentos fallidos.");
             }
 
 
+
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
+
+
 
             if (usuario == null)
             {
                 IncrementarIntentos(nombreUsuario);
+
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
-                throw new Exception($"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}");
+
+                throw new Exception(
+                    $"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}");
             }
+
+
 
 
             if (!VerificarEstadoUsuario(usuario))
             {
-                _bitacoraServicio.RegistrarBitacora("Usuario bloqueado o inactivo", nombreUsuario, "Seguridad", 1);
-                throw new Exception("El usuario se encuentra inactivo o bloqueado.");
+                _bitacoraServicio.RegistrarBitacora(
+                    "Usuario bloqueado o inactivo",
+                    nombreUsuario,
+                    "Seguridad",
+                    1);
+
+                throw new Exception(
+                    "El usuario se encuentra inactivo o bloqueado.");
             }
+
+
+
             if (string.IsNullOrWhiteSpace(usuario.IdRol))
             {
-                _bitacoraServicio.RegistrarBitacora("Intento de login sin rol asignado", nombreUsuario, "Seguridad", 2);
-                throw new Exception("Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
+                _bitacoraServicio.RegistrarBitacora(
+                    "Intento de login sin rol asignado",
+                    nombreUsuario,
+                    "Seguridad",
+                    2);
+
+                throw new Exception(
+                    "Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
             }
+
+
+
 
             BLL_Rol bllRol = new BLL_Rol();
             BLL_Familia bllFamilia = new BLL_Familia();
             BLL_Permiso bllPermiso = new BLL_Permiso();
 
 
-            usuario.Permisos = new Servicio_Familia(usuario.IdRol, "Raíz_Permisos_" + usuario.Login);
+
+            usuario.Permisos =
+                new Servicio_Familia(usuario.IdRol,
+                "Raíz_Permisos_" + usuario.Login);
 
 
-            List<Servicio_Permiso> permisosDirectos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+
+            List<Servicio_Permiso> permisosDirectos =
+                bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+
+
 
             if (permisosDirectos != null)
             {
@@ -257,32 +283,44 @@ namespace BLL
                     usuario.Permisos.AgregarRol(permiso);
                 }
             }
-            
 
-            List<Servicio_Familia> familiasDelRol = bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+
+
+
+            List<Servicio_Familia> familiasDelRol =
+                bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+
+
+
             if (familiasDelRol != null)
             {
                 foreach (Servicio_Familia familiaLigera in familiasDelRol)
                 {
 
-                    Servicio_Familia familiaCompleta = bllFamilia.ObtenerFamiliaCompleta(familiaLigera.IdRol);
+                    Servicio_Familia familiaCompleta =
+                        bllFamilia.ObtenerFamiliaCompleta(familiaLigera.IdRol);
+
+
                     usuario.Permisos.AgregarRol(familiaCompleta);
                 }
             }
 
-            // 5. Validación de Integridad (Dígito Verificador)
-            // BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
-            // bllDV.ValidarIntegridad(); 
+
 
 
             _sm.CrearSesion(usuario);
-           
 
-            _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login, "Seguridad", 1);
+
+
+            _bitacoraServicio.RegistrarBitacora(
+                "Login correcto",
+                usuario.Login,
+                "Seguridad",
+                1);
+
 
 
             return true;
-
         }
 
         private Servicio_Usuario ConstruirPermisos(Servicio_Usuario usuario)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Servicio
 {
-    public class Servicio_Idioma
+    public class Servicio_Idioma:IVerificable
     {
         public string Id_Idioma { get; set; }
         public string Nombre { get; set; }
@@ -16,6 +16,16 @@ namespace Servicio
         public Servicio_Idioma()
         {
             Etiquetas = new List<Servicio_Etiqueta>();
+        }
+
+        public string ObtenerIdentificadorFila()
+        {
+            return Id_Idioma + Nombre;
+        }
+
+        public string ObtenerCadenaParaHash()
+        {
+            return this.Id_Idioma;
         }
     }
 }

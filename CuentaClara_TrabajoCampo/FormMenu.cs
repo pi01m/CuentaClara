@@ -175,7 +175,9 @@ namespace CuentaClara_TrabajoCampo
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
 
-            if (usuarioActual != null && usuarioActual.ModoEmergencia && usuarioActual.ErrorIntegridad != null)
+            if (usuarioActual != null &&
+                usuarioActual.ModoEmergencia &&
+                usuarioActual.ErrorIntegridad != null)
             {
                 string mensaje =
                 @"ATENCIÓN
@@ -184,43 +186,64 @@ namespace CuentaClara_TrabajoCampo
 
                 ";
 
-                if (string.IsNullOrWhiteSpace(usuarioActual.ErrorIntegridad.Tabla))
+                foreach (ExcepcionIntegridad error in usuarioActual.ErrorIntegridad.Errores)
                 {
-                    // Hay varias tablas con problemas
-                    mensaje += usuarioActual.ErrorIntegridad.Message + Environment.NewLine;
-                } 
-                else
-                {
-                    // Hay un único error
-                    mensaje += $"Tabla: {usuarioActual.ErrorIntegridad.Tabla}{Environment.NewLine}";
+                    mensaje += $"Tabla: {error.Tabla}{Environment.NewLine}";
 
-                    if (!usuarioActual.ErrorIntegridad.EsDVV)
+                    if (error.RegistrosModificados.Count > 0)
                     {
-                        mensaje += $"Registro: {usuarioActual.ErrorIntegridad.Registro}{Environment.NewLine}";
+                        mensaje += "Registros modificados:" + Environment.NewLine;
+
+                        foreach (string reg in error.RegistrosModificados)
+                        {
+                            mensaje += "- " + reg + Environment.NewLine;
+                        }
                     }
-                    else
+
+                    if (error.RegistrosEliminados.Count > 0)
                     {
-                        mensaje += "Se detectó que un registro fue eliminado o se modificó la estructura de la tabla."
+                        mensaje += "Registros eliminados:" + Environment.NewLine;
+
+                        foreach (string reg in error.RegistrosEliminados)
+                        {
+                            mensaje += "- " + reg + Environment.NewLine;
+                        }
+                    }
+
+                    if (error.ErrorDVV)
+                    {
+                        mensaje += "Error detectado en DVV de la tabla."
+                                 + Environment.NewLine;
+                    }
+
+                    if (error.RegistrosModificados.Count == 0 &&
+                        error.RegistrosEliminados.Count == 0 &&
+                        !error.ErrorDVV)
+                    {
+                        mensaje += "Se detectó una alteración estructural de la tabla."
                                  + Environment.NewLine;
                     }
 
                     mensaje += Environment.NewLine;
-                    mensaje += $"Detalle: {usuarioActual.ErrorIntegridad.Message}{Environment.NewLine}";
+                    //mensaje += $"Detalle: {error.Message}{Environment.NewLine}";
+                    mensaje += Environment.NewLine;
                 }
 
                 mensaje +=
-                $@"
+                 @"
+                 El sistema está funcionando en Modo Emergencia.
 
-                El sistema está funcionando en Modo Emergencia.
+                 Revise la base de datos antes de continuar.";
 
-                Revise la base de datos antes de continuar.";
+                MessageBox.Show(
+                    mensaje,
+                    "Modo Emergencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
-                MessageBox.Show( mensaje,"Modo Emergencia",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                  
                 usuarioActual.ErrorIntegridad = null;
                 SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);
             }
-
 
             BLL_Rol bllRol = new BLL_Rol();
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);

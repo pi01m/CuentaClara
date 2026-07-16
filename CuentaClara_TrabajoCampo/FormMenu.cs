@@ -171,6 +171,25 @@ namespace CuentaClara_TrabajoCampo
             }
         }
 
+
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
+
+
+
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
@@ -179,17 +198,25 @@ namespace CuentaClara_TrabajoCampo
                 usuarioActual.ModoEmergencia &&
                 usuarioActual.ErrorIntegridad != null)
             {
+                //string mensaje =
+                //@"ATENCIÓN
+
+                //El sistema detectó una violación de integridad.
+
+                //";
+
                 string mensaje =
-                @"ATENCIÓN
-
-                El sistema detectó una violación de integridad.
-
-                ";
+                TraducirTexto("Atencion") +
+                Environment.NewLine + Environment.NewLine +
+                TraducirTexto("ViolacionIntegridad") +
+                Environment.NewLine + Environment.NewLine;
 
                 foreach (ExcepcionIntegridad error in usuarioActual.ErrorIntegridad.Errores)
                 {
-                    mensaje += $"Tabla: {error.Tabla}{Environment.NewLine}";
+                    //mensaje += $"Tabla: {error.Tabla}{Environment.NewLine}";
 
+                    mensaje +=TraducirTexto("Tabla") +": " +error.Tabla +Environment.NewLine;
+                    
                     if (error.RegistrosModificados.Count > 0)
                     {
                         mensaje += "Registros modificados:" + Environment.NewLine;

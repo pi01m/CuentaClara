@@ -135,13 +135,7 @@ namespace BLL
         public void ValidarTodaLaBase()
         {
             List<ExcepcionIntegridad> errores = new List<ExcepcionIntegridad>();
-            // ---------- Idioma ----------
-            var errorIdioma = ValidarIntegridad(
-                dalIdioma.DameIdiomasBD(),
-                "Idioma");
-
-            if (errorIdioma != null)
-                errores.Add(errorIdioma);
+            
 
             // ---------- Permiso ----------
             var errorPermiso = ValidarIntegridad(
@@ -255,7 +249,7 @@ namespace BLL
             RecalcularUsuarios(log);
             RecalcularRoles(log);
             RecalcularFamilias(log);
-            RecalcularIdiomas(log);
+           
             RecalcularPermisos(log);
         }
 
@@ -448,48 +442,7 @@ namespace BLL
         }
 
 
-        private void RecalcularIdiomas(string log)
-        {
-            dalDigito.EliminarDVHDeTabla("Idioma");
-
-            List<Servicio_Idioma> idiomas =
-                dalIdioma.ListarIdiomas()
-                         .OrderBy(i => i.ObtenerIdentificadorFila())
-                         .ToList();
-
-            string cadenaDVV = "";
-
-            foreach (Servicio_Idioma idioma in idiomas)
-            {
-                string dvh = servicioCalcular.CalcularDVH(idioma);
-
-                Servicio_DigitoVerificadorVertical reg =
-                    new Servicio_DigitoVerificadorVertical();
-
-                reg.Nombre = "Idioma_" + idioma.ObtenerIdentificadorFila();
-                reg.DVH = dvh;
-
-                dalDigito.GuardarDVH(reg);
-
-                cadenaDVV += dvh;
-            }
-
-            string dvv = servicioCalcular.CalcularHash(cadenaDVV);
-
-            Servicio_DigitoVerificadorVertical maestro =
-                new Servicio_DigitoVerificadorVertical();
-
-            maestro.Nombre = "Idioma_MAESTRO";
-            maestro.DVV = dvv;
-
-            dalDigito.GuardarDVV(maestro);
-
-            bllBitacora.RegistrarBitacora(
-                "Recalculo de Dígitos Verificadores de Idiomas",
-                log,
-                "Seguridad",
-                1);
-        }
+        
 
 
     }

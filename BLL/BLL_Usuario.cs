@@ -163,18 +163,42 @@ namespace BLL
             try
             {
                 BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
-                List<Servicio_Usuario> todos = _dalUsuario.ListarUsuarios();
-                bllDV.ValidarIntegridad(todos, "Usuario");
+                bllDV.ValidarTodaLaBase();
             }
             catch (ExcepcionIntegridad ex)
             {
                 Servicio_Usuario usuarioAdmin = _dalUsuario.ObtenerUsuarioPorLogin(nombreUsuario);
 
-                if (usuarioAdmin.IdRol != null && usuarioAdmin.IdRol == "R1")
+                if (usuarioAdmin != null && usuarioAdmin.IdRol == "R1")
                 {
-                    
-                    usuarioAdmin.ModoEmergencia = true; 
-                    usuarioAdmin.ErrorIntegridad = ex;
+
+                    usuarioAdmin.ModoEmergencia = true;
+
+                    if (ex.TieneMultiplesErrores)
+                    {
+                        string detalle = "";
+
+                        foreach (var error in ex.Errores)
+                        {
+                            detalle += $"Tabla: {error.Tabla}";
+
+                            if (!error.EsDVV)
+                                detalle += $" | Registro: {error.Registro}";
+
+                            detalle += Environment.NewLine;
+                        }
+
+                        usuarioAdmin.ErrorIntegridad = new ExcepcionIntegridad(
+                            "",
+                            "",
+                            false,
+                            detalle);
+                    }
+                    else
+                    {
+                        usuarioAdmin.ErrorIntegridad = ex;
+                    }
+
                     usuarioAdmin = ConstruirPermisos(usuarioAdmin);
                     _sm.CrearSesion(usuarioAdmin);
 
@@ -256,6 +280,7 @@ namespace BLL
 
             _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login, "Seguridad", 1);
 
+
             return true;
 
         }
@@ -330,10 +355,14 @@ namespace BLL
             string idiomaAnterior = _dalUsuario.ObtenerUsuarioPorLogin(usuario.Login)?.Id_Idioma;
             string idiomaActual = usuario.Id_Idioma;
 
-            
             if (!string.IsNullOrEmpty(idiomaActual))
             {
                 _dalUsuario.ActualizarIdiomaUsuario(usuario.Login, idiomaActual);
+
+               
+                Servicio_Usuario usuarioActualizado = _dalUsuario.ObtenerUsuarioPorLogin(usuario.Login);
+                List<Servicio_Usuario> todos = this.ListarUsuarios();
+                _bllDV.ActualizarDigitos(usuarioActualizado, todos, "Usuario");
             }
 
             

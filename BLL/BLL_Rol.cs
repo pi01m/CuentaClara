@@ -15,7 +15,8 @@ namespace BLL
         private DAL_Rol dal;
         private BLL_BitacoraEvento bllBitacora = new BLL_BitacoraEvento();
         private BLL_DigitoVerificador bllDV = new BLL_DigitoVerificador();
-
+        private BLL_Permiso bllPermiso = new BLL_Permiso();
+        private BLL_Familia bllFamilia = new BLL_Familia();
         public BLL_Rol()
         {
             string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
@@ -366,6 +367,138 @@ namespace BLL
                 }
             }
             return lista;
+        }
+
+        public void ValidarIntegridadRoles()
+        {
+            List<Servicio_Familia> roles = dal.ListarRoles();
+
+            if (roles == null || roles.Count == 0)
+                return;
+
+            foreach (Servicio_Familia rol in roles)
+            {
+                ValidarRolRecursivo(
+                    rol.IdRol,
+                    rol.Nombre,
+                    new HashSet<string>(),
+                    new HashSet<string>());
+            }
+        }
+
+        private void ValidarRolRecursivo(
+      string idRol,
+      string nombreRol,
+      HashSet<string> familiasEncontradas,
+      HashSet<string> permisosEncontrados)
+        {
+            // ==========================
+            // PERMISOS DIRECTOS DEL ROL
+            // ==========================
+
+            List<Servicio_Permiso> permisosDirectos =
+                dal.ObtenerPermisosPorRol(idRol);
+
+            if (permisosDirectos != null)
+            {
+                foreach (Servicio_Permiso permiso in permisosDirectos)
+                {
+                    if (!permisosEncontrados.Add(permiso.IdRol))
+                    {
+                        throw new Exception(
+                            $"Error de integridad: el permiso '{permiso.Nombre}' está repetido dentro del rol '{nombreRol}'.");
+                    }
+                }
+            }
+
+            // ==========================
+            // FAMILIAS DEL ROL
+            // ==========================
+
+            List<Servicio_Familia> familias =
+                dal.ObtenerFamiliasPorRol(idRol);
+
+            if (familias != null)
+            {
+                foreach (Servicio_Familia familia in familias)
+                {
+                    ValidarFamiliaDelRol(
+                        familia.IdRol,
+                        familia.Nombre,
+                        nombreRol,
+                        familiasEncontradas,
+                        permisosEncontrados,
+                        new HashSet<string>());
+                }
+            }
+        }
+
+
+        private void ValidarFamiliaDelRol(string idFamilia, string nombreFamilia,string nombreRol,HashSet<string> familiasEncontradas,HashSet<string> permisosEncontrados,HashSet<string> familiasEnCamino)
+        {
+            // ==========================
+            // CICLO
+            // ==========================
+
+            if (familiasEnCamino.Contains(idFamilia))
+            {
+                throw new Exception(
+                    $"Error de integridad: se detectó un ciclo en la familia '{nombreFamilia}' del rol '{nombreRol}'.");
+            }
+
+            // ==========================
+            // FAMILIA REPETIDA
+            // ==========================
+
+            if (!familiasEncontradas.Add(idFamilia))
+            {
+                throw new Exception(
+                    $"Error de integridad: la familia '{nombreFamilia}' aparece más de una vez dentro del rol '{nombreRol}'.");
+            }
+
+            familiasEnCamino.Add(idFamilia);
+
+            // ==========================
+            // PERMISOS DIRECTOS DE LA FAMILIA
+            // ==========================
+
+            List<Servicio_Permiso> permisos =
+                bllPermiso.ObtenerPermisosPorFamilia(idFamilia);
+
+            if (permisos != null)
+            {
+                foreach (Servicio_Permiso permiso in permisos)
+                {
+                    if (!permisosEncontrados.Add(permiso.IdRol))
+                    {
+                        throw new Exception(
+                            $"Error de integridad: el permiso '{permiso.Nombre}' está repetido dentro del rol '{nombreRol}'.");
+                    }
+                }
+            }
+
+            // ==========================
+            // SUBFAMILIAS
+            // ==========================
+
+            List<Servicio_Familia> hijas =
+                bllFamilia.ObtenerSubFamilias(idFamilia);
+
+            if (hijas != null)
+            {
+                foreach (Servicio_Familia hija in hijas)
+                {
+                    ValidarFamiliaDelRol(
+                        hija.IdRol,
+                        hija.Nombre,
+                        nombreRol,
+                        familiasEncontradas,
+                        permisosEncontrados,
+                        familiasEnCamino);
+                }
+            }
+
+            familiasEnCamino.Remove(idFamilia);
         }
     }
 }

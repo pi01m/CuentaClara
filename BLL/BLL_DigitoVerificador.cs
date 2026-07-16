@@ -31,6 +31,7 @@ namespace BLL
            
             var listaOrdenada = listaRegistros.OrderBy(x => x.ObtenerIdentificadorFila()).ToList();
 
+
             foreach (T registro in listaOrdenada)
             {
 
@@ -64,6 +65,57 @@ namespace BLL
 
             return true;
         }
+
+        public void ValidarTodaLaBase()
+        {
+            List<ExcepcionIntegridad> errores = new List<ExcepcionIntegridad>();
+
+            // ---------- Usuario ----------
+            try
+            {
+                ValidarIntegridad(
+                    dalUsuario.ListarUsuarios(),
+                    "Usuario");
+            }
+            catch (ExcepcionIntegridad ex)
+            {
+                errores.Add(ex);
+            }
+
+            // ---------- Rol ----------
+            try
+            {
+                DAL_Rol dalRol = new DAL_Rol(
+                    "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+
+                ValidarIntegridad(
+                    dalRol.ListarRoles(),
+                    "Rol");
+            }
+            catch (ExcepcionIntegridad ex)
+            {
+                errores.Add(ex);
+            }
+
+            // ---------- Familia ----------
+            try
+            {
+                DAL_Familia dalFamilia = new DAL_Familia(
+                    "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+
+                ValidarIntegridad(
+                    dalFamilia.ListarFamilias(),
+                    "Familia");
+            }
+            catch (ExcepcionIntegridad ex)
+            {
+                errores.Add(ex);
+            }
+
+            if (errores.Count > 0)
+                throw new ExcepcionIntegridad(errores);
+        }
+
 
         public void ActualizarDigitos<T>(T entidadModificada, List<T> listaCompleta, string nombreTabla) where T : IVerificable
         {
@@ -137,6 +189,11 @@ namespace BLL
 
         private void RecalcularRoles(string log)
         {
+            BLL_Rol bllRol = new BLL_Rol();
+
+            // Validar integridad del árbol del rol antes de recalcular DV
+            bllRol.ValidarIntegridadRoles();
+
             DAL_Rol dalRol = new DAL_Rol("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
             List<Servicio_Familia> roles = dalRol.ListarRoles().OrderBy(r => r.ObtenerIdentificadorFila()) .ToList();
 
@@ -159,11 +216,15 @@ namespace BLL
             Servicio_DigitoVerificadorVertical maestro = new Servicio_DigitoVerificadorVertical("Rol_MAESTRO", dvv);
             dalDigito.GuardarDVV(maestro);
 
-            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Roles", log , "Seguridad", 2);
+            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Roles", log , "Seguridad", 1);
         }
 
         private void RecalcularFamilias(string log)
         {
+            BLL_Familia bllFamilia = new BLL_Familia();
+
+            bllFamilia.ValidarIntegridadJerarquia();
+
             DAL_Familia dalFam = new DAL_Familia("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
             List<Servicio_Familia> familias = dalFam.ListarFamilias() .OrderBy(f => f.ObtenerIdentificadorFila()) .ToList();
 
@@ -186,7 +247,8 @@ namespace BLL
             Servicio_DigitoVerificadorVertical maestro = new Servicio_DigitoVerificadorVertical("Familia_MAESTRO", dvv);
             dalDigito.GuardarDVV(maestro);
 
-            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Familias", log, "Seguridad", 2);
+            bllBitacora.RegistrarBitacora("Recalculo de Dígitos Verificadores de Familias", log, "Seguridad", 1);
         }
+
     }
 }

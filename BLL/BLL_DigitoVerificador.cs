@@ -16,6 +16,7 @@ namespace BLL
         private DAL_Usuario dalUsuario;
         private DAL_Idioma dalIdioma;
         private DAL_Permiso dalPermiso;
+        private Servicio_VerificadorDigito servicioVerificador;
         public BLL_DigitoVerificador()
         {
             servicioCalcular = new Servicio_Calcular();
@@ -23,10 +24,9 @@ namespace BLL
             dalDigito = new DAL_DigitoVerificador();
             dalUsuario = new DAL_Usuario();
             dalIdioma = new DAL_Idioma();
-
-            dalPermiso = new DAL_Permiso(
-                "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
-
+            servicioVerificador = new Servicio_VerificadorDigito();
+            dalPermiso = new DAL_Permiso( "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+  
         }
 
 
@@ -52,11 +52,11 @@ namespace BLL
 
                 // Solo se marca "modificado" si YA existía un DVH previo y no coincide.
                 // Si registroBD es null, es un registro nuevo sin baseline: no es una alteración.
-                if (registroBD != null && registroBD.DVH != dvhCalculado)
+                
+                if (registroBD != null &&!servicioVerificador.EsValido(dvhCalculado, registroBD.DVH))
                 {
                     registrosAlterados.Add(registro.ObtenerIdentificadorFila());
                 }
-
                 cadenaAcumuladaParaDVV += dvhCalculado;
             }
 
@@ -79,9 +79,8 @@ namespace BLL
             Servicio_DigitoVerificadorVertical maestro =
                 dalDigito.ObtenerRegistroDigito(nombreTabla + "_MAESTRO");
 
-            bool errorDVV =
-                maestro == null ||
-                maestro.DVV != dvvCalculado;
+            bool errorDVV =maestro == null ||!servicioVerificador.EsValido(dvvCalculado, maestro.DVV);
+     
 
             if (registrosAlterados.Count == 0 &&
                 eliminados.Count == 0 &&

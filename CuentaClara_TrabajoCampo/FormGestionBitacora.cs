@@ -218,7 +218,6 @@ namespace CuentaClara_TrabajoCampo
                 {
                     string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
 
-
                     List<Servicio_Bitacora> lista = (List<Servicio_Bitacora>)dgvBitacora.DataSource;
 
                     bllPdf.ExportarBitacora(lista, save.FileName, login);

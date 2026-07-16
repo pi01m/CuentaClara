@@ -219,8 +219,9 @@ namespace CuentaClara_TrabajoCampo
                     
                     if (error.RegistrosModificados.Count > 0)
                     {
-                        mensaje += "Registros modificados:" + Environment.NewLine;
-
+                        //mensaje += "Registros modificados:" + Environment.NewLine;
+                        mensaje +=TraducirTexto("RegistrosModificados") +Environment.NewLine;
+                        
                         foreach (string reg in error.RegistrosModificados)
                         {
                             mensaje += "- " + reg + Environment.NewLine;
@@ -229,7 +230,9 @@ namespace CuentaClara_TrabajoCampo
 
                     if (error.RegistrosEliminados.Count > 0)
                     {
-                        mensaje += "Registros eliminados:" + Environment.NewLine;
+                        //mensaje += "Registros eliminados:" + Environment.NewLine;
+                        mensaje +=TraducirTexto("RegistrosEliminados") +Environment.NewLine;
+
 
                         foreach (string reg in error.RegistrosEliminados)
                         {
@@ -239,16 +242,22 @@ namespace CuentaClara_TrabajoCampo
 
                     if (error.ErrorDVV)
                     {
-                        mensaje += "Error detectado en DVV de la tabla."
-                                 + Environment.NewLine;
+                        //mensaje += "Error detectado en DVV de la tabla."
+                        //         + Environment.NewLine;
+                        mensaje +=TraducirTexto("ErrorDVV")+ Environment.NewLine;
+
+
                     }
 
                     if (error.RegistrosModificados.Count == 0 &&
                         error.RegistrosEliminados.Count == 0 &&
                         !error.ErrorDVV)
                     {
-                        mensaje += "Se detectó una alteración estructural de la tabla."
-                                 + Environment.NewLine;
+                        //mensaje += "Se detectó una alteración estructural de la tabla."
+                        //         + Environment.NewLine;
+                        mensaje +=TraducirTexto("AlteracionEstructural")+ Environment.NewLine;
+
+
                     }
 
                     mensaje += Environment.NewLine;
@@ -256,15 +265,25 @@ namespace CuentaClara_TrabajoCampo
                     mensaje += Environment.NewLine;
                 }
 
-                mensaje +=
-                 @"
-                 El sistema está funcionando en Modo Emergencia.
+                //mensaje +=
+                // @"
+                // El sistema está funcionando en Modo Emergencia.
 
-                 Revise la base de datos antes de continuar.";
+                // Revise la base de datos antes de continuar.";
+
+                mensaje +=
+                Environment.NewLine +
+                TraducirTexto("ModoEmergenciaFinal");
+
+                //MessageBox.Show(
+                //    mensaje,
+                //    "Modo Emergencia",
+                //    MessageBoxButtons.OK,
+                //    MessageBoxIcon.Warning);
 
                 MessageBox.Show(
                     mensaje,
-                    "Modo Emergencia",
+                    TraducirTexto("ModoEmergencia"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 

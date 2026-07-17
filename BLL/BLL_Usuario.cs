@@ -105,8 +105,7 @@ namespace BLL
         public bool CrearUsuario(Servicio_Usuario usuario)
     
         {
-            try
-            {
+           
 
                 ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
 
@@ -133,11 +132,7 @@ namespace BLL
                 }
 
                 return resultado;
-            }
-            catch
-            {
-                return false;
-            }
+            
         }
         public void ReiniciarIntentos(string login)
         {
@@ -230,7 +225,7 @@ namespace BLL
 
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
 
-                throw new Exception($"Error de autenticación. Intentos restantes: {3 - intentosActualizados}");
+                throw new Exception("err_IntentosRestantes| " + ( 3 - intentosActualizados));
                     
             }
 
@@ -533,5 +528,6 @@ namespace BLL
 
 
         }
+      
     }
 }

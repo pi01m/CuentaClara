@@ -89,17 +89,33 @@ namespace CuentaClara_TrabajoCampo
             }
             catch (Exception ex)
             {
-                
 
+                string mensajeParaMostrar;
+
+                
+                if (ex.Message.Contains("|"))
+                {
+                    string[] partes = ex.Message.Split('|');
+                    string clave = partes[0];      
+                    string valor = partes[1];     
+
+                 
+                    mensajeParaMostrar = TraducirTexto(clave) + " " + valor;
+                }
+                else
+                {
+                   
+                    mensajeParaMostrar = TraducirTexto(ex.Message);
+                }
                 string tituloError = TraducirTexto("msg_TituloErrorLogin") != "msg_TituloErrorLogin"
                                      ? TraducirTexto("msg_TituloErrorLogin")
-                                     : "Error de Autenticación";
+                                     : TraducirTexto("msg_ErrorAutenticacion");
 
-                MessageBox.Show(ex.Message, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mensajeParaMostrar, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
-                // Esto asegura que el botón siempre se vuelva a habilitar, pase lo que pase
+                
                 btnIngresar.Enabled = true;
             }
         }

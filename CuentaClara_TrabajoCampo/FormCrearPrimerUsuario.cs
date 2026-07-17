@@ -26,31 +26,33 @@ namespace IU
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+
+            try
+            {
+                Servicio_Usuario usuario = new Servicio_Usuario();
+                usuario.Nombre = txtNombre.Text;
+                usuario.Apellido = txtApellido.Text;
+                usuario.DNI = txtDNI.Text;
+                usuario.email = txtCorreo.Text;
+                usuario.Login = txtNombre.Text + txtDNI.Text;
+                usuario.IdRol = "R1";
+                usuario.Activo = 1;
+                usuario.Id_Idioma = "1";
+                BLL_Usuario bll = new BLL_Usuario();
+
+                if (bll.CrearUsuario(usuario))
+                {
+                    MessageBox.Show(TraducirTexto("msg_UsuarioCreadoCorrectamente"));
+
+                    this.Close();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
            
 
-            Servicio_Usuario usuario = new Servicio_Usuario();
-            usuario.Nombre = txtNombre.Text;
-            usuario.Apellido = txtApellido.Text;
-            usuario.DNI = txtDNI.Text;
-            usuario.email = txtCorreo.Text;
-            usuario.Login = txtNombre.Text + txtDNI.Text;
-            usuario.IdRol = "R1"; 
-            usuario.Activo = 1;
-
-            BLL_Usuario bll = new BLL_Usuario();
-
-            if (bll.CrearUsuario(usuario))
-            {
-                MessageBox.Show("Usuario creado correctamente");
-
-
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("El usuario ya existe");
-
-            }
         }
         public void ActualizarIdioma()
         {
@@ -109,5 +111,6 @@ namespace IU
         {
             this.Close();
         }
+        
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace IU
 {
@@ -111,6 +112,28 @@ namespace IU
         {
             this.Close();
         }
-        
+        private string TraducirTexto(string clave)
+        {
+            var session = SessionManager.GetInstancia();
+            var usuarioActual = session.GetUsuarioActual();
+
+          
+            if (usuarioActual == null)
+            {
+                return clave; // O retorna un texto genérico si prefieres
+            }
+
+            // 3. Si hay usuario, procedemos normalmente
+            string idIdioma = usuarioActual.Id_Idioma;
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
     }
 }

@@ -22,36 +22,52 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            Servicio_Usuario usuario = new Servicio_Usuario();
-
-
-            usuario.Nombre = txtNombre.Text;
-            usuario.Apellido = txtApellido.Text;
-            usuario.DNI = txtDNI.Text;
-            usuario.email = txtCorreo.Text;
-            txtLogin.Text = txtNombre.Text + txtDNI.Text;
-            usuario.Login = txtLogin.Text;
-            usuario.IdRol = cmbRol.SelectedValue.ToString();
-            usuario.Activo = chkActivo.Checked ? 1 : 0;
-
-
-            BLL_Usuario bll = new BLL_Usuario();
-
-
-            if (bll.CrearUsuario(usuario))
+            try
             {
-                MessageBox.Show("Usuario creado correctamente");
+
+                Servicio_Usuario usuario = new Servicio_Usuario();
 
 
-                this.Close();
+                usuario.Nombre = txtNombre.Text;
+                usuario.Apellido = txtApellido.Text;
+                usuario.DNI = txtDNI.Text;
+                usuario.email = txtCorreo.Text;
+                txtLogin.Text = txtNombre.Text + txtDNI.Text;
+                usuario.Login = txtLogin.Text;
+                usuario.IdRol = cmbRol.SelectedValue.ToString();
+                usuario.Activo = chkActivo.Checked ? 1 : 0;
+
+
+                BLL_Usuario bll = new BLL_Usuario();
+
+
+                if (bll.CrearUsuario(usuario))
+                {
+                    MessageBox.Show(TraducirTexto("msg_UsuarioCreadoCorrectamente"));
+
+                    this.Close();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("El usuario ya existe");
-
+                MessageBox.Show(ex.Message);
             }
         }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
 
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
         private void FormCrearUsuario_Load_1(object sender, EventArgs e)
         {
             cmbRol.DataSource = null;

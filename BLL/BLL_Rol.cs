@@ -22,7 +22,18 @@ namespace BLL
             string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
             dal = new DAL_Rol(conn);
         }
+        public List<Servicio_Familia> ObtenerRolesCompletos()
+        {
+            List<Servicio_Familia> rolesBasicos = dal.ListarRoles();
+            List<Servicio_Familia> rolesCompletos = new List<Servicio_Familia>();
 
+            foreach (var r in rolesBasicos)
+            {
+                rolesCompletos.Add(this.ObtenerRolCompleto(r.IdRol));
+            }
+
+            return rolesCompletos;
+        }
         public void CrearRol(Servicio_Familia rol, List<string> idFamilias, List<string> idPermisos)
         {
             if (string.IsNullOrWhiteSpace(rol.Nombre))
@@ -98,7 +109,7 @@ namespace BLL
             }
 
             bllBitacora.RegistrarBitacora("Alta Perfil (Rol): " + rol.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(rol, this.ObtenerRoles(), "Rol");
+            bllDV.ActualizarDigitos(this.ObtenerRolCompleto(rol.IdRol), this.ObtenerRolesCompletos(), "Rol");
         }
 
         public List<Servicio_Familia> ObtenerRoles()
@@ -115,10 +126,12 @@ namespace BLL
             dal.AsignarPermiso(idRol, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso asignado al Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
-            // Buscar el objeto Rol para actualizar DV
-            var roles = this.ObtenerRoles();
-            var rol = roles.FirstOrDefault(r => r.IdRol == idRol);
-            if (rol != null) bllDV.ActualizarDigitos(rol, roles, "Rol");
+           
+            var rolesCompletos = this.ObtenerRolesCompletos();
+       
+            var rolModificado = this.ObtenerRolCompleto(idRol);
+
+            bllDV.ActualizarDigitos(rolModificado, rolesCompletos, "Rol");
         }
 
         public string ObtenerNombreRol(string idRol)
@@ -184,9 +197,11 @@ namespace BLL
             dal.AsignarFamilia(idRol, idFamilia);
             bllBitacora.RegistrarBitacora("Asignación de familias a rol", SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
-            var roles = this.ObtenerRoles();
-            var rol = roles.FirstOrDefault(r => r.IdRol == idRol);
-            if (rol != null) bllDV.ActualizarDigitos(rol, roles, "Rol");
+            var rolesCompletos = this.ObtenerRolesCompletos();
+         
+            var rolModificado = this.ObtenerRolCompleto(idRol);
+
+            bllDV.ActualizarDigitos(rolModificado, rolesCompletos, "Rol");
         }
 
         public List<Servicio_Familia> ObtenerFamiliasPorRol(string idRol)
@@ -199,9 +214,11 @@ namespace BLL
             dal.DesasignarPermiso(idRol, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso desasignado del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
-            var roles = this.ObtenerRoles();
-            var rol = roles.FirstOrDefault(r => r.IdRol == idRol);
-            if (rol != null) bllDV.ActualizarDigitos(rol, roles, "Rol");
+            var rolesCompletos = this.ObtenerRolesCompletos();
+            // Obtenemos la entidad modificada completamente hidratada
+            var rolModificado = this.ObtenerRolCompleto(idRol);
+
+            bllDV.ActualizarDigitos(rolModificado, rolesCompletos, "Rol");
         }
 
         public void DesasignarFamilia(string idRol, string idFamilia)
@@ -209,9 +226,11 @@ namespace BLL
             dal.DesasignarFamilia(idRol, idFamilia);
             bllBitacora.RegistrarBitacora("Familia desasignada del Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
-            var roles = this.ObtenerRoles();
-            var rol = roles.FirstOrDefault(r => r.IdRol == idRol);
-            if (rol != null) bllDV.ActualizarDigitos(rol, roles, "Rol");
+            var rolesCompletos = this.ObtenerRolesCompletos();
+            // Obtenemos la entidad modificada completamente hidratada
+            var rolModificado = this.ObtenerRolCompleto(idRol);
+
+            bllDV.ActualizarDigitos(rolModificado, rolesCompletos, "Rol");
         }
 
         public void ModificarRol(string idRol, string nombre)
@@ -222,9 +241,11 @@ namespace BLL
             dal.ModificarRol(idRol, nombre);
             bllBitacora.RegistrarBitacora("Modificación de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
 
-            var roles = this.ObtenerRoles();
-            var rol = roles.FirstOrDefault(r => r.IdRol == idRol);
-            if (rol != null) bllDV.ActualizarDigitos(rol, roles, "Rol");
+            var rolesCompletos = this.ObtenerRolesCompletos();
+           
+            var rolModificado = this.ObtenerRolCompleto(idRol);
+
+            bllDV.ActualizarDigitos(rolModificado, rolesCompletos, "Rol");
         }
 
         public void EliminarRol(string idRol)
@@ -236,7 +257,7 @@ namespace BLL
             dal.EliminarRol(idRol);
 
             bllBitacora.RegistrarBitacora("Baja de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(new Servicio_Familia("0", "Dummy"), this.ObtenerRoles(), "Rol");
+            bllDV.EliminarDigitoYRecalcular(idRol, this.ObtenerRolesCompletos(), "Rol");
         }
 
         public bool ExisteNombre(string nombre)
@@ -436,9 +457,7 @@ namespace BLL
 
         private void ValidarFamiliaDelRol(string idFamilia, string nombreFamilia,string nombreRol,HashSet<string> familiasEncontradas,HashSet<string> permisosEncontrados,HashSet<string> familiasEnCamino)
         {
-            // ==========================
-            // CICLO
-            // ==========================
+
 
             if (familiasEnCamino.Contains(idFamilia))
             {
@@ -446,9 +465,6 @@ namespace BLL
                     $"Error de integridad: se detectó un ciclo en la familia '{nombreFamilia}' del rol '{nombreRol}'.");
             }
 
-            // ==========================
-            // FAMILIA REPETIDA
-            // ==========================
 
             if (!familiasEncontradas.Add(idFamilia))
             {
@@ -457,10 +473,6 @@ namespace BLL
             }
 
             familiasEnCamino.Add(idFamilia);
-
-            // ==========================
-            // PERMISOS DIRECTOS DE LA FAMILIA
-            // ==========================
 
             List<Servicio_Permiso> permisos =
                 bllPermiso.ObtenerPermisosPorFamilia(idFamilia);
@@ -477,9 +489,6 @@ namespace BLL
                 }
             }
 
-            // ==========================
-            // SUBFAMILIAS
-            // ==========================
 
             List<Servicio_Familia> hijas =
                 bllFamilia.ObtenerSubFamilias(idFamilia);

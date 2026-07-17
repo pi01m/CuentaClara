@@ -5,41 +5,41 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace CuentaClara_TrabajoCampo
+namespace IU
 {
-    public partial class FormCrearUsuario : Form, IObserverIdioma
+    public partial class FormCrearPrimerUsuario : Form
     {
-        public FormCrearUsuario()
+        public FormCrearPrimerUsuario()
         {
             InitializeComponent();
-            GestorIdioma.GetInstancia().Suscribir(this);
         }
 
-        private BLL_Rol bllRol = new BLL_Rol();
+        private void FormCrearPrimerUsuario_Load(object sender, EventArgs e)
+        {
+            ActualizarIdioma();
+        }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+
             try
             {
-
                 Servicio_Usuario usuario = new Servicio_Usuario();
-
-
                 usuario.Nombre = txtNombre.Text;
                 usuario.Apellido = txtApellido.Text;
                 usuario.DNI = txtDNI.Text;
                 usuario.email = txtCorreo.Text;
-                txtLogin.Text = txtNombre.Text + txtDNI.Text;
-                usuario.Login = txtLogin.Text;
-                usuario.IdRol = cmbRol.SelectedValue.ToString();
-                usuario.Activo = chkActivo.Checked ? 1 : 0;
-
-
+                usuario.Login = txtNombre.Text + txtDNI.Text;
+                usuario.IdRol = "R1";
+                usuario.Activo = 1;
+                usuario.Id_Idioma = "1";
                 BLL_Usuario bll = new BLL_Usuario();
-
 
                 if (bll.CrearUsuario(usuario))
                 {
@@ -52,57 +52,23 @@ namespace CuentaClara_TrabajoCampo
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-        private string TraducirTexto(string clave)
-        {
-            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
-
-            BLL_Idioma bllIdioma = new BLL_Idioma();
-
-            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
-
-            if (idioma == null)
-                return clave;
-
-            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
-
-            return etiqueta != null ? etiqueta.Texto : clave;
-        }
-        private void FormCrearUsuario_Load_1(object sender, EventArgs e)
-        {
-            cmbRol.DataSource = null;
-            cmbRol.DataSource = bllRol.ObtenerRoles();
-            cmbRol.DisplayMember = "Nombre";
-            cmbRol.ValueMember = "IdRol";
-            ActualizarIdioma();
-        }
-
-        private void chkActivo_CheckedChanged(object sender, EventArgs e)
-        {
+           
 
         }
-
-        private void panelPrincipal_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void FormCrearUsuario_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            GestorIdioma.GetInstancia().Desuscribir(this);
-
-
-        }
-
         public void ActualizarIdioma()
         {
-            string idIdioma =
-            SessionManager.GetInstancia()
-            .GetUsuarioActual()
-            .Id_Idioma;
+            var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+
+            // 2. Si es null (como ocurre al crear el primer usuario), salimos del método para que no explote
+            if (usuarioActual == null)
+            {
+                return;
+            }
+
+            // 3. Si hay usuario, sigue tu lógica normal
+            string idIdioma = usuarioActual.Id_Idioma;
 
             BLL_Idioma bllIdioma = new BLL_Idioma();
-
             Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
 
             if (idioma == null)
@@ -145,6 +111,29 @@ namespace CuentaClara_TrabajoCampo
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private string TraducirTexto(string clave)
+        {
+            var session = SessionManager.GetInstancia();
+            var usuarioActual = session.GetUsuarioActual();
+
+          
+            if (usuarioActual == null)
+            {
+                return clave; // O retorna un texto genérico si prefieres
+            }
+
+            // 3. Si hay usuario, procedemos normalmente
+            string idIdioma = usuarioActual.Id_Idioma;
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BLL;
+using IU;
 using Microsoft.Data.SqlClient;
 using Servicio;
 using System;
@@ -25,6 +26,32 @@ namespace CuentaClara_TrabajoCampo
 
         private void frmLogIn_Load_1(object sender, EventArgs e)
         {
+            BLL_Usuario bllUsuario = new BLL_Usuario();
+
+            try
+            {
+           
+                if (!bllUsuario.ExisteAlgunaCuenta())
+                {
+                    MessageBox.Show("Es la primera vez que inicia el sistema. Por favor, registre al administrador inicial.");
+
+                   
+                    FormCrearPrimerUsuario formAlta = new FormCrearPrimerUsuario();
+                    formAlta.ShowDialog();
+
+                    if (!bllUsuario.ExisteAlgunaCuenta())
+                    {
+                        MessageBox.Show("No se pudo crear el administrador. El sistema se cerrará.");
+                        Application.Exit();
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al verificar el estado del sistema: " + ex.Message);
+            }
+
             bllIdioma = new BLL_Idioma();
 
             comboBox1.DataSource = bllIdioma.ListarIdiomasBD();
@@ -36,7 +63,6 @@ namespace CuentaClara_TrabajoCampo
         {
             if (!ValidarCampos())
             {
-                //MostrarError("Debe completar todos los campos.");
                 MostrarError(TraducirTexto("msg_DebeCompletarCampos"));
                 return;
             }
@@ -46,33 +72,50 @@ namespace CuentaClara_TrabajoCampo
 
             btnIngresar.Enabled = false;
 
-
             try
             {
+               
                 bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
                 if (loginExitoso)
                 {
                     string idIdioma = comboBox1.SelectedValue.ToString();
                     _bllUsuario.CambiarIdiomaEnSesion(idIdioma);
-                    //SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = idIdioma;
 
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();
                     this.Close();
                 }
-                else
-                {
-                    //MessageBox.Show("Usuario o contraseña incorrectos.");
-                    MessageBox.Show(TraducirTexto("msg_UsuarioContrasenaIncorrectos"));
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message); // acá cae "usuario bloqueado"
+
+                string mensajeParaMostrar;
+
+                
+                if (ex.Message.Contains("|"))
+                {
+                    string[] partes = ex.Message.Split('|');
+                    string clave = partes[0];      
+                    string valor = partes[1];     
+
+                 
+                    mensajeParaMostrar = TraducirTexto(clave) + " " + valor;
+                }
+                else
+                {
+                   
+                    mensajeParaMostrar = TraducirTexto(ex.Message);
+                }
+                string tituloError = TraducirTexto("msg_TituloErrorLogin") != "msg_TituloErrorLogin"
+                                     ? TraducirTexto("msg_TituloErrorLogin")
+                                     : TraducirTexto("msg_ErrorAutenticacion");
+
+                MessageBox.Show(mensajeParaMostrar, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
+                
                 btnIngresar.Enabled = true;
             }
         }

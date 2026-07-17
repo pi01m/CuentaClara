@@ -19,11 +19,29 @@ namespace DAL
         {
             
         }
+        public bool HayUsuariosRegistrados()
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                
+                string sql = "SELECT COUNT(*) AS Cantidad FROM Usuario";
 
+                SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
+                DataTable tabla = new DataTable();
+
+                // El adaptador abre y cierra la conexión automáticamente
+                adapter.Fill(tabla);
+
+                // Accedemos al valor dentro del DataTable
+                int cantidad = Convert.ToInt32(tabla.Rows[0]["Cantidad"]);
+
+                return cantidad > 0;
+            }
+        }
         public Servicio_Usuario AutenticarUsuario(string login, string hash)
         {
-            const string sql =
-                "SELECT Nombre, Apellido, DNI, email, Login, Password, " +
+            const string sql ="SELECT Nombre, Apellido, DNI, email, Login, Password, " +
+                
                 "       Activo, Bloqueo, IdRol " +
                 "FROM Usuario " +
                 "WHERE Login = @Login " +

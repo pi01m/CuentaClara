@@ -32,6 +32,11 @@ namespace BLL
 
             _sm = SessionManager.GetInstancia();
         }
+        public bool ExisteAlgunaCuenta()
+        {
+            
+            return _dalUsuario.HayUsuariosRegistrados();
+        }
         private void ValidarDatosBasicos(string dni, string nombre, string apellido, string email)
         {
 
@@ -100,8 +105,7 @@ namespace BLL
         public bool CrearUsuario(Servicio_Usuario usuario)
     
         {
-            try
-            {
+           
 
                 ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
 
@@ -128,11 +132,7 @@ namespace BLL
                 }
 
                 return resultado;
-            }
-            catch
-            {
-                return false;
-            }
+            
         }
         public void ReiniciarIntentos(string login)
         {
@@ -195,7 +195,13 @@ namespace BLL
                 throw new Exception("Sistema en mantenimiento. Espere unos segundos...");
             }
 
+            Servicio_Usuario usuarioExistente = _dalUsuario.ObtenerUsuarioPorLogin(nombreUsuario);
 
+            if (usuarioExistente == null)
+            {
+                // El usuario no existe. Cortamos el flujo aquí. No se descuentan intentos a nadie.
+                throw new Exception("Usuario no registrado.");
+            }
 
 
             int intentos = _dalUsuario.ObtenerIntentos(nombreUsuario);
@@ -211,11 +217,7 @@ namespace BLL
                 throw new Exception("Usuario bloqueado por múltiples intentos fallidos.");
             }
 
-
-
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
-
-
 
             if (usuario == null)
             {
@@ -223,26 +225,18 @@ namespace BLL
 
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
 
-                throw new Exception(
-                    $"Contraseña incorrecta. Intentos restantes: {3 - intentosActualizados}");
+                throw new Exception("err_IntentosRestantes| " + ( 3 - intentosActualizados));
+                    
             }
-
-
 
 
             if (!VerificarEstadoUsuario(usuario))
             {
-                _bitacoraServicio.RegistrarBitacora(
-                    "Usuario bloqueado o inactivo",
-                    nombreUsuario,
-                    "Seguridad",
-                    1);
+                _bitacoraServicio.RegistrarBitacora("Usuario bloqueado o inactivo",nombreUsuario,"Seguridad",1);
 
-                throw new Exception(
-                    "El usuario se encuentra inactivo o bloqueado.");
+                throw new Exception("El usuario se encuentra inactivo o bloqueado.");
+                    
             }
-
-
 
             if (string.IsNullOrWhiteSpace(usuario.IdRol))
             {
@@ -252,11 +246,9 @@ namespace BLL
                     "Seguridad",
                     2);
 
-                throw new Exception(
-                    "Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
+                throw new Exception( "Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
+                   
             }
-
-
 
 
             BLL_Rol bllRol = new BLL_Rol();
@@ -265,17 +257,10 @@ namespace BLL
 
 
 
-            usuario.Permisos =
-                new Servicio_Familia(usuario.IdRol,
-                "Raíz_Permisos_" + usuario.Login);
+            usuario.Permisos =new Servicio_Familia(usuario.IdRol,"Raíz_Permisos_" + usuario.Login);
 
-
-
-            List<Servicio_Permiso> permisosDirectos =
-                bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
-
-
-
+            List<Servicio_Permiso> permisosDirectos = bllPermiso.ObtenerPermisosPorRol(usuario.IdRol);
+ 
             if (permisosDirectos != null)
             {
                 foreach (Servicio_Permiso permiso in permisosDirectos)
@@ -284,14 +269,8 @@ namespace BLL
                 }
             }
 
-
-
-
-            List<Servicio_Familia> familiasDelRol =
-                bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
-
-
-
+            List<Servicio_Familia> familiasDelRol =bllRol.ObtenerFamiliasPorRol(usuario.IdRol);
+ 
             if (familiasDelRol != null)
             {
                 foreach (Servicio_Familia familiaLigera in familiasDelRol)
@@ -312,8 +291,8 @@ namespace BLL
 
 
 
-            _bitacoraServicio.RegistrarBitacora(
-                "Login correcto",
+            _bitacoraServicio.RegistrarBitacora("Login correcto",
+                
                 usuario.Login,
                 "Seguridad",
                 1);
@@ -549,5 +528,6 @@ namespace BLL
 
 
         }
+      
     }
 }

@@ -269,11 +269,18 @@ namespace CuentaClara_TrabajoCampo
                     mensaje += Environment.NewLine;
                 }
 
-                //mensaje +=
-                // @"
-                // El sistema está funcionando en Modo Emergencia.
 
-                // Revise la base de datos antes de continuar.";
+//                mensaje += @"  El sistema está funcionando en Modo Emergencia.
+                
+               
+
+//                Revise la base de datos antes de continuar.";
+
+////             mensaje +=
+               // @"
+////                // El sistema está funcionando en Modo Emergencia.
+
+               // Revise la base de datos antes de continuar.";
 
                 mensaje +=
                 Environment.NewLine +
@@ -285,11 +292,8 @@ namespace CuentaClara_TrabajoCampo
                 //    MessageBoxButtons.OK,
                 //    MessageBoxIcon.Warning);
 
-                MessageBox.Show(
-                    mensaje,
-                    TraducirTexto("ModoEmergencia"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+
+                MessageBox.Show(mensaje,TraducirTexto("ModoEmergencia"),MessageBoxButtons.OK,MessageBoxIcon.Warning);
 
                 usuarioActual.ErrorIntegridad = null;
                 SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);

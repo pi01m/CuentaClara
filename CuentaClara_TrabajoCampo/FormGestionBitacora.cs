@@ -109,7 +109,12 @@ namespace CuentaClara_TrabajoCampo
             FormGestionBitacora_Resize(null, null);
 
             RefrescarSesionUsuario();
+            List<string> listaEventos = bll.ObtenerEventosBase();
 
+            listaEventos.Insert(0, "Todos");
+
+            cboEvento.DataSource = listaEventos;
+            cboEvento.SelectedIndex = 0;
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
             BLL_Rol bllRol = new BLL_Rol(); BloquearBotonesSegunPermisos(usuarioActual);
 

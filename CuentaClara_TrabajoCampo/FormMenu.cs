@@ -193,10 +193,14 @@ namespace CuentaClara_TrabajoCampo
         private void FormMenu_Load(object sender, EventArgs e)
         {
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
+            BLL_Rol bllRol = new BLL_Rol();
+            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
-            if (usuarioActual != null &&
-                usuarioActual.ModoEmergencia &&
-                usuarioActual.ErrorIntegridad != null)
+            lblUsuario.Text = $"Usuario:";
+            label1.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
+
+            if (usuarioActual != null &&usuarioActual.ModoEmergencia &&usuarioActual.ErrorIntegridad != null)
+     
             {
                 //string mensaje =
                 //@"ATENCIÓN
@@ -291,11 +295,8 @@ namespace CuentaClara_TrabajoCampo
                 SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);
             }
 
-            BLL_Rol bllRol = new BLL_Rol();
-            string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
-
-            lblUsuario.Text = $"Usuario:";
-            lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
+        
+            
 
             Bloquear(usuarioActual);
             ActualizarIdioma();

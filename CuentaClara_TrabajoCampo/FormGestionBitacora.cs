@@ -68,9 +68,9 @@ namespace CuentaClara_TrabajoCampo
             }
 
             btnAplicar.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P6"); // Bitacora_Consultar
-            btnImprimir.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P7"); // Bitacora_Exportar
+            btnImprimir.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P7"); // Bitacora_Exportar
 
-            btnLimpiar.Enabled =bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P6");
+            btnLimpiar.Enabled = bllRol.ValidarPermisoEnArbol(usuarioActual.Permisos, "P6");
 
             btnSalir.Enabled = true;
         }
@@ -93,7 +93,7 @@ namespace CuentaClara_TrabajoCampo
             dgvBitacora.Columns["Fecha"].HeaderText = TraducirTexto("Fecha");
             dgvBitacora.Columns["Hora"].HeaderText = TraducirTexto("Hora");
 
-            
+
             lstMensajes.Items.Clear();
             //lstMensajes.Items.Add("Se cargaron los eventos de los últimos 3 días.");
             lstMensajes.Items.Add(TraducirTexto("EventosUltimos3Dias"));
@@ -105,13 +105,13 @@ namespace CuentaClara_TrabajoCampo
 
         private void FormGestionBitacora_Load_1(object sender, EventArgs e)
         {
-                       
+
             FormGestionBitacora_Resize(null, null);
 
             RefrescarSesionUsuario();
 
             var usuarioActual = SessionManager.GetInstancia().GetUsuarioActual();
-            BLL_Rol bllRol = new BLL_Rol();BloquearBotonesSegunPermisos(usuarioActual);
+            BLL_Rol bllRol = new BLL_Rol(); BloquearBotonesSegunPermisos(usuarioActual);
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
@@ -218,7 +218,6 @@ namespace CuentaClara_TrabajoCampo
                 {
                     string login = dgvBitacora.CurrentRow.Cells["Login"].Value.ToString();
 
-
                     List<Servicio_Bitacora> lista = (List<Servicio_Bitacora>)dgvBitacora.DataSource;
 
                     bllPdf.ExportarBitacora(lista, save.FileName, login);
@@ -317,6 +316,9 @@ namespace CuentaClara_TrabajoCampo
             );
         }
 
-       
+        private void lblUsuarioValor_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

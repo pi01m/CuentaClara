@@ -40,6 +40,7 @@ namespace BLL
 
             List<string> registrosAlterados = new List<string>();
 
+
             foreach (T registro in listaOrdenada)
             {
                 string dvhCalculado = servicioCalcular.CalcularDVH(registro);

@@ -48,6 +48,60 @@ namespace BLL
 
             return _dal.FiltrarBitacora(login, desde, hasta, modulo, evento, criticidad);
         }
+        public List<string> ObtenerEventosBase()
+        {
+            return new List<string>
+        {
+      
+        "Login Incorrecto - DV Actualizado",
+        "Usuario Creado",
+        "Usuario Desbloqueado",
+        "Acceso de emergencia por violación de integridad",
+        "Violación de integridad detectada",
+        "Intento de login bloqueado",
+        "Usuario bloqueado o inactivo",
+        "Intento de login sin rol asignado",
+        "Login correcto",
+        "Actualización de Idioma",
+        "Cerrar Sesión",
+        "Activar Usuario",
+        "Desactivar Usuario",
+        "Usuario Modificado",
+        "Cambio Clave",
+        "Cambio de Idioma en Sesión",
+
+      
+        "Alta Familia",
+        "Modificación Familia",
+        "Baja Familia",
+        "Permiso asignado a Familia",
+        "Asignación familia a familia",
+        "Permiso desasignado de Familia",
+        "Subfamilia desasignada de Familia",
+
+       
+        "Alta Perfil (Rol)",
+        "Permiso asignado al Rol",
+        "Asignación de familias a rol",
+        "Permiso desasignado del Rol",
+        "Familia desasignada del Rol",
+        "Modificación de Rol",
+        "Baja de Rol",
+
+     
+        "Backup exitoso",
+
+        
+        "Impresión/Exportación de Bitácora",
+
+  
+        "Recalculo de Dígitos Verificadores de Usuario",
+        "Recalculo de Dígitos Verificadores de Roles",
+        "Recalculo de Dígitos Verificadores de Familias",
+        "Recalculo de Dígitos Verificadores de Permisos",
+        "Recalculo de Dígitos Verificadores de Idiomas"
+    };
+        }
 
     }
 }

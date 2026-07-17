@@ -36,7 +36,6 @@ namespace CuentaClara_TrabajoCampo
         {
             if (!ValidarCampos())
             {
-                //MostrarError("Debe completar todos los campos.");
                 MostrarError(TraducirTexto("msg_DebeCompletarCampos"));
                 return;
             }
@@ -46,33 +45,34 @@ namespace CuentaClara_TrabajoCampo
 
             btnIngresar.Enabled = false;
 
-
             try
             {
+               
                 bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
                 if (loginExitoso)
                 {
                     string idIdioma = comboBox1.SelectedValue.ToString();
                     _bllUsuario.CambiarIdiomaEnSesion(idIdioma);
-                    //SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma = idIdioma;
 
                     ConfigurarMenu();
                     MostrarPantallaPrincipal();
                     this.Close();
                 }
-                else
-                {
-                    //MessageBox.Show("Usuario o contraseña incorrectos.");
-                    MessageBox.Show(TraducirTexto("msg_UsuarioContrasenaIncorrectos"));
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message); // acá cae "usuario bloqueado"
+                
+
+                string tituloError = TraducirTexto("msg_TituloErrorLogin") != "msg_TituloErrorLogin"
+                                     ? TraducirTexto("msg_TituloErrorLogin")
+                                     : "Error de Autenticación";
+
+                MessageBox.Show(ex.Message, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
+                // Esto asegura que el botón siempre se vuelva a habilitar, pase lo que pase
                 btnIngresar.Enabled = true;
             }
         }

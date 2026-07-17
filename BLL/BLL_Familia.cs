@@ -154,8 +154,8 @@ namespace BLL
 
             if (usosDetectados.Count > 0)
             {
-                throw new Exception("No se puede eliminar la familia porque está siendo utilizada por:\n"
-                                    + string.Join("\n", usosDetectados.Distinct()));
+                throw new Exception("No se puede eliminar la familia porque está siendo utilizada por:\n"+ string.Join("\n", usosDetectados.Distinct()));
+                                    
             }
 
             dal.Eliminar(idFamilia);

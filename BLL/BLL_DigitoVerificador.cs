@@ -29,6 +29,27 @@ namespace BLL
   
         }
 
+        public void EliminarDigitoYRecalcular<T>(string idElementoEliminado, List<T> listaCompleta, string nombreTabla) where T : IVerificable
+        {
+            
+            string nombreFila = $"{nombreTabla}_{idElementoEliminado}";
+            dalDigito.EliminarRegistroDigito(nombreFila);
+
+      
+            var listaOrdenada = listaCompleta.OrderBy(x => x.ObtenerIdentificadorFila()).ToList();
+            string cadenaAcumulada = "";
+
+            foreach (T registro in listaOrdenada)
+            {
+                cadenaAcumulada += servicioCalcular.CalcularDVH(registro);
+            }
+
+            string dvvFinal = servicioCalcular.CalcularHash(cadenaAcumulada);
+            string nombreMaestro = $"{nombreTabla}_MAESTRO";
+
+            Servicio_DigitoVerificadorVertical nuevoDVV = new Servicio_DigitoVerificadorVertical(dvvFinal, nombreMaestro);
+            dalDigito.GuardarDVV(nuevoDVV);
+        }
 
         public ExcepcionIntegridad ValidarIntegridad<T>(List<T> listaRegistros, string nombreTabla) where T : IVerificable
         {

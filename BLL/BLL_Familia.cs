@@ -26,6 +26,18 @@ namespace BLL
             bllPermiso = new BLL_Permiso();
         }
 
+        public List<Servicio_Familia> ObtenerFamiliasCompletas()
+        {
+            List<Servicio_Familia> familiasBasicas = dal.ListarFamilias();
+            List<Servicio_Familia> familiasCompletas = new List<Servicio_Familia>();
+
+            foreach (var f in familiasBasicas)
+            {
+                familiasCompletas.Add(this.ObtenerFamiliaCompleta(f.IdRol));
+            }
+
+            return familiasCompletas;
+        }
         public void Guardar(Servicio_Familia familia, List<string> itemsAsignadosIniciales)
         {
             if (string.IsNullOrWhiteSpace(familia.Nombre))
@@ -84,7 +96,7 @@ namespace BLL
             }
 
             bllBitacora.RegistrarBitacora("Alta Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(familia, this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(familia.IdRol), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         private void CargarHijosRecursivo(Servicio_Familia familia)
@@ -120,7 +132,7 @@ namespace BLL
 
             dal.Modificar(familia);
             bllBitacora.RegistrarBitacora("Modificación Familia: " + familia.Nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(familia, this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(familia.IdRol), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         public void Eliminar(string idFamilia)
@@ -160,7 +172,7 @@ namespace BLL
 
             dal.Eliminar(idFamilia);
             bllBitacora.RegistrarBitacora("Baja Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(new Servicio_Familia("0", "Dummy"), this.ObtenerFamilias(), "Familia");
+            bllDV.EliminarDigitoYRecalcular(idFamilia, this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         public void AsignarPermiso(string idFamilia, string idPermiso)
@@ -189,7 +201,7 @@ namespace BLL
             }
             dal.AsignarPermiso(idFamilia, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 1);
-            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idFamilia), this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idFamilia), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         private List<Servicio_Permiso> ObtenerPermisosDeFamiliaRecursivo(Servicio_Familia familia)
@@ -280,7 +292,7 @@ namespace BLL
 
             dal.AsignarSubFamilia(idPadre, idHija);
             bllBitacora.RegistrarBitacora("Asignación familia a familia", SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idPadre), this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idPadre), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         private bool RolTienePermiso(string idRol, string idPermiso)
@@ -402,7 +414,7 @@ namespace BLL
 
             dal.DesasignarPermiso(idFamilia, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso desasignado de Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idFamilia), this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(idFamilia), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
         public void DesasignarSubFamilia(string padre, string hija)
@@ -413,7 +425,7 @@ namespace BLL
 
             dal.DesasignarSubFamilia(padre, hija);
             bllBitacora.RegistrarBitacora("Subfamilia desasignada de Familia ID: " + padre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
-            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(padre), this.ObtenerFamilias(), "Familia");
+            bllDV.ActualizarDigitos(ObtenerFamiliaCompleta(padre), this.ObtenerFamiliasCompletas(), "Familia");
         }
 
 
@@ -450,7 +462,7 @@ namespace BLL
                     $"Error de integridad: se detectó un ciclo en la familia '{nombreFamilia}'.");
             }
 
-            // FAMILIA REPETIDA
+        
 
             if (!familiasEncontradas.Add(idFamilia))
             {
@@ -460,7 +472,7 @@ namespace BLL
 
             familiasEnCamino.Add(idFamilia);
 
-            // PERMISOS DIRECTOS
+          
 
             List<Servicio_Permiso> permisos =
                 bllPermiso.ObtenerPermisosPorFamilia(idFamilia);
@@ -477,7 +489,7 @@ namespace BLL
                 }
             }
 
-            // SUBFAMILIAS
+  
 
             List<Servicio_Familia> hijas =
                 dal.ObtenerSubFamilias(idFamilia);

@@ -1,4 +1,5 @@
 ﻿using BLL;
+using IU;
 using Microsoft.Data.SqlClient;
 using Servicio;
 using System;
@@ -25,6 +26,32 @@ namespace CuentaClara_TrabajoCampo
 
         private void frmLogIn_Load_1(object sender, EventArgs e)
         {
+            BLL_Usuario bllUsuario = new BLL_Usuario();
+
+            try
+            {
+           
+                if (!bllUsuario.ExisteAlgunaCuenta())
+                {
+                    MessageBox.Show("Es la primera vez que inicia el sistema. Por favor, registre al administrador inicial.");
+
+                   
+                    FormCrearPrimerUsuario formAlta = new FormCrearPrimerUsuario();
+                    formAlta.ShowDialog();
+
+                    if (!bllUsuario.ExisteAlgunaCuenta())
+                    {
+                        MessageBox.Show("No se pudo crear el administrador. El sistema se cerrará.");
+                        Application.Exit();
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al verificar el estado del sistema: " + ex.Message);
+            }
+
             bllIdioma = new BLL_Idioma();
 
             comboBox1.DataSource = bllIdioma.ListarIdiomasBD();

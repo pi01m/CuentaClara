@@ -32,6 +32,11 @@ namespace BLL
 
             _sm = SessionManager.GetInstancia();
         }
+        public bool ExisteAlgunaCuenta()
+        {
+            
+            return _dalUsuario.HayUsuariosRegistrados();
+        }
         private void ValidarDatosBasicos(string dni, string nombre, string apellido, string email)
         {
 

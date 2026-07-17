@@ -14,9 +14,36 @@ namespace DAL
     {
         private string cadenaConexion = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
-        // =================================================================
-        // Obtener Registro (Desconectado)
-        // =================================================================
+        public void EliminarRegistroDigito(string nombreFila)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                // 1. Configuramos el SelectCommand
+                string selectQuery = "SELECT Nombre, DVV, DVH FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre";
+                SqlDataAdapter da = new SqlDataAdapter(selectQuery, conn);
+                da.SelectCommand.Parameters.AddWithValue("@Nombre", nombreFila);
+
+                // 2. Configuramos el DeleteCommand (CON PARÁMETROS EXPLÍCITOS)
+                da.DeleteCommand = new SqlCommand("DELETE FROM DIGITOVERIFICADOR WHERE Nombre = @Nombre", conn);
+
+                // Mapeo explícito: el 4to parámetro ("Nombre") indica de qué columna del DataTable saca el valor
+                da.DeleteCommand.Parameters.Add("@Nombre", SqlDbType.NVarChar, 255, "Nombre");
+
+                // 3. Llenamos el DataTable (Modo Desconectado)
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                // 4. Modificamos los datos en memoria
+                if (dt.Rows.Count > 0)
+                {
+                    // Marca la fila con el estado 'Deleted' (No la remueve de la colección inmediatamente)
+                    dt.Rows[0].Delete();
+                }
+
+                // 5. Sincronizamos los cambios hacia la base de datos
+                da.Update(dt);
+            }
+        }
         public Servicio_DigitoVerificadorVertical ObtenerRegistroDigito(string nombre)
         {
             Servicio_DigitoVerificadorVertical entidad = null;

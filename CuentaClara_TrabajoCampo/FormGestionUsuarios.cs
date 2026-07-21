@@ -252,73 +252,96 @@ namespace CuentaClara_TrabajoCampo
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            if (modoActual == "ModoModificar")
+            try
             {
-                string nuevoIdRol = cmbRol.SelectedValue.ToString();
-                bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text, nuevoIdRol);
-
-                //MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
-                MessageBox.Show(resultado ? TraducirTexto("UsuarioModificado") : TraducirTexto("NoSePudoModificar"));
-
-            }
-
-            else if (modoActual == "ModoDesbloquear")
-            {
-                int intentos = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Bloqueo"].Value);
 
 
-                if (intentos < 3)
+                if (modoActual == "ModoModificar")
                 {
-                    //MessageBox.Show("El usuario seleccionado no se encuentra bloqueado.");
-                    MessageBox.Show(TraducirTexto("UsuarioNoBloqueado"));
-                    return;
+                    string nuevoIdRol = cmbRol.SelectedValue.ToString();
+                    bool resultado = bll.ModificarUsuario(txtDNI.Text, txtNombre.Text, txtApellido.Text, txtCorreo.Text, nuevoIdRol);
+
+                    //MessageBox.Show(resultado ? "Usuario modificado" : "No se pudo modificar");
+                    MessageBox.Show(resultado ? TraducirTexto("UsuarioModificado") : TraducirTexto("NoSePudoModificar"));
+
                 }
 
-                bll.DesbloquearUsuario(txtLogin.Text);
+                else if (modoActual == "ModoDesbloquear")
+                {
+                    int intentos = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Bloqueo"].Value);
 
-                //MessageBox.Show("Usuario desbloqueado correctamente.");
-                MessageBox.Show(TraducirTexto("UsuarioDesbloqueado"));
-                bool rta = bll.DesbloquearUsuario(txtLogin.Text);
-                if (rta)
-                {
-                    MessageBox.Show("Usuario desbloqueado correctamente.");
+
+                    if (intentos < 3)
+                    {
+                        //MessageBox.Show("El usuario seleccionado no se encuentra bloqueado.");
+                        MessageBox.Show(TraducirTexto("UsuarioNoBloqueado"));
+                        return;
+                    }
+
+
+                    //MessageBox.Show("Usuario desbloqueado correctamente.");
+
+                    bool rta = bll.DesbloquearUsuario(txtLogin.Text);
+                    if (rta)
+                    {
+                        MessageBox.Show(TraducirTexto("UsuarioDesbloqueado"));
+                    }
+                    else
+                    {
+                        MessageBox.Show(TraducirTexto("ErrorDesbloquearUsuario"));
+                    }
+
+                    CargarUsuarios();
+
+                    RestaurarModoConsulta();
                 }
-                else
+
+                else if (modoActual == "ModoActivarDesactivar")
                 {
-                    MessageBox.Show("Error: No se pudo desbloquear el usuario.");
+                    int activo = chkActivo.Checked ? 1 : 0;
+
+                    bool resultado = bll.CambiarEstadoUsuario(txtDNI.Text, activo);
+
+                    //MessageBox.Show("Estado actualizado correctamente.");
+
+                    if (resultado)
+                    {
+                        MessageBox.Show(TraducirTexto("EstadoActualizado"));
+                    }
+                    else
+                    {
+                        MessageBox.Show(TraducirTexto("err_NoSePudoActualizarEstadoUsuario"));
+                    }
+
                 }
 
                 CargarUsuarios();
 
                 RestaurarModoConsulta();
-            }
-
-            else if (modoActual == "ModoActivarDesactivar")
+            } 
+            catch(Exception ex) 
             {
-                int activo = chkActivo.Checked ? 1 : 0;
+                string mensaje = TraducirExcepcion(ex);
 
-                bool resultado = bll.CambiarEstadoUsuario(txtDNI.Text, activo);
-
-                //MessageBox.Show("Estado actualizado correctamente.");
-                MessageBox.Show(TraducirTexto("EstadoActualizado"));
-                if (resultado)
-                {
-                    MessageBox.Show("Estado actualizado correctamente.");
-                }
-                else
-                {
-                    MessageBox.Show("Error: No se pudo actualizar el estado del usuario.");
-                }
-
+                MessageBox.Show(mensaje);
             }
-
-            CargarUsuarios();
-
-            RestaurarModoConsulta();
-
         }
 
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
 
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
 
         private void radioBtnUserActivos_CheckedChanged(object sender, EventArgs e)
         {

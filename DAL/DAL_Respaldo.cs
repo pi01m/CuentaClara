@@ -10,12 +10,11 @@ namespace DAL
 {
     public class DAL_Respaldo
     {
-        private readonly string connMaster =
-            @"Data Source=.;Initial Catalog=master;Integrated Security=True;Trust Server Certificate=True";
+        private readonly string connMaster = DAL_ConexionDB.ObtenerCadenaMaster();
 
-        private readonly string connBD =
-            @"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
+        private readonly string connBD = DAL_ConexionDB.ObtenerCadena();
 
+           
         public DAL_Respaldo()
         {
 

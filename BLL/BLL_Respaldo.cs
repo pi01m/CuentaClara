@@ -36,10 +36,10 @@ namespace BLL
         {
 
             if (!System.IO.File.Exists(rutaArchivo))
-                throw new Exception("No existe el archivo seleccionado.");
+                throw new Exception("err_ArchivoNoExiste");
 
             if (System.IO.Path.GetExtension(rutaArchivo).ToLower() != ".bak")
-                throw new Exception("Debe seleccionar un archivo .bak");
+                throw new Exception("err_ExtensionBackupInvalida");
 
             dal.EjecutarRestore(rutaArchivo);
             //_bitacora.RegistrarBitacora("Restauración de base de datos realizada", "Sistema", "Seguridad", 3);

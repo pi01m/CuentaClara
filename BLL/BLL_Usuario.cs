@@ -19,9 +19,7 @@ namespace BLL
 
         public BLL_Usuario()
         {
-            string connStr = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-
-            _dalUsuario = new DAL_Usuario(connStr);
+            _dalUsuario = new DAL_Usuario();
 
             _encriptadorServicio = new Servicio_Cripto();
 
@@ -41,19 +39,19 @@ namespace BLL
         {
 
             if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido))
-                throw new Exception("El nombre y el apellido son obligatorios.");
-
+                throw new Exception("err_NombreApellidoObligatorios");
+             
 
             if (!Regex.IsMatch(nombre, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$") || !Regex.IsMatch(apellido, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
-                throw new Exception("El nombre y el apellido solo pueden contener letras.");
+                throw new Exception("err_NombreApellidoSoloLetras");
 
 
             if (string.IsNullOrWhiteSpace(dni) || !Regex.IsMatch(dni, @"^\d{8}$"))
-                throw new Exception("El DNI debe contener exactamente 8 números enteros.");
+                throw new Exception("err_DniFormatoInvalido");
 
 
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                throw new Exception("El formato del correo electrónico no es válido.");
+                throw new Exception("err_EmailFormatoInvalido");
         }
         public List<Servicio_Usuario> ListarUsuarios()
         {
@@ -195,7 +193,7 @@ namespace BLL
                     "Seguridad",
                     1);
 
-                throw new Exception("Sistema en mantenimiento. Espere unos segundos...");
+                throw new Exception("err_SistemaMantenimiento");
             }
 
             Servicio_Usuario usuarioExistente = _dalUsuario.ObtenerUsuarioPorLogin(nombreUsuario);
@@ -203,7 +201,7 @@ namespace BLL
             if (usuarioExistente == null)
             {
                 // El usuario no existe. Cortamos el flujo aquí. No se descuentan intentos a nadie.
-                throw new Exception("Usuario no registrado.");
+                throw new Exception("err_UsuarioNoRegistrado");
             }
 
 
@@ -217,7 +215,7 @@ namespace BLL
                     "Seguridad",
                     1);
 
-                throw new Exception("Usuario bloqueado por múltiples intentos fallidos.");
+                throw new Exception("err_UsuarioBloqueado");
             }
 
             Servicio_Usuario usuario = _dalUsuario.AutenticarUsuario(nombreUsuario, hash);
@@ -228,7 +226,7 @@ namespace BLL
 
                 int intentosActualizados = _dalUsuario.ObtenerIntentos(nombreUsuario);
 
-                throw new Exception("err_IntentosRestantes| " + ( 3 - intentosActualizados));
+                throw new Exception("err_IntentosRestantes| " + ( 3 - intentosActualizados)); 
                     
             }
 
@@ -237,7 +235,7 @@ namespace BLL
             {
                 _bitacoraServicio.RegistrarBitacora("Usuario bloqueado o inactivo",nombreUsuario,"Seguridad",1);
 
-                throw new Exception("El usuario se encuentra inactivo o bloqueado.");
+                throw new Exception("err_UsuarioInactivoBloqueado");
                     
             }
 
@@ -249,7 +247,7 @@ namespace BLL
                     "Seguridad",
                     2);
 
-                throw new Exception( "Error de configuración: El usuario no tiene un rol asignado. Contacte al Administrador.");
+                throw new Exception("err_UsuarioSinRol");
                    
             }
 
@@ -445,13 +443,12 @@ namespace BLL
 
         public bool ModificarUsuario(string dni,string nuevoNombre,string nuevoApellido, string nuevoEmail, string nuevoRol)
         {
-            try
-            {
+           
                 ValidarDatosBasicos(dni, nuevoNombre, nuevoApellido, nuevoEmail);
                 Servicio_Usuario usuario = _dalUsuario.ObtenerUsuario(dni);
 
-                if (usuario == null) throw new Exception("No se encontró el usuario a modificar.");
-                if (!VerificarEstadoUsuario(usuario)) throw new Exception("El usuario no se encuentra en un estado válido para ser modificado.");
+                if (usuario == null) throw new Exception("err_UsuarioNoEncontrado");
+                if (!VerificarEstadoUsuario(usuario)) throw new Exception("err_UsuarioEstadoInvalido");
 
                 usuario.Nombre = nuevoNombre;
                 usuario.Apellido = nuevoApellido;
@@ -467,11 +464,7 @@ namespace BLL
                 _bitacoraServicio.RegistrarBitacora("Usuario Modificado",admin.Login,"Administración",3);
 
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
+           
         }
       
         public DataTable ListarLogins()

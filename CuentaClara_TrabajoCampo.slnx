@@ -3,7 +3,7 @@
   <Project Path="BLL/BLL.csproj" Id="3fc9606e-598a-4b40-a7bb-6fddcabf1df3" />
   <Project Path="CuentaClara_TrabajoCampo/IU.csproj" />
   <Project Path="DAL/DAL.csproj" Id="8f771a1e-633a-4114-a0a0-4fd8212614cc" />
-  <Project Path="InstaladorCuentaClara/InstaladorCuentaClara.vdproj" Type="Installer">
+  <Project Path="Instalador_CuentaClara/Instalador_CuentaClara.vdproj" Type="Installer">
     <Build />
   </Project>
   <Project Path="Servicio/Servicio.csproj" Id="0afb1d81-a0c0-42a3-bf68-c4f32f0c7e1a" />

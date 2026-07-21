@@ -14,8 +14,7 @@ namespace BLL
 
         public BLL_BitacoraEvento()
         {
-            string connStr = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            _dal = new DAL_BitacoraEvento(connStr);
+            _dal = new DAL_BitacoraEvento();
         }
 
         public void RegistrarBitacora(string evento,string login,string modulo,int criticidad){

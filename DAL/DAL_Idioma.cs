@@ -104,8 +104,8 @@ namespace DAL
         {
             try
             {
-                using (SqlConnection conexion = new SqlConnection("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"))
-                {
+                using (SqlConnection conexion = new SqlConnection(DAL_ConexionDB.ObtenerCadena()))
+                { 
                     
                     SqlDataAdapter da = new SqlDataAdapter(
                         "SELECT Id_Idioma, Nombre FROM Idioma",
@@ -148,7 +148,7 @@ namespace DAL
 
             try
             {
-                using (SqlConnection conexion = new SqlConnection("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"))
+                using (SqlConnection conexion = new SqlConnection(DAL_ConexionDB.ObtenerCadena()))
                 {
                     SqlCommand cmd = new SqlCommand(
                         "SELECT Id_Idioma, Nombre FROM Idioma",

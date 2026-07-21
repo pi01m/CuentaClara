@@ -12,8 +12,7 @@ namespace DAL
 {
     public class DAL_DigitoVerificador
     {
-        private string cadenaConexion = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-
+        private string cadenaConexion = DAL_ConexionDB.ObtenerCadena();
         public void EliminarRegistroDigito(string nombreFila)
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))

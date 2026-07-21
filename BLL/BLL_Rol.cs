@@ -19,8 +19,7 @@ namespace BLL
         private BLL_Familia bllFamilia = new BLL_Familia();
         public BLL_Rol()
         {
-            string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            dal = new DAL_Rol(conn);
+            dal = new DAL_Rol();
         }
         public List<Servicio_Familia> ObtenerRolesCompletos()
         {
@@ -37,15 +36,15 @@ namespace BLL
         public void CrearRol(Servicio_Familia rol, List<string> idFamilias, List<string> idPermisos)
         {
             if (string.IsNullOrWhiteSpace(rol.Nombre))
-                throw new Exception("Ingrese un nombre.");
+                throw new Exception("err_NombreFamiliaObligatorio");
 
             if (dal.ExisteNombre(rol.Nombre))
-                throw new Exception("Ya existe un rol con ese nombre.");
+                throw new Exception("err_RolNombreExiste");
 
             int totalElementos = (idFamilias != null ? idFamilias.Count : 0) + (idPermisos != null ? idPermisos.Count : 0);
             if (totalElementos < 1)
             {
-                throw new Exception("Un Rol no puede crearse vacío. Debe asignarle al menos un Permiso o una Familia.");
+                throw new Exception("err_RolVacio");
             }
 
             List<string> permisosVistos = new List<string>();
@@ -79,7 +78,7 @@ namespace BLL
                 {
                     if (permisosVistos.Contains(idPerm))
                     {
-                        throw new Exception("Error de integridad: Ha seleccionado permisos sueltos que ya están incluidos dentro de las familias seleccionadas.");
+                        throw new Exception("err_PermisosSueltosRedundantes");
                     }
                     permisosVistos.Add(idPerm);
                 }
@@ -87,7 +86,7 @@ namespace BLL
 
             if (nombresRedundantes.Count > 0)
             {
-                throw new Exception("No se puede crear el Rol. Las familias seleccionadas tienen los siguientes permisos cruzados/redundantes: " + string.Join(", ", nombresRedundantes));
+                throw new Exception("err_RolPermisosRedundantes|" + string.Join(", ", nombresRedundantes));
             }
 
             dal.CrearRol(rol.IdRol, rol.Nombre);
@@ -119,9 +118,9 @@ namespace BLL
 
         public void AsignarPermiso(string idRol, string idPermiso)
         {
-            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un rol.");
-            if (string.IsNullOrWhiteSpace(idPermiso)) throw new Exception("Seleccione un permiso.");
-            if (dal.ExistePermiso(idRol, idPermiso)) throw new Exception("El rol ya posee ese permiso.");
+            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("err_SeleccioneRol");
+            if (string.IsNullOrWhiteSpace(idPermiso)) throw new Exception("err_SeleccionePermiso");
+            if (dal.ExistePermiso(idRol, idPermiso)) throw new Exception("err_RolYaPoseePermiso");
 
             dal.AsignarPermiso(idRol, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso asignado al Rol ID: " + idRol, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
@@ -168,9 +167,9 @@ namespace BLL
 
         public void AsignarFamiliaARol(string idRol, string idFamilia, bool limpiarRedundancias)
         {
-            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un rol.");
-            if (string.IsNullOrWhiteSpace(idFamilia)) throw new Exception("Seleccione una familia.");
-            if (dal.ExisteFamilia(idRol, idFamilia)) throw new Exception("La familia ya está asignada.");
+            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("err_SeleccioneRol");
+            if (string.IsNullOrWhiteSpace(idFamilia)) throw new Exception("err_SeleccioneFamilia");
+            if (dal.ExisteFamilia(idRol, idFamilia)) throw new Exception("err_FamiliaYaAsignada");
 
             BLL_Familia bllFam = new BLL_Familia();
             Servicio_Familia familiaCompleta = bllFam.ObtenerFamiliaCompleta(idFamilia);
@@ -191,7 +190,7 @@ namespace BLL
             }
             if (permisosRedundantes.Count > 0)
             {
-                throw new Exception("No se puede asignar la familia porque el rol ya posee los siguientes permisos: " + string.Join(", ", permisosRedundantes) + ".");
+                throw new Exception("err_FamiliaPermisosRedundantes|" + string.Join(", ", permisosRedundantes));
             }
 
             dal.AsignarFamilia(idRol, idFamilia);
@@ -235,8 +234,8 @@ namespace BLL
 
         public void ModificarRol(string idRol, string nombre)
         {
-            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un perfil.");
-            if (string.IsNullOrWhiteSpace(nombre)) throw new Exception("Ingrese un nombre.");
+            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("err_SeleccioneRol");
+            if (string.IsNullOrWhiteSpace(nombre)) throw new Exception("err_NombreFamiliaObligatorio");
 
             dal.ModificarRol(idRol, nombre);
             bllBitacora.RegistrarBitacora("Modificación de Rol: " + nombre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
@@ -250,7 +249,7 @@ namespace BLL
 
         public void EliminarRol(string idRol)
         {
-            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("Seleccione un Rol.");
+            if (string.IsNullOrWhiteSpace(idRol)) throw new Exception("err_SeleccioneRol");
 
             string nombre = ObtenerNombreRol(idRol);
             dal.EliminarRelacionesRol(idRol);
@@ -427,7 +426,7 @@ namespace BLL
                     if (!permisosEncontrados.Add(permiso.IdRol))
                     {
                         throw new Exception(
-                            $"Error de integridad: el permiso '{permiso.Nombre}' está repetido dentro del rol '{nombreRol}'.");
+                            $"err_PermisoRepetidoRol| P:{permiso.Nombre} - R:{nombreRol}");
                     }
                 }
             }
@@ -462,14 +461,14 @@ namespace BLL
             if (familiasEnCamino.Contains(idFamilia))
             {
                 throw new Exception(
-                    $"Error de integridad: se detectó un ciclo en la familia '{nombreFamilia}' del rol '{nombreRol}'.");
+                   $"err_CicloFamiliaRol|F:{nombreFamilia},R:{nombreRol}");
             }
 
 
             if (!familiasEncontradas.Add(idFamilia))
             {
                 throw new Exception(
-                    $"Error de integridad: la familia '{nombreFamilia}' aparece más de una vez dentro del rol '{nombreRol}'.");
+                    $"err_FamiliaRepetidaRol|F:{nombreFamilia},R:{nombreRol}");
             }
 
             familiasEnCamino.Add(idFamilia);
@@ -484,7 +483,7 @@ namespace BLL
                     if (!permisosEncontrados.Add(permiso.IdRol))
                     {
                         throw new Exception(
-                            $"Error de integridad: el permiso '{permiso.Nombre}' está repetido dentro del rol '{nombreRol}'.");
+                            $"err_PermisoRepetidoRol|Permission: P:{permiso.Nombre},R:{nombreRol}");
                     }
                 }
             }

@@ -11,11 +11,10 @@ namespace DAL
 {
     public class DAL_Permiso
     {
-        private readonly string _connectionString = $"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
-
-        public DAL_Permiso(string connectionString)
+        private readonly string _connectionString = DAL_ConexionDB.ObtenerCadena();
+        public DAL_Permiso()
         {
-            _connectionString = connectionString;
+            
         }
 
         public bool CrearPermiso(string idPermiso,string nombre)

@@ -259,9 +259,25 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(TraducirTexto("msg_ErrorVistaPrevia") + ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(TraducirTexto("msg_ErrorVistaPrevia") +mensaje);
 
             }
+        }
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
         }
         private void DibujarComposite(TreeNode nodoPadre, Servicio_Familia familiaArmada)
         {
@@ -408,8 +424,8 @@ namespace IU
                         string idFamilia = item.IdRol;
                         if (bllRol.ExisteRedundanciaPermisos(idRol, idFamilia))
                         {
-                            MessageBox.Show("Error de integridad: La familia seleccionada contiene permisos que ya posee este Rol. Por favor, elimine la redundancia antes de asignar.",
-                                            "Redundancia detectada", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(TraducirTexto("msg_ErrorIntegridadFamiliaPermisos"),
+                                           TraducirTexto("msg_RedundanciaDetectada"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return; // Saltamos este elemento
                         }
                         string nombreFamilia = item.Nombre;
@@ -442,7 +458,7 @@ namespace IU
                 {
                     if (cmbFamilia.SelectedValue == null || cmbFamiliaHija.SelectedValue == null)
                     {
-                        MessageBox.Show("Por favor, seleccione una familia padre y una hija en los combos.");
+                        MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaPadreHija"));
                         return;
                     }
                     BLL_Familia bllFamilia = new BLL_Familia();
@@ -451,14 +467,14 @@ namespace IU
 
                     if (idPadre == idHija)
                     {
-                        MessageBox.Show("Una familia no puede asignarse a sí misma.");
+                        MessageBox.Show(TraducirTexto("msg_FamiliaNoPuedeAsignarseMisma"));
                         return;
                     }
 
                     // Validación de redundancia antes de asignar
                     if (bllFamilia.TieneFamilia(idPadre, idHija))
                     {
-                        MessageBox.Show("Esta relación ya existe o causaría un ciclo.");
+                        MessageBox.Show(TraducirTexto("msg_RelacionFamiliasYaExisteOCiclo"));
                         return;
                     }
 
@@ -495,7 +511,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -577,7 +594,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -587,12 +605,12 @@ namespace IU
             {
                 if (clbFamilia.CheckedItems.Count == 0)
                 {
-                    MessageBox.Show("Por favor, seleccione una familia en la lista de la izquierda.");
+                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaModificar"));
                     return;
                 }
                 if (clbFamilia.CheckedItems.Count > 1)
                 {
-                    MessageBox.Show("Por favor, seleccione solo una familia a la vez para modificar.");
+                    MessageBox.Show(TraducirTexto("msg_SoloUnaFamiliaModificar"));
                     return;
                 }
 
@@ -623,7 +641,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -635,13 +654,13 @@ namespace IU
             {
                 if (clbFamilia.CheckedItems.Count == 0)
                 {
-                    MessageBox.Show("Por favor, seleccione al menos una familia en la lista de la izquierda.");
+                    MessageBox.Show(TraducirTexto("msg_SeleccioneFamiliaModificar"));
                     return;
                 }
 
                 if (clbFamilia.CheckedItems.Count > 1)
                 {
-                    MessageBox.Show("Por favor, seleccione solo una familia a la vez para eliminar.");
+                    MessageBox.Show(TraducirTexto("msg_SoloUnaFamiliaModificar"));
                     return;
                 }
 
@@ -657,7 +676,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje, TraducirTexto("msg_ErrorEliminar"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -717,7 +737,8 @@ namespace IU
             {
                 // Si falló el nombre, si falló la cantidad mínima en la BLL, o si hubo una 
                 // redundancia no resuelta, el error salta acá y LA FAMILIA NO SE CREÓ EN LA BD.
-                MessageBox.Show(ex.Message, TraducirTexto("msg_Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje, TraducirTexto("msg_Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -776,7 +797,8 @@ namespace IU
             catch (Exception ex)
             {
                 // MessageBox.Show("Error al intentar desasignar: " + ex.Message);
-                MessageBox.Show(TraducirTexto("msg_ErrorDesasignar") + ": " + ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(TraducirTexto("msg_ErrorDesasignar") + ": " + mensaje);
             }
         }
 
@@ -814,7 +836,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error al crear Rol", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje, TraducirTexto("err_ErrorCrearRol"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -830,7 +853,7 @@ namespace IU
                 //}
                 if (cmbRol.SelectedItem == null)
                 {
-                    MessageBox.Show("Por favor, seleccione un rol del combo.");
+                    MessageBox.Show(TraducirTexto("msg_SeleccioneRolCombo"));
                     return;
                 }
                 Servicio_Familia rolSeleccionado = (Servicio_Familia)cmbRol.SelectedItem;
@@ -865,7 +888,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -890,7 +914,7 @@ namespace IU
 
                 bllRol.EliminarRol(idNodoSeleccionado);
 
-                MessageBox.Show("Rol eliminado correctamente.");
+                MessageBox.Show(TraducirTexto("msg_RolEliminadoCorrectamente"));
 
                 //MessageBox.Show(
                 //    "Perfil eliminado correctamente."); 
@@ -902,7 +926,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -1190,7 +1215,9 @@ namespace IU
                 //listBox1.Items.Add("Modo modificar FAMILIA");
                 //listBox1.Items.Add("1. Elija la FAMILIA de la lista.");
                 //listBox1.Items.Add("3. Presione Aplicar.");
-
+                listBox1.Items.Add(TraducirTexto("msg_ModoModificarFamilia"));
+                listBox1.Items.Add(TraducirTexto("msg_ElijaFamiliaLista"));
+                listBox1.Items.Add(TraducirTexto("msg_PresioneAplicar"));
                 clbFamilia.Enabled = true;
                 btnAplicar.Enabled = true;
 
@@ -1262,7 +1289,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
 
             CargarCombos();

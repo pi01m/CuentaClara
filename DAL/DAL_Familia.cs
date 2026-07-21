@@ -9,11 +9,10 @@ namespace DAL
 {
     public class DAL_Familia
     {
-        private readonly string _connectionString = $"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
-
-        public DAL_Familia(string connectionString)
+        private readonly string _connectionString = DAL_ConexionDB.ObtenerCadena();
+        public DAL_Familia()
         {
-            _connectionString = connectionString;
+           
         }
 
         public bool CrearFamilia(Servicio_Familia familia)

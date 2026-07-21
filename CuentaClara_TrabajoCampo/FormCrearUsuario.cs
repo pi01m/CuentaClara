@@ -50,9 +50,28 @@ namespace CuentaClara_TrabajoCampo
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+
+                MessageBox.Show(mensaje);
             }
         }
+
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
+       
         private string TraducirTexto(string clave)
         {
             string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;

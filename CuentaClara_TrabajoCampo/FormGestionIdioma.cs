@@ -137,13 +137,28 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(TraducirTexto("ErrorCrearIdioma") + ": " + ex.Message, TraducirTexto("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(TraducirTexto("ErrorCrearIdioma") + ": " + mensaje, TraducirTexto("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
         }
 
 
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
 
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
 
         #endregion
         private void btnAplicar_Click(object sender, EventArgs e)
@@ -207,7 +222,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -263,7 +279,8 @@ namespace IU
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 

@@ -28,7 +28,7 @@ namespace CuentaClara_TrabajoCampo
 
             string nombreLegibleDelRol = bllRol.ObtenerNombreRol(usuarioActual.IdRol);
 
-            lblUsuarioActivo.Text = $"Usuario:";
+            lblUsuarioActivo.Text = TraducirTexto("lbl_Usuario");
             lblUsuarioValor.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
             _bllUsuario = new BLL_Usuario();
             _bllBitacoraEvento = new BLL_BitacoraEvento();
@@ -41,7 +41,7 @@ namespace CuentaClara_TrabajoCampo
             {
                 if (string.IsNullOrWhiteSpace(txtClaveActual.Text) || string.IsNullOrWhiteSpace(txtNuevaClave.Text))
                 {
-                    MessageBox.Show("Por favor, complete todos los campos.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(TraducirTexto("msg_CamposObligatorios"),TraducirTexto("msg_Atencion"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 string ClaveVieja = txtClaveActual.Text;
@@ -50,17 +50,19 @@ namespace CuentaClara_TrabajoCampo
 
                 if (resultado)
                 {
-                    MessageBox.Show("Contraseña modificada de forma permanente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(TraducirTexto("msg_ClaveModificadaCorrectamente"),TraducirTexto("msg_Exito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo realizar el cambio de clave. Verifique que su clave actual sea correcta o reintente más tarde.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(TraducirTexto("msg_ErrorCambioClave"),TraducirTexto("msg_Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -69,6 +71,37 @@ namespace CuentaClara_TrabajoCampo
             GestorIdioma.GetInstancia().Desuscribir(this);
 
             
+        }
+
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
         }
 
         public void ActualizarIdioma()

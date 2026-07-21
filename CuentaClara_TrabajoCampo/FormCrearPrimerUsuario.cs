@@ -45,17 +45,49 @@ namespace IU
 
                 if (bll.CrearUsuario(usuario))
                 {
-                    MessageBox.Show("Usuario Creado Correctamente");
+                    MessageBox.Show(TraducirTexto("msg_UsuarioCreadoCorrectamente"));
                     this.Close();
                 }
             }
             catch (Exception ex)
             {
-          
-                MessageBox.Show(ex.Message);
+
+                string mensaje = TraducirExcepcion(ex);
+
+                MessageBox.Show(mensaje);
             }
         }
-     
+
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = "1";
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {

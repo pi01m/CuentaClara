@@ -28,15 +28,14 @@ namespace IU
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                var confirmacion = MessageBox.Show("¿Seguro? Esto sobreescribirá los datos.", "Atención", MessageBoxButtons.YesNo);
+                var confirmacion = MessageBox.Show(TraducirTexto("msg_ConfirmarRestauracion"), TraducirTexto("msg_Atencion"), MessageBoxButtons.YesNo);
                 if (confirmacion == DialogResult.Yes)
                 {
                     try
                     {
                         bllRespaldo.HacerRestore(ofd.FileName);
-                        MessageBox.Show(
-                        "La base de datos fue restaurada correctamente.\n\nLa aplicación se cerrará para aplicar los cambios.",
-                        "Restauración",
+                        MessageBox.Show(TraducirTexto("msg_RestauracionExitosaCerrar"),
+                        TraducirTexto("msg_Restauracion"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
@@ -44,7 +43,8 @@ namespace IU
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error en la restauración: " + ex.Message);
+                        string mensaje = TraducirExcepcion(ex);
+                        MessageBox.Show(TraducirTexto("msg_ErrorRestauracion") + mensaje);
                     }
                 }
             }
@@ -60,11 +60,12 @@ namespace IU
             try
             {
                 bllRespaldo.HacerBackup(textBox1.Text);
-                MessageBox.Show("Backup generado exitosamente.");
+                MessageBox.Show(TraducirTexto("msg_BackupGeneradoExitosamente"));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(TraducirTexto("msg_Error") + mensaje);
             }
             finally
             {
@@ -92,10 +93,10 @@ namespace IU
         private void btn_RecalcularDv_Click(object sender, EventArgs e)
         {
             DialogResult r = MessageBox.Show(
-        "Se recalcularán todos los Dígitos Verificadores.\n\n¿Desea continuar?",
-        "Confirmación",
-        MessageBoxButtons.YesNo,
-        MessageBoxIcon.Warning);
+            TraducirTexto("msg_ConfirmarRecalculoDV"),
+            TraducirTexto("msg_Confirmacion"),
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning);
 
             if (r != DialogResult.Yes)
                 return;
@@ -105,14 +106,15 @@ namespace IU
                 bllRespaldo.RecalcularDigitos();
 
                 MessageBox.Show(
-                    "Los Dígitos Verificadores fueron recalculados correctamente.",
-                    "Éxito",
+                    TraducirTexto("msg_DVRecalculadosCorrectamente"),
+                    TraducirTexto("msg_Exito"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string mensaje = TraducirExcepcion(ex);
+                MessageBox.Show(mensaje);
             }
         }
 
@@ -132,6 +134,36 @@ namespace IU
 
         }
 
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
+        private string TraducirTexto(string clave)
+        {
+            string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;
+
+            BLL_Idioma bllIdioma = new BLL_Idioma();
+
+            Servicio_Idioma idioma = bllIdioma.ObtenerIdiomaPorId(idIdioma);
+
+            if (idioma == null)
+                return clave;
+
+            var etiqueta = idioma.Etiquetas.FirstOrDefault(x => x.Clave == clave);
+
+            return etiqueta != null ? etiqueta.Texto : clave;
+        }
 
         private void TraducirControles(Control.ControlCollection controles, Servicio_Idioma idioma)
         {

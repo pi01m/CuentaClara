@@ -90,28 +90,12 @@ namespace CuentaClara_TrabajoCampo
             catch (Exception ex)
             {
 
-                string mensajeParaMostrar;
-
-                
-                if (ex.Message.Contains("|"))
-                {
-                    string[] partes = ex.Message.Split('|');
-                    string clave = partes[0];      
-                    string valor = partes[1];     
-
-                 
-                    mensajeParaMostrar = TraducirTexto(clave) + " " + valor;
-                }
-                else
-                {
-                   
-                    mensajeParaMostrar = TraducirTexto(ex.Message);
-                }
+                string mensaje = TraducirExcepcion(ex);
                 string tituloError = TraducirTexto("msg_TituloErrorLogin") != "msg_TituloErrorLogin"
                                      ? TraducirTexto("msg_TituloErrorLogin")
                                      : TraducirTexto("msg_ErrorAutenticacion");
 
-                MessageBox.Show(mensajeParaMostrar, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mensaje, tituloError, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
@@ -119,7 +103,21 @@ namespace CuentaClara_TrabajoCampo
                 btnIngresar.Enabled = true;
             }
         }
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
 
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
         private void ConfigurarMenu()
         {
             Servicio_Usuario usuarioSesion = SessionManager.GetInstancia().GetUsuarioActual();

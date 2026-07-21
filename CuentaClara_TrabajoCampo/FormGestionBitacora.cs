@@ -234,8 +234,9 @@ namespace CuentaClara_TrabajoCampo
             }
             catch (Exception ex)
             {
+                string mensaje = TraducirExcepcion(ex);
                 //MessageBox.Show("Error al generar el PDF: " + ex.Message);
-                MessageBox.Show(TraducirTexto("ErrorPdf") + ": " + ex.Message);
+                MessageBox.Show(TraducirTexto("ErrorPdf") + ": " + mensaje);
             }
         }
 
@@ -291,6 +292,21 @@ namespace CuentaClara_TrabajoCampo
             }
         }
 
+        private string TraducirExcepcion(Exception ex)
+        {
+            string[] partes = ex.Message.Split('|');
+
+            string clave = partes[0];
+
+            string mensaje = TraducirTexto(clave);
+
+            if (partes.Length > 1)
+            {
+                mensaje += " " + partes[1];
+            }
+
+            return mensaje;
+        }
         private string TraducirTexto(string clave)
         {
             string idIdioma = SessionManager.GetInstancia().GetUsuarioActual().Id_Idioma;

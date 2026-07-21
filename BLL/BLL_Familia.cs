@@ -39,14 +39,14 @@ namespace BLL
         public void Guardar(Servicio_Familia familia, List<string> itemsAsignadosIniciales)
         {
             if (string.IsNullOrWhiteSpace(familia.Nombre))
-                throw new Exception("Ingrese un nombre.");
+                throw new Exception("err_NombreFamiliaObligatorio");
 
             if (dal.ExisteNombre(familia.Nombre))
-                throw new Exception("Ya existe una familia con ese nombre.");
+                throw new Exception("err_FamiliaNombreExistente");
 
             if (itemsAsignadosIniciales == null || itemsAsignadosIniciales.Count < 2)
             {
-                throw new Exception("Una familia no puede crearse vacía. Debe seleccionar al menos dos permisos o subfamilias iniciales.");
+                throw new Exception("err_FamiliaSinContenido");
             }
 
             List<string> permisosVistos = new List<string>();
@@ -64,7 +64,7 @@ namespace BLL
                     {
                         if (permisosVistos.Contains(p.IdRol))
                         {
-                            throw new Exception($"Error de integridad: La selección es redundante. El permiso '{p.Nombre}' está repetido dentro de las familias seleccionadas.");
+                            throw new Exception("err_RedundanciaPermisoFamilia|" + p.Nombre);
                         }
                         permisosVistos.Add(p.IdRol);
                     }
@@ -73,7 +73,7 @@ namespace BLL
                 {
                     if (permisosVistos.Contains(idItem))
                     {
-                        throw new Exception("Error de integridad: Ha seleccionado un permiso suelto que ya está contenido dentro de una de las familias seleccionadas.");
+                        throw new Exception("err_RedundanciaPermisoSuelto");
                     }
                     permisosVistos.Add(idItem);
                 }
@@ -125,7 +125,7 @@ namespace BLL
         {
             if (string.IsNullOrWhiteSpace(familia.Nombre))
             {
-                throw new Exception("Ingrese un nombre.");
+                throw new Exception("err_NombreFamiliaObligatorio");
             }
 
             dal.Modificar(familia);
@@ -136,7 +136,7 @@ namespace BLL
         public void Eliminar(string idFamilia)
         {
             if (string.IsNullOrWhiteSpace(idFamilia))
-                throw new Exception("Seleccione una familia para eliminar.");
+                throw new Exception("err_SeleccionarFamiliaEliminar");
 
             List<string> usosDetectados = new List<string>();
 
@@ -164,8 +164,8 @@ namespace BLL
 
             if (usosDetectados.Count > 0)
             {
-                throw new Exception("No se puede eliminar la familia porque está siendo utilizada por:\n"+ string.Join("\n", usosDetectados.Distinct()));
-                                    
+                throw new Exception("err_FamiliaEnUso|" + string.Join("\n", usosDetectados.Distinct()));
+                       
             }
 
             dal.Eliminar(idFamilia);
@@ -175,12 +175,12 @@ namespace BLL
 
         public void AsignarPermiso(string idFamilia, string idPermiso)
         {
-            if (string.IsNullOrWhiteSpace(idFamilia)) throw new Exception("Seleccione una familia.");
-            if (string.IsNullOrWhiteSpace(idPermiso)) throw new Exception("Seleccione un permiso.");
+            if (string.IsNullOrWhiteSpace(idFamilia)) throw new Exception("err_SeleccionarFamilia");
+            if (string.IsNullOrWhiteSpace(idPermiso)) throw new Exception("err_SeleccionarPermiso");
 
             if (this.TienePermiso(idFamilia, idPermiso))
             {
-                throw new Exception("Error de redundancia: La familia ya contiene este permiso (directamente o heredado de una subfamilia).");
+                throw new Exception("err_PermisoFamiliaRedundante");
             }
             List<string> idsRolesAfectados = ObtenerRolesQueContienenFamilia(idFamilia);
             List<string> rolesConConflicto = new List<string>();
@@ -195,7 +195,8 @@ namespace BLL
 
             if (rolesConConflicto.Count > 0)
             {
-                throw new Exception($"Operación cancelada. Si agrega este permiso a la familia, generará redundancia en los siguientes Roles que ya lo poseen por otra vía: {string.Join(", ", rolesConConflicto)}.");
+                throw new Exception("err_OperacionCanceladaRedundancia|" + string.Join(", ", rolesConConflicto));
+   
             }
             dal.AsignarPermiso(idFamilia, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso asignado a Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 1);
@@ -238,10 +239,10 @@ namespace BLL
 
         public void AsignarSubFamilia(string idPadre, string idHija)
         {
-            if (string.IsNullOrWhiteSpace(idPadre)) throw new Exception("Seleccione familia padre.");
-            if (string.IsNullOrWhiteSpace(idHija)) throw new Exception("Seleccione familia hija.");
-            if (idPadre == idHija) throw new Exception("No puede asignarse a sí misma.");
-            if (TieneFamilia(idHija, idPadre)) throw new Exception("Error: Esto crearía un ciclo infinito de familias.");
+            if (string.IsNullOrWhiteSpace(idPadre)) throw new Exception("err_SeleccionarFamiliaPadre");
+            if (string.IsNullOrWhiteSpace(idHija)) throw new Exception("err_SeleccionarFamiliaHija");
+            if (idPadre == idHija) throw new Exception("err_FamiliaNoPuedeAsignarseSiMisma");
+            if (TieneFamilia(idHija, idPadre)) throw new Exception("err_CicloFamilias");
 
             Servicio_Familia familiaHijaCompleta = this.ObtenerFamiliaCompleta(idHija);
             List<string> permisosRedundantes = new List<string>();
@@ -280,12 +281,13 @@ namespace BLL
 
             if (rolesConConflicto.Count > 0)
             {
-                throw new Exception($"Operación cancelada. La familia hija contiene permisos que ya existen en los siguientes Roles (los cuales usan la familia padre): {string.Join(", ", rolesConConflicto)}.");
+                throw new Exception("err_AsignacionFamiliaRedundanteRoles|" +string.Join(", ", rolesConConflicto));
+        
             }
             if (permisosRedundantes.Count > 0)
             {
-                string mensaje = "No se puede realizar la asignación. Los siguientes permisos de la familia hija ya están presentes en el padre: " + string.Join(", ", permisosRedundantes) + ".";
-                throw new Exception(mensaje);
+                throw new Exception("err_PermisosRedundantesFamilia|" +string.Join(", ", permisosRedundantes));
+        
             }
 
             dal.AsignarSubFamilia(idPadre, idHija);
@@ -408,7 +410,7 @@ namespace BLL
         {
             Servicio_Familia familiaCompleta = ObtenerFamiliaCompleta(idFamilia);
             if (familiaCompleta.ObtenerHijos().Count <= 2)
-                throw new Exception("Una familia no puede quedar con un solo elemento.");
+                throw new Exception("err_FamiliaUnSoloElemento");
 
             dal.DesasignarPermiso(idFamilia, idPermiso);
             bllBitacora.RegistrarBitacora("Permiso desasignado de Familia ID: " + idFamilia, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
@@ -419,7 +421,7 @@ namespace BLL
         {
             Servicio_Familia familiaCompleta = ObtenerFamiliaCompleta(padre);
             if (familiaCompleta.ObtenerHijos().Count <= 2)
-                throw new Exception("Una familia no puede quedar con un solo elemento.");
+                throw new Exception("err_FamiliaUnSoloElemento");
 
             dal.DesasignarSubFamilia(padre, hija);
             bllBitacora.RegistrarBitacora("Subfamilia desasignada de Familia ID: " + padre, SessionManager.GetInstancia().GetUsuarioActual().Login, "Gestión de Perfiles y Autorización", 2);
@@ -445,19 +447,14 @@ namespace BLL
             }
         }
 
-        private void ValidarJerarquiaRecursiva(
-    string idFamilia,
-    string nombreFamilia,
-    HashSet<string> familiasEnCamino,
-    HashSet<string> familiasEncontradas,
-    HashSet<string> permisosEncontrados)
+        private void ValidarJerarquiaRecursiva( string idFamilia, string nombreFamilia, HashSet<string> familiasEnCamino, HashSet<string> familiasEncontradas,HashSet<string> permisosEncontrados)
         {
             // CICLO
 
             if (familiasEnCamino.Contains(idFamilia))
             {
                 throw new Exception(
-                    $"Error de integridad: se detectó un ciclo en la familia '{nombreFamilia}'.");
+                     $"err_CicloFamilia|{nombreFamilia}");
             }
 
         
@@ -465,7 +462,7 @@ namespace BLL
             if (!familiasEncontradas.Add(idFamilia))
             {
                 throw new Exception(
-                    $"Error de integridad: la familia '{nombreFamilia}' aparece más de una vez dentro de la misma jerarquía.");
+                     $"err_FamiliaRepetidaJerarquia|{nombreFamilia}");
             }
 
             familiasEnCamino.Add(idFamilia);
@@ -482,7 +479,7 @@ namespace BLL
                     if (!permisosEncontrados.Add(permiso.IdRol))
                     {
                         throw new Exception(
-                            $"Error de integridad: el permiso '{permiso.Nombre}' está repetido dentro de la jerarquía.");
+                            $"err_PermisoRepetidoJerarquia|{permiso.Nombre}");
                     }
                 }
             }

@@ -19,10 +19,8 @@ namespace BLL
 
         public BLL_Familia()
         {
-            string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-
-            dal = new DAL_Familia(conn);
-            dalRol = new DAL_Rol(conn);
+           dal = new DAL_Familia();
+            dalRol = new DAL_Rol();
             bllPermiso = new BLL_Permiso();
         }
 

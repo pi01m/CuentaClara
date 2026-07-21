@@ -19,8 +19,7 @@ namespace BLL
         private BLL_Familia bllFamilia = new BLL_Familia();
         public BLL_Rol()
         {
-            string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            dal = new DAL_Rol(conn);
+            dal = new DAL_Rol();
         }
         public List<Servicio_Familia> ObtenerRolesCompletos()
         {

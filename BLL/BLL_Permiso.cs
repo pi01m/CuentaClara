@@ -16,8 +16,7 @@ namespace BLL
 
         public BLL_Permiso()
         {
-            string conn = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            dal = new DAL_Permiso(conn);
+          dal = new DAL_Permiso();
         }
 
         public List<Servicio_Permiso> ObtenerPermisosPorFamilia(string idFamilia)

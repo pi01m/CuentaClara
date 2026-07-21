@@ -199,8 +199,8 @@ namespace CuentaClara_TrabajoCampo
             lblUsuario.Text = $"Usuario:";
             label1.Text = $"{usuarioActual.Login}-{nombreLegibleDelRol}";
 
-            if (usuarioActual != null &&usuarioActual.ModoEmergencia &&usuarioActual.ErrorIntegridad != null)
-     
+            if (usuarioActual != null && usuarioActual.ModoEmergencia && usuarioActual.ErrorIntegridad != null)
+
             {
                 //string mensaje =
                 //@"ATENCIÓN
@@ -219,13 +219,13 @@ namespace CuentaClara_TrabajoCampo
                 {
                     //mensaje += $"Tabla: {error.Tabla}{Environment.NewLine}";
 
-                    mensaje +=TraducirTexto("Tabla") +": " +error.Tabla +Environment.NewLine;
-                    
+                    mensaje += TraducirTexto("Tabla") + ": " + error.Tabla + Environment.NewLine;
+
                     if (error.RegistrosModificados.Count > 0)
                     {
                         //mensaje += "Registros modificados:" + Environment.NewLine;
-                        mensaje +=TraducirTexto("RegistrosModificados") +Environment.NewLine;
-                        
+                        mensaje += TraducirTexto("RegistrosModificados") + Environment.NewLine;
+
                         foreach (string reg in error.RegistrosModificados)
                         {
                             mensaje += "- " + reg + Environment.NewLine;
@@ -235,7 +235,7 @@ namespace CuentaClara_TrabajoCampo
                     if (error.RegistrosEliminados.Count > 0)
                     {
                         //mensaje += "Registros eliminados:" + Environment.NewLine;
-                        mensaje +=TraducirTexto("RegistrosEliminados") +Environment.NewLine;
+                        mensaje += TraducirTexto("RegistrosEliminados") + Environment.NewLine;
 
 
                         foreach (string reg in error.RegistrosEliminados)
@@ -248,7 +248,7 @@ namespace CuentaClara_TrabajoCampo
                     {
                         //mensaje += "Error detectado en DVV de la tabla."
                         //         + Environment.NewLine;
-                        mensaje +=TraducirTexto("ErrorDVV")+ Environment.NewLine;
+                        mensaje += TraducirTexto("ErrorDVV") + Environment.NewLine;
 
 
                     }
@@ -259,7 +259,7 @@ namespace CuentaClara_TrabajoCampo
                     {
                         //mensaje += "Se detectó una alteración estructural de la tabla."
                         //         + Environment.NewLine;
-                        mensaje +=TraducirTexto("AlteracionEstructural")+ Environment.NewLine;
+                        mensaje += TraducirTexto("AlteracionEstructural") + Environment.NewLine;
 
 
                     }
@@ -270,17 +270,17 @@ namespace CuentaClara_TrabajoCampo
                 }
 
 
-//                mensaje += @"  El sistema está funcionando en Modo Emergencia.
-                
-               
+                //                mensaje += @"  El sistema está funcionando en Modo Emergencia.
 
-//                Revise la base de datos antes de continuar.";
 
-////             mensaje +=
-               // @"
-////                // El sistema está funcionando en Modo Emergencia.
 
-               // Revise la base de datos antes de continuar.";
+                //                Revise la base de datos antes de continuar.";
+
+                ////             mensaje +=
+                // @"
+                ////                // El sistema está funcionando en Modo Emergencia.
+
+                // Revise la base de datos antes de continuar.";
 
                 mensaje +=
                 Environment.NewLine +
@@ -293,14 +293,14 @@ namespace CuentaClara_TrabajoCampo
                 //    MessageBoxIcon.Warning);
 
 
-                MessageBox.Show(mensaje,TraducirTexto("ModoEmergencia"),MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show(mensaje, TraducirTexto("ModoEmergencia"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 usuarioActual.ErrorIntegridad = null;
                 SessionManager.GetInstancia().SetUsuarioActual(usuarioActual);
             }
 
-        
-            
+
+
 
             Bloquear(usuarioActual);
             ActualizarIdioma();
@@ -346,6 +346,11 @@ namespace CuentaClara_TrabajoCampo
         {
             FormGestionRespaldo frm = new FormGestionRespaldo();
             frm.ShowDialog();
+        }
+
+        private void panelMovimientos_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

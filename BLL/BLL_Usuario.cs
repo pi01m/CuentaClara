@@ -19,9 +19,7 @@ namespace BLL
 
         public BLL_Usuario()
         {
-            string connStr = "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-
-            _dalUsuario = new DAL_Usuario(connStr);
+            _dalUsuario = new DAL_Usuario();
 
             _encriptadorServicio = new Servicio_Cripto();
 

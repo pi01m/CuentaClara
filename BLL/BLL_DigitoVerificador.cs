@@ -25,7 +25,7 @@ namespace BLL
             dalUsuario = new DAL_Usuario();
             dalIdioma = new DAL_Idioma();
             servicioVerificador = new Servicio_VerificadorDigito();
-            dalPermiso = new DAL_Permiso( "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            dalPermiso = new DAL_Permiso();
   
         }
 
@@ -161,8 +161,7 @@ namespace BLL
                 errores.Add(errorUsuario);
 
             // ---------- Rol ----------
-            DAL_Rol dalRol = new DAL_Rol(
-                "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            DAL_Rol dalRol = new DAL_Rol();
 
             BLL_Rol bllRol = new BLL_Rol();
 
@@ -188,8 +187,7 @@ namespace BLL
                 errores.Add(errorRol);
 
             // ---------- Familia ----------
-            DAL_Familia dalFamilia = new DAL_Familia(
-                "Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            DAL_Familia dalFamilia = new DAL_Familia();
 
             List<Servicio_Familia> familias = dalFamilia.ListarFamilias();
 
@@ -216,6 +214,28 @@ namespace BLL
 
             if (errores.Count > 0)
                 throw new ExcepcionIntegridad(errores);
+        }
+
+        public void EliminarDigitoYRecalcular<T>(string idElementoEliminado, List<T> listaCompleta, string nombreTabla) where T : IVerificable
+        {
+
+            string nombreFila = $"{nombreTabla}_{idElementoEliminado}";
+            dalDigito.EliminarRegistroDigito(nombreFila);
+
+
+            var listaOrdenada = listaCompleta.OrderBy(x => x.ObtenerIdentificadorFila()).ToList();
+            string cadenaAcumulada = "";
+
+            foreach (T registro in listaOrdenada)
+            {
+                cadenaAcumulada += servicioCalcular.CalcularDVH(registro);
+            }
+
+            string dvvFinal = servicioCalcular.CalcularHash(cadenaAcumulada);
+            string nombreMaestro = $"{nombreTabla}_MAESTRO";
+
+            Servicio_DigitoVerificadorVertical nuevoDVV = new Servicio_DigitoVerificadorVertical(dvvFinal, nombreMaestro);
+            dalDigito.GuardarDVV(nuevoDVV);
         }
 
 
@@ -300,7 +320,7 @@ namespace BLL
 
             dalDigito.EliminarDVHDeTabla("Rol");
 
-            DAL_Rol dalRol = new DAL_Rol("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            DAL_Rol dalRol = new DAL_Rol();
             List<Servicio_Familia> roles = dalRol.ListarRoles().OrderBy(r => r.ObtenerIdentificadorFila()) .ToList();
 
             string cadenaDVV = "";
@@ -351,7 +371,7 @@ namespace BLL
 
             dalDigito.EliminarDVHDeTabla("Familia");
 
-            DAL_Familia dalFam = new DAL_Familia("Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+            DAL_Familia dalFam = new DAL_Familia();
 
             List<Servicio_Familia> familias = dalFam.ListarFamilias()
                 .OrderBy(f => f.ObtenerIdentificadorFila())

@@ -10,11 +10,10 @@ namespace DAL
 {
     public class DAL_BitacoraEvento
     {
-        private readonly string _connectionString = $"Data Source=.;Initial Catalog=BD_CuentaClara;Integrated Security=True;Trust Server Certificate=True";
-
-        public DAL_BitacoraEvento(string connectionString)
+        private readonly string _connectionString = DAL_ConexionDB.ObtenerCadena();
+        public DAL_BitacoraEvento()
         {
-            _connectionString = connectionString;
+          
         }
 
         private List<Servicio_Bitacora> MapearTablaALista(DataTable tabla)

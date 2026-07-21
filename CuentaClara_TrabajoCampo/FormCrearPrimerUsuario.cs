@@ -29,7 +29,6 @@ namespace IU
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-
             try
             {
                 Servicio_Usuario usuario = new Servicio_Usuario();
@@ -40,23 +39,23 @@ namespace IU
                 usuario.Login = txtNombre.Text + txtDNI.Text;
                 usuario.IdRol = "R1";
                 usuario.Activo = 1;
-                usuario.Id_Idioma = "1";
+              
+
                 BLL_Usuario bll = new BLL_Usuario();
 
                 if (bll.CrearUsuario(usuario))
                 {
-                    MessageBox.Show("UsuarioCreadoCorrectamente");
-
+                    MessageBox.Show("Usuario Creado Correctamente");
                     this.Close();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+          
                 MessageBox.Show(ex.Message);
             }
-           
-
         }
+     
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {

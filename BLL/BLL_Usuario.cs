@@ -105,34 +105,37 @@ namespace BLL
         public bool CrearUsuario(Servicio_Usuario usuario)
     
         {
-           
+            // 1. Validaciones (Si fallan, lanzan una excepción que llega al Form)
+            ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
 
-                ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
+            if (_dalUsuario.ExisteUsuario(usuario.Login))
+                throw new Exception("err_UsuarioYaExiste"); // Clave para traducir en el Form
 
-                if (_dalUsuario.ExisteUsuario(usuario.Login))
-                    throw new Exception("El nombre de usuario (Login) ya se encuentra registrado.");
+            string contraseñaInicial = usuario.Apellido + usuario.DNI;
+            usuario.Password = _encriptadorServicio.CalcularHash(contraseñaInicial);
+            usuario.Bloqueo = 0;
 
-                string contraseñaInicial = usuario.Apellido + usuario.DNI;
+            // 2. Intentamos guardar en la BD
+            bool resultado = _dalUsuario.CrearUsuario(usuario);
 
-
-                usuario.Password = _encriptadorServicio.CalcularHash(contraseñaInicial);
-
-                usuario.Bloqueo = 0;
-
-                bool resultado = _dalUsuario.CrearUsuario(usuario);
-
-
-                if (resultado)
+            if (resultado)
+            {
+                // 3. ACTUALIZACIÓN DE DÍGITOS (Aquí es donde se corrige el Modo Emergencia)
+                try
                 {
-                    List<Servicio_Usuario> todos = this.ListarUsuarios(); // Necesitas este método en tu DAL
+                    List<Servicio_Usuario> todos = this.ListarUsuarios();
                     _bllDV.ActualizarDigitos(usuario, todos, "Usuario");
                     _bitacoraServicio.RegistrarBitacora("Usuario Creado", usuario.Login, "Administración", 3);
-
-
                 }
+                catch (Exception ex)
+                {
+                    // Si falla la seguridad, lanzamos un error que el usuario debe saber
+                    throw new Exception("err_ErrorActualizacionDV");
+                }
+            }
 
-                return resultado;
-            
+            return resultado;
+
         }
         public void ReiniciarIntentos(string login)
         {

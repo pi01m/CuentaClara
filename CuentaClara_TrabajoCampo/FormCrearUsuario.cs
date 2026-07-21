@@ -48,7 +48,7 @@ namespace CuentaClara_TrabajoCampo
                     this.Close();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -75,6 +75,13 @@ namespace CuentaClara_TrabajoCampo
             cmbRol.DisplayMember = "Nombre";
             cmbRol.ValueMember = "IdRol";
             ActualizarIdioma();
+            if (!posicionInicializada)
+            {
+                posicionOriginalPanel = panelPrincipal.Location;
+                posicionInicializada = true;
+            }
+
+            ReacomodarPanel();
         }
 
         private void chkActivo_CheckedChanged(object sender, EventArgs e)
@@ -145,6 +152,23 @@ namespace CuentaClara_TrabajoCampo
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private Point posicionOriginalPanel;
+        private bool posicionInicializada = false;
+
+        private void ReacomodarPanel()
+        {
+            if (!posicionInicializada)
+                return;
+
+            panelPrincipal.Location = new Point(
+                (ClientSize.Width - panelPrincipal.Width) / 2,
+                (ClientSize.Height - panelPrincipal.Height) / 2);
+        }
+
+        private void FormCrearUsuario_Resize(object sender, EventArgs e)
+        {
+            ReacomodarPanel();
         }
     }
 }

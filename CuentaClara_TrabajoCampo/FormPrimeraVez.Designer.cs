@@ -28,9 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrimeraVez));
             btnBuscar = new Button();
             listaServidores = new ListBox();
             btnGuardar = new Button();
+            label1 = new Label();
+            lblTitulo = new Label();
+            lblNombre = new Label();
+            picLogo = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
             // 
             // btnBuscar
@@ -40,10 +46,10 @@
             btnBuscar.FlatStyle = FlatStyle.Flat;
             btnBuscar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBuscar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnBuscar.Location = new Point(1070, 192);
+            btnBuscar.Location = new Point(255, 252);
             btnBuscar.Margin = new Padding(0);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(260, 118);
+            btnBuscar.Size = new Size(159, 43);
             btnBuscar.TabIndex = 43;
             btnBuscar.Tag = "";
             btnBuscar.Text = "Buscar";
@@ -53,12 +59,13 @@
             // listaServidores
             // 
             listaServidores.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listaServidores.BorderStyle = BorderStyle.FixedSingle;
             listaServidores.FormattingEnabled = true;
-            listaServidores.ItemHeight = 41;
-            listaServidores.Location = new Point(44, 106);
+            listaServidores.ItemHeight = 15;
+            listaServidores.Location = new Point(23, 188);
             listaServidores.Margin = new Padding(0);
             listaServidores.Name = "listaServidores";
-            listaServidores.Size = new Size(862, 865);
+            listaServidores.Size = new Size(177, 257);
             listaServidores.TabIndex = 42;
             // 
             // btnGuardar
@@ -68,29 +75,85 @@
             btnGuardar.FlatStyle = FlatStyle.Flat;
             btnGuardar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(1070, 376);
+            btnGuardar.Location = new Point(255, 320);
             btnGuardar.Margin = new Padding(0);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(260, 118);
+            btnGuardar.Size = new Size(159, 43);
             btnGuardar.TabIndex = 41;
             btnGuardar.Tag = "";
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
             btnGuardar.Click += btnGuardar_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label1.Location = new Point(23, 114);
+            label1.Name = "label1";
+            label1.Size = new Size(391, 38);
+            label1.TabIndex = 44;
+            label1.Tag = "lbl_Nombre";
+            label1.Text = "Para comenzar, necesitamos preparar tu entorno. \r\nPor favor, selecciona el nombre de tu servidor SQL local.";
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
+            lblTitulo.Location = new Point(80, 20);
+            lblTitulo.Margin = new Padding(1, 0, 1, 0);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(152, 32);
+            lblTitulo.TabIndex = 45;
+            lblTitulo.Text = "CuentaClara";
+            // 
+            // lblNombre
+            // 
+            lblNombre.AutoSize = true;
+            lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblNombre.Location = new Point(23, 80);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(102, 19);
+            lblNombre.TabIndex = 46;
+            lblNombre.Tag = "lbl_Nombre";
+            lblNombre.Text = "Bienvenida/o ";
+            // 
+            // picLogo
+            // 
+            picLogo.BorderStyle = BorderStyle.FixedSingle;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(23, 9);
+            picLogo.Margin = new Padding(0);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(56, 43);
+            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picLogo.TabIndex = 47;
+            picLogo.TabStop = false;
+            // 
             // FormPrimeraVez
             // 
-            AutoScaleDimensions = new SizeF(17F, 41F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ButtonHighlight;
-            ClientSize = new Size(1745, 1088);
+            BackColor = Color.White;
+            ClientSize = new Size(446, 478);
+            Controls.Add(picLogo);
+            Controls.Add(lblNombre);
+            Controls.Add(lblTitulo);
+            Controls.Add(label1);
             Controls.Add(btnBuscar);
             Controls.Add(listaServidores);
             Controls.Add(btnGuardar);
+            Margin = new Padding(1, 1, 1, 1);
+            MaximizeBox = false;
             Name = "FormPrimeraVez";
-            Text = "FormPrimeraVez";
+            StartPosition = FormStartPosition.CenterScreen;
+            Tag = "";
+            Text = "CuentaClara";
             Load += FormPrimeraVez_Load;
+            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -98,5 +161,9 @@
         private Button btnBuscar;
         private ListBox listaServidores;
         private Button btnGuardar;
+        private Label label1;
+        private Label lblTitulo;
+        private Label lblNombre;
+        private PictureBox picLogo;
     }
 }

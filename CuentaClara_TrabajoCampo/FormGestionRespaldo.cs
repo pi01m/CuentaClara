@@ -77,6 +77,7 @@ namespace IU
 
         private void FormGestionRespaldo_Load(object sender, EventArgs e)
         {
+           
             ActualizarIdioma();
         }
 

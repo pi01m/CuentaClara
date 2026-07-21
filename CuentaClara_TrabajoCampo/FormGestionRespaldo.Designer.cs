@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGestionRespaldo));
             btnAplicar = new Button();
             button1 = new Button();
             folderBrowserDialog1 = new FolderBrowserDialog();
@@ -35,6 +36,9 @@
             progresoBackup = new ProgressBar();
             btnSeleccionar = new Button();
             btn_RecalcularDv = new Button();
+            picLogo = new PictureBox();
+            lblTitulo = new Label();
+            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
             // 
             // btnAplicar
@@ -44,10 +48,9 @@
             btnAplicar.FlatStyle = FlatStyle.Flat;
             btnAplicar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAplicar.ForeColor = Color.White;
-            btnAplicar.Location = new Point(97, 618);
-            btnAplicar.Margin = new Padding(7, 8, 7, 8);
+            btnAplicar.Location = new Point(40, 204);
             btnAplicar.Name = "btnAplicar";
-            btnAplicar.Size = new Size(340, 115);
+            btnAplicar.Size = new Size(140, 42);
             btnAplicar.TabIndex = 7;
             btnAplicar.Tag = "btn_Restaurar";
             btnAplicar.Text = "Restaurar\r\n";
@@ -61,10 +64,9 @@
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             button1.ForeColor = Color.White;
-            button1.Location = new Point(602, 618);
-            button1.Margin = new Padding(7, 8, 7, 8);
+            button1.Location = new Point(248, 204);
             button1.Name = "button1";
-            button1.Size = new Size(340, 115);
+            button1.Size = new Size(140, 42);
             button1.TabIndex = 8;
             button1.Tag = "btn_BackUp";
             button1.Text = "BackUp\r\n";
@@ -73,18 +75,16 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(97, 265);
-            textBox1.Margin = new Padding(7, 8, 7, 8);
+            textBox1.Location = new Point(40, 97);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(839, 47);
+            textBox1.Size = new Size(348, 23);
             textBox1.TabIndex = 9;
             // 
             // progresoBackup
             // 
-            progresoBackup.Location = new Point(97, 383);
-            progresoBackup.Margin = new Padding(7, 8, 7, 8);
+            progresoBackup.Location = new Point(40, 140);
             progresoBackup.Name = "progresoBackup";
-            progresoBackup.Size = new Size(845, 63);
+            progresoBackup.Size = new Size(348, 23);
             progresoBackup.TabIndex = 10;
             // 
             // btnSeleccionar
@@ -93,10 +93,9 @@
             btnSeleccionar.FlatStyle = FlatStyle.Flat;
             btnSeleccionar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSeleccionar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSeleccionar.Location = new Point(97, 795);
-            btnSeleccionar.Margin = new Padding(7, 8, 7, 8);
+            btnSeleccionar.Location = new Point(40, 269);
             btnSeleccionar.Name = "btnSeleccionar";
-            btnSeleccionar.Size = new Size(340, 115);
+            btnSeleccionar.Size = new Size(140, 52);
             btnSeleccionar.TabIndex = 11;
             btnSeleccionar.Tag = "btn_Seleccionar";
             btnSeleccionar.Text = "Seleccionar\r\n";
@@ -110,32 +109,61 @@
             btn_RecalcularDv.FlatStyle = FlatStyle.Flat;
             btn_RecalcularDv.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btn_RecalcularDv.ForeColor = Color.White;
-            btn_RecalcularDv.Location = new Point(602, 795);
-            btn_RecalcularDv.Margin = new Padding(7, 8, 7, 8);
+            btn_RecalcularDv.Location = new Point(248, 269);
             btn_RecalcularDv.Name = "btn_RecalcularDv";
-            btn_RecalcularDv.Size = new Size(340, 115);
+            btn_RecalcularDv.Size = new Size(140, 52);
             btn_RecalcularDv.TabIndex = 12;
             btn_RecalcularDv.Tag = "btn_RecalcularDigitosVerificadores";
             btn_RecalcularDv.Text = "Recalcular Digitos Verificadores";
             btn_RecalcularDv.UseVisualStyleBackColor = false;
             btn_RecalcularDv.Click += btn_RecalcularDv_Click;
             // 
+            // picLogo
+            // 
+            picLogo.BorderStyle = BorderStyle.FixedSingle;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(40, 9);
+            picLogo.Margin = new Padding(0);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(71, 57);
+            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picLogo.TabIndex = 13;
+            picLogo.TabStop = false;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
+            lblTitulo.Location = new Point(114, 20);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(279, 37);
+            lblTitulo.TabIndex = 14;
+            lblTitulo.Tag = "lbl_GestionDeRespaldo";
+            lblTitulo.Text = "Gestión de Respaldo";
+            // 
             // FormGestionRespaldo
             // 
-            AutoScaleDimensions = new SizeF(17F, 41F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1055, 1019);
+            BackColor = Color.White;
+            ClientSize = new Size(434, 373);
+            Controls.Add(lblTitulo);
+            Controls.Add(picLogo);
             Controls.Add(btn_RecalcularDv);
             Controls.Add(btnSeleccionar);
             Controls.Add(progresoBackup);
             Controls.Add(textBox1);
             Controls.Add(button1);
             Controls.Add(btnAplicar);
-            Margin = new Padding(7, 8, 7, 8);
+            MaximizeBox = false;
             Name = "FormGestionRespaldo";
-            Text = "FormGestionRespaldo";
+            StartPosition = FormStartPosition.CenterScreen;
+            Tag = "lbl_FormRespaldo";
+            Text = "Form Gestion Respaldo";
             FormClosed += FormGestionRespaldo_FormClosed;
             Load += FormGestionRespaldo_Load;
+            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -149,5 +177,7 @@
         private ProgressBar progresoBackup;
         private Button btnSeleccionar;
         private Button btn_RecalcularDv;
+        private PictureBox picLogo;
+        private Label lblTitulo;
     }
 }

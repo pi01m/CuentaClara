@@ -10,7 +10,7 @@ namespace DAL
 {
     public class DAL_Respaldo
     {
-        private readonly string connMaster = DAL_ConexionDB.ObtenerCadenaMaster();
+        private readonly string connMaster = DAL_ConexionDB.ObtenerCadenaMaster(null);
 
         private readonly string connBD = DAL_ConexionDB.ObtenerCadena();
 

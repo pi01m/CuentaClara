@@ -443,9 +443,9 @@ namespace IU
             // 
             // dgvEtiquetas
             // 
-            dgvEtiquetas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvEtiquetas.AllowUserToAddRows = false;
             dgvEtiquetas.AllowUserToDeleteRows = false;
+            dgvEtiquetas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvEtiquetas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEtiquetas.BackgroundColor = Color.FromArgb(12, 74, 144);
             dgvEtiquetas.BorderStyle = BorderStyle.None;
@@ -522,10 +522,10 @@ namespace IU
             // 
             // panelInferior
             // 
-            panelInferior.Dock = DockStyle.Bottom;
             panelInferior.BackColor = Color.FromArgb(12, 74, 144);
             panelInferior.Controls.Add(lblUsuarioValor);
             panelInferior.Controls.Add(lblUsuario);
+            panelInferior.Dock = DockStyle.Bottom;
             panelInferior.Location = new Point(0, 788);
             panelInferior.Name = "panelInferior";
             panelInferior.Size = new Size(1314, 46);
@@ -682,10 +682,9 @@ namespace IU
             Controls.Add(cboIdiomas);
             Controls.Add(lblSeccionIdioma);
             Controls.Add(lblTitulo);
-            FormBorderStyle = FormBorderStyle.Sizable;
-            MaximizeBox = true;
             Name = "FormGestionIdioma";
             StartPosition = FormStartPosition.CenterScreen;
+            Tag = "lbl_FormGestionIdioma";
             Text = "CuentaClara - Gestión de Idioma";
             FormClosed += FormGestionIdioma_FormClosed;
             Load += FormGestionIdioma_Load;

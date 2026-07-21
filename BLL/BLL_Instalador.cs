@@ -1,6 +1,7 @@
 ﻿using DAL;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,23 +10,55 @@ namespace BLL
 {
     public class BLL_Instalador
     {
-      
-        public static void ConfigurarEntorno(string servidor, string rutaScript)
+
+        private DAL_ConexionDB dalConexion = new DAL_ConexionDB();
+
+        public List<string> ObtenerListaServidores()
         {
-            bool baseYaExiste = DAL_Instalador.VerificarBaseDeDatos(servidor, "BD_CuentaClara");
+            List<string> lista = new List<string>();
+            DataTable table = dalConexion.ObtenerServidoresRed(); // Llamada a la nueva ubicación
 
-            if (baseYaExiste)
+            foreach (DataRow row in table.Rows)
             {
-                return;
+                string serverName = row["ServerName"].ToString();
+                string instanceName = row["InstanceName"].ToString();
+
+                if (string.IsNullOrEmpty(instanceName))
+                    lista.Add(serverName);
+                else
+                    lista.Add($"{serverName}\\{instanceName}");
             }
 
-            if (!File.Exists(rutaScript))
+            if (lista.Count == 0)
             {
-                throw new Exception("No se encontró el archivo de base de datos (SetupData.sql).");
+                lista.Add(".");
+                lista.Add(".\\SQLEXPRESS");
             }
 
-            string contenidoScript = File.ReadAllText(rutaScript);
-            DAL_Instalador.EjecutarScriptPrimeraVez(servidor, contenidoScript);
+            return lista;
+        }
+
+        public void InstalarBaseDeDatos(string servidorElegido, string scriptPath)
+        {
+            if (!File.Exists(scriptPath))
+            {
+                throw new Exception("No se encontró el archivo SetupData.sql en la carpeta de instalación.");
+            }
+
+            string script = File.ReadAllText(scriptPath);
+
+            // Llamamos al método que ahora está en DAL_ConexionDB
+            dalConexion.EjecutarScriptSQL(script, servidorElegido);
+
+            // Guardamos las configuraciones en AppData
+            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
+            Directory.CreateDirectory(appDataFolder);
+
+            string configPath = Path.Combine(appDataFolder, "servidor_config.txt");
+            File.WriteAllText(configPath, servidorElegido);
+
+            string banderaPath = Path.Combine(appDataFolder, "bandera.txt");
+            File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now.ToString());
         }
     }
 }

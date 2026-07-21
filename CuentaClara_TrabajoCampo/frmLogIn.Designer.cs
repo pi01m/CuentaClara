@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogIn));
             panelLogin = new Panel();
             label1 = new Label();
             comboBox1 = new ComboBox();
-            picLogo = new PictureBox();
             lblTitulo = new Label();
             lblUsuario = new Label();
             txtUsuario = new TextBox();
@@ -39,6 +39,7 @@
             txtContrasena = new TextBox();
             btnIngresar = new Button();
             btnSalir = new Button();
+            picLogo = new PictureBox();
             panelLogin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
@@ -48,9 +49,9 @@
             panelLogin.Anchor = AnchorStyles.None;
             panelLogin.BackColor = Color.White;
             panelLogin.BorderStyle = BorderStyle.FixedSingle;
+            panelLogin.Controls.Add(picLogo);
             panelLogin.Controls.Add(label1);
             panelLogin.Controls.Add(comboBox1);
-            panelLogin.Controls.Add(picLogo);
             panelLogin.Controls.Add(lblTitulo);
             panelLogin.Controls.Add(lblUsuario);
             panelLogin.Controls.Add(txtUsuario);
@@ -84,23 +85,12 @@
             comboBox1.TabIndex = 8;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
-            // picLogo
-            // 
-            picLogo.BackColor = Color.White;
-            picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Location = new Point(32, 16);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(58, 46);
-            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            picLogo.TabIndex = 0;
-            picLogo.TabStop = false;
-            // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(96, 25);
+            lblTitulo.Location = new Point(152, 25);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(173, 37);
             lblTitulo.TabIndex = 1;
@@ -179,6 +169,18 @@
             btnSalir.UseVisualStyleBackColor = false;
             btnSalir.Click += btnSalir_Click;
             // 
+            // picLogo
+            // 
+            picLogo.BorderStyle = BorderStyle.FixedSingle;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(65, 15);
+            picLogo.Margin = new Padding(0);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(71, 56);
+            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picLogo.TabIndex = 10;
+            picLogo.TabStop = false;
+            // 
             // frmLogIn
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -190,6 +192,7 @@
             MinimumSize = new Size(497, 562);
             Name = "frmLogIn";
             StartPosition = FormStartPosition.CenterScreen;
+            Tag = "lbl_FormLogin";
             Text = "CuentaClara - Inicio de Sesión";
             FormClosed += frmLogIn_FormClosed;
             Load += frmLogIn_Load_1;
@@ -204,8 +207,6 @@
 
         private Panel panelLogin;
 
-        private PictureBox picLogo;
-
         private Label lblTitulo;
 
         private Label lblUsuario;
@@ -218,5 +219,6 @@
         private Button btnSalir;
         private ComboBox comboBox1;
         private Label label1;
+        private PictureBox picLogo;
     }
 }

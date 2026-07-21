@@ -92,9 +92,9 @@
             panelContenedor.Controls.Add(btnAplicar);
             panelContenedor.Controls.Add(btnImprimir);
             panelContenedor.Controls.Add(btnSalir);
-            panelContenedor.Location = new Point(41, 36);
+            panelContenedor.Location = new Point(12, 12);
             panelContenedor.Name = "panelContenedor";
-            panelContenedor.Size = new Size(1259, 721);
+            panelContenedor.Size = new Size(1316, 745);
             panelContenedor.TabIndex = 1;
             // 
             // label2
@@ -162,7 +162,7 @@
             dgvBitacora.RowHeadersWidth = 102;
             dgvBitacora.RowTemplate.Height = 28;
             dgvBitacora.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBitacora.Size = new Size(1194, 337);
+            dgvBitacora.Size = new Size(1239, 337);
             dgvBitacora.TabIndex = 1;
             dgvBitacora.SelectionChanged += dgvBitacora_SelectionChanged;
             // 
@@ -314,6 +314,7 @@
             cboEvento.Name = "cboEvento";
             cboEvento.Size = new Size(253, 25);
             cboEvento.TabIndex = 15;
+            cboEvento.SelectedIndexChanged += cboEvento_SelectedIndexChanged;
             // 
             // lblCriticidad
             // 
@@ -399,7 +400,7 @@
             btnSalir.FlatStyle = FlatStyle.Flat;
             btnSalir.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSalir.ForeColor = Color.FromArgb(18, 87, 150);
-            btnSalir.Location = new Point(1084, 21);
+            btnSalir.Location = new Point(1129, 21);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(140, 38);
             btnSalir.TabIndex = 22;
@@ -454,6 +455,7 @@
             Font = new Font("Segoe UI", 9F);
             Name = "FormGestionBitacora";
             StartPosition = FormStartPosition.CenterScreen;
+            Tag = "lbl_FormBitacora";
             Text = "CuentaClara - Gestión de Bitácora";
             FormClosed += FormGestionBitacora_FormClosed;
             Load += FormGestionBitacora_Load_1;

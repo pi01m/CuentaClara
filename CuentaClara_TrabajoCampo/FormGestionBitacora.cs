@@ -341,5 +341,10 @@ namespace CuentaClara_TrabajoCampo
         {
 
         }
+
+        private void cboEvento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -28,14 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panelLogin = new Panel();
-            button1 = new Button();
-            btnGuardarr = new Button();
             cmbIdioma = new ComboBox();
-            picLogo = new PictureBox();
+            btnGuardarr = new Button();
+            button1 = new Button();
+            panelLogin = new Panel();
             panelLogin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
+            // 
+            // cmbIdioma
+            // 
+            cmbIdioma.FormattingEnabled = true;
+            cmbIdioma.Location = new Point(30, 43);
+            cmbIdioma.Margin = new Padding(1);
+            cmbIdioma.Name = "cmbIdioma";
+            cmbIdioma.Size = new Size(121, 23);
+            cmbIdioma.TabIndex = 8;
+            cmbIdioma.SelectedIndexChanged += cmbIdioma_SelectedIndexChanged;
+            // 
+            // btnGuardarr
+            // 
+            btnGuardarr.BackColor = Color.White;
+            btnGuardarr.FlatAppearance.BorderColor = Color.FromArgb(18, 87, 150);
+            btnGuardarr.FlatStyle = FlatStyle.Flat;
+            btnGuardarr.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnGuardarr.ForeColor = Color.FromArgb(18, 87, 150);
+            btnGuardarr.Location = new Point(180, 34);
+            btnGuardarr.Margin = new Padding(1);
+            btnGuardarr.Name = "btnGuardarr";
+            btnGuardarr.Size = new Size(107, 37);
+            btnGuardarr.TabIndex = 9;
+            btnGuardarr.Tag = "btn_Guardar";
+            btnGuardarr.Text = "Guardar";
+            btnGuardarr.UseVisualStyleBackColor = false;
+            btnGuardarr.Click += btnGuardarr_Click;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.White;
+            button1.FlatAppearance.BorderColor = Color.FromArgb(18, 87, 150);
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            button1.ForeColor = Color.FromArgb(18, 87, 150);
+            button1.Location = new Point(180, 99);
+            button1.Margin = new Padding(1);
+            button1.Name = "button1";
+            button1.Size = new Size(107, 37);
+            button1.TabIndex = 10;
+            button1.Tag = "btn_Salir";
+            button1.Text = "Salir";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // panelLogin
             // 
@@ -45,93 +87,35 @@
             panelLogin.Controls.Add(button1);
             panelLogin.Controls.Add(btnGuardarr);
             panelLogin.Controls.Add(cmbIdioma);
-            panelLogin.Controls.Add(picLogo);
             panelLogin.Dock = DockStyle.Fill;
             panelLogin.Location = new Point(0, 0);
-            panelLogin.Margin = new Padding(1, 1, 1, 1);
+            panelLogin.Margin = new Padding(1);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(351, 206);
+            panelLogin.Size = new Size(326, 174);
             panelLogin.TabIndex = 1;
             panelLogin.Paint += panelLogin_Paint;
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.White;
-            button1.FlatAppearance.BorderColor = Color.FromArgb(18, 87, 150);
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            button1.ForeColor = Color.FromArgb(18, 87, 150);
-            button1.Location = new Point(185, 143);
-            button1.Margin = new Padding(1, 1, 1, 1);
-            button1.Name = "button1";
-            button1.Size = new Size(107, 37);
-            button1.TabIndex = 10;
-            button1.Tag = "btn_Salir";
-            button1.Text = "Salir";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
-            // 
-            // btnGuardarr
-            // 
-            btnGuardarr.BackColor = Color.White;
-            btnGuardarr.FlatAppearance.BorderColor = Color.FromArgb(18, 87, 150);
-            btnGuardarr.FlatStyle = FlatStyle.Flat;
-            btnGuardarr.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnGuardarr.ForeColor = Color.FromArgb(18, 87, 150);
-            btnGuardarr.Location = new Point(185, 78);
-            btnGuardarr.Margin = new Padding(1, 1, 1, 1);
-            btnGuardarr.Name = "btnGuardarr";
-            btnGuardarr.Size = new Size(107, 37);
-            btnGuardarr.TabIndex = 9;
-            btnGuardarr.Tag = "btn_Guardar";
-            btnGuardarr.Text = "Guardar";
-            btnGuardarr.UseVisualStyleBackColor = false;
-            btnGuardarr.Click += btnGuardarr_Click;
-            // 
-            // cmbIdioma
-            // 
-            cmbIdioma.FormattingEnabled = true;
-            cmbIdioma.Location = new Point(35, 87);
-            cmbIdioma.Margin = new Padding(1, 1, 1, 1);
-            cmbIdioma.Name = "cmbIdioma";
-            cmbIdioma.Size = new Size(121, 23);
-            cmbIdioma.TabIndex = 8;
-            cmbIdioma.SelectedIndexChanged += cmbIdioma_SelectedIndexChanged;
-            // 
-            // picLogo
-            // 
-            picLogo.BackColor = Color.White;
-            picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Location = new Point(13, 6);
-            picLogo.Margin = new Padding(1, 1, 1, 1);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(50, 37);
-            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            picLogo.TabIndex = 0;
-            picLogo.TabStop = false;
             // 
             // FormConfiguracion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(351, 206);
+            ClientSize = new Size(326, 174);
             Controls.Add(panelLogin);
-            Margin = new Padding(1, 1, 1, 1);
+            Margin = new Padding(1);
             Name = "FormConfiguracion";
-            Text = "FormConfiguracion";
+            Tag = "lbl_FormConfIdioma";
+            Text = "CuentaClara - Configuración Idioma";
             FormClosed += FormConfiguracion_FormClosed;
             Load += FormConfiguracion_Load;
             panelLogin.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel panelLogin;
         private ComboBox cmbIdioma;
-        private PictureBox picLogo;
         private Button btnGuardarr;
         private Button button1;
+        private Panel panelLogin;
     }
 }

@@ -39,24 +39,43 @@ namespace CuentaClara_TrabajoCampo
 
 
             ApplicationConfiguration.Initialize();
+            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
 
-            string rutaBandera = Path.Combine(Application.StartupPath, "bandera.txt");
+            // 2. Buscamos el archivo bandera o el de configuración en esa subcarpeta
+            string rutaBandera = Path.Combine(appDataFolder, "bandera.txt");
 
-           
+            // 3. Si NO existe la bandera en AppData, abrimos el instalador
             if (!File.Exists(rutaBandera))
             {
                 FormPrimeraVez frmConfig = new FormPrimeraVez();
 
-                
                 if (frmConfig.ShowDialog() != DialogResult.OK)
                 {
                     MessageBox.Show("La configuración inicial es obligatoria para iniciar el sistema.", "Instalación Cancelada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; 
+                    return;
                 }
             }
 
-          
+            // Si la bandera existe (o el formulario terminó en OK), avanzamos al Login
             Application.Run(new frmLogIn());
+        }
+        //string rutaBandera = Path.Combine(Application.StartupPath, "bandera.txt");
+
+
+        //if (!File.Exists(rutaBandera))
+        //{
+        //    FormPrimeraVez frmConfig = new FormPrimeraVez();
+
+
+        //    if (frmConfig.ShowDialog() != DialogResult.OK)
+        //    {
+        //        MessageBox.Show("La configuración inicial es obligatoria para iniciar el sistema.", "Instalación Cancelada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        return; 
+        //    }
+        //}
+
+
+        //Application.Run(new frmLogIn());
         }
         //static bool BaseDeDatosEstaConfigurada()
         //{
@@ -121,4 +140,3 @@ namespace CuentaClara_TrabajoCampo
         //    }
         //}
     }
-}

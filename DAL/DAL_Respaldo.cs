@@ -44,7 +44,6 @@ namespace DAL
                 {
                     conn.Open();
 
-                    // Obtiene los nombres lógicos del backup
                     DataTable archivos = ObtenerLogicalNames(conn, rutaCompleta);
 
                     if (archivos.Rows.Count < 2)
@@ -52,10 +51,7 @@ namespace DAL
 
                     string logicalData = archivos.Rows[0]["LogicalName"].ToString();
                     string logicalLog = archivos.Rows[1]["LogicalName"].ToString();
-
-                    // Obtiene la carpeta donde SQL Server guarda las bases
                     string rutaDatos = ObtenerRutaDatosSQL(conn);
-
                     string archivoMDF = Path.Combine(rutaDatos, "BD_CuentaClara.mdf");
                     string archivoLDF = Path.Combine(rutaDatos, "BD_CuentaClara_log.ldf");
 
@@ -74,7 +70,7 @@ namespace DAL
             }
             catch (SqlException ex)
             {
-                // Si falló el restore intentamos volver la BD a MULTI_USER
+               
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(connMaster))
@@ -90,12 +86,11 @@ namespace DAL
                 }
                 catch
                 {
-                    // Si también falla, ignoramos este error
+                    
                 }
 
-                throw new Exception(
-                    "No fue posible restaurar la base de datos.\n\n" +
-                    ex.Message);
+                throw new Exception( "No fue posible restaurar la base de datos.\n\n" + ex.Message);
+ 
             }
         }
 
@@ -103,9 +98,8 @@ namespace DAL
         {
             DataTable archivos = new DataTable();
 
-            string sql =
-                $"RESTORE FILELISTONLY FROM DISK = '{rutaCompleta}'";
-
+            string sql = $"RESTORE FILELISTONLY FROM DISK = '{rutaCompleta}'";
+  
             SqlDataAdapter da = new SqlDataAdapter(sql, conn);
 
             da.Fill(archivos);

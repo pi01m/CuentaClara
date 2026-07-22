@@ -66,5 +66,18 @@ namespace BLL
             string banderaPath = Path.Combine(appDataFolder, "bandera.txt");
             File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now.ToString());
         }
+        public bool EsNecesarioInstalar()
+        {
+            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
+            string rutaBandera = Path.Combine(appDataFolder, "bandera.txt");
+
+            if (!File.Exists(rutaBandera))
+            {
+                return true;
+            }
+            bool baseExisteEnSql = DAL_ConexionDB.VerificarBaseDatosExistente();
+
+            return !baseExisteEnSql;
+        }
     }
 }

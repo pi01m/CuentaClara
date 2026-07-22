@@ -93,106 +93,25 @@ namespace IU
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            //if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
-            //{
-            //    MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.");
-            //    return;
-            //}
-
-            //string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
-
-            //string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
-
-            //if (!File.Exists(scriptPath))
-            //{
-            //    MessageBox.Show("No se encontró el archivo SetupData.sql en la carpeta de instalación.");
-            //    return;
-            //}
-
-            //this.Cursor = Cursors.WaitCursor;
-            //btnGuardar.Enabled = false;
-
-            //try
-            //{
-
-            //    string masterConnStr = $"Data Source={servidorElegido};Initial Catalog=master;Integrated Security=True;TrustServerCertificate=True;";
-            //    EjecutarScriptSQL(scriptPath, masterConnStr);
-
-            //    // 2. Definimos una carpeta segura en AppData para guardar las configuraciones de la app sin problemas de permisos
-            //    string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
-            //    Directory.CreateDirectory(appDataFolder); // Si no existe, la crea automáticamente
-
-            //    // 3. Guardamos el servidor elegido
-            //    string configPath = Path.Combine(appDataFolder, "servidor_config.txt");
-            //    File.WriteAllText(configPath, servidorElegido);
-
-            //    // 4. ¡CREAMOS LA BANDERA! En la misma ruta segura de AppData
-            //    string banderaPath = Path.Combine(appDataFolder, "bandera.txt");
-            //    File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now.ToString());
-            //    MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            //    // Cerramos el formulario indicando que todo salió bien
-            //    this.DialogResult = DialogResult.OK;
-            //    this.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error al configurar la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    btnGuardar.Enabled = true;
-            //}
-            //finally
-            //{
-            //    this.Cursor = Cursors.Default;
-            //}
-
-            //Nuevo1
-            //if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
-            //{
-            //    MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return;
-            //}
-
-            //string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
-            //string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
-
-            //this.Cursor = Cursors.WaitCursor;
-            //btnGuardar.Enabled = false;
-
-            //try
-            //{
-            //    bllInstalador.InstalarBaseDeDatos(servidorElegido, scriptPath);
-
-            //    MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            //    this.DialogResult = DialogResult.OK;
-            //    this.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error al configurar la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    btnGuardar.Enabled = true;
-            //}
-            //finally
-            //{
-            //    this.Cursor = Cursors.Default;
-            //}
-
-            //nuevo 2
             if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
             {
                 MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+        
             string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
+
+      
+            string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
 
             this.Cursor = Cursors.WaitCursor;
             btnGuardar.Enabled = false;
 
             try
             {
-                // Ya no necesitamos pasarle ninguna ruta física
-                bllInstalador.InstalarBaseDeDatos(servidorElegido);
+
+                bllInstalador.InstalarBaseDeDatos(servidorElegido, scriptPath);
 
                 MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -211,25 +130,25 @@ namespace IU
 
         }
 
-        //private void EjecutarScriptSQL(string path, string connString)
-        //{
-        //    string script = File.ReadAllText(path);
-        //    using (SqlConnection conn = new SqlConnection(connString))
-        //    {
-        //        string[] comandos = script.Split(new[] { "GO\r\n", "GO\n", "GO " }, StringSplitOptions.RemoveEmptyEntries);
-        //        conn.Open();
+        private void EjecutarScriptSQL(string path, string connString)
+        {
+            string script = File.ReadAllText(path);
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                string[] comandos = script.Split(new[] { "GO\r\n", "GO\n", "GO " }, StringSplitOptions.RemoveEmptyEntries);
+                conn.Open();
 
-        //        foreach (string comando in comandos)
-        //        {
-        //            if (!string.IsNullOrWhiteSpace(comando))
-        //            {
-        //                using (SqlCommand cmd = new SqlCommand(comando, conn))
-        //                {
-        //                    cmd.ExecuteNonQuery();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                foreach (string comando in comandos)
+                {
+                    if (!string.IsNullOrWhiteSpace(comando))
+                    {
+                        using (SqlCommand cmd = new SqlCommand(comando, conn))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

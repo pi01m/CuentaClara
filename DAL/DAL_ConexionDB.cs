@@ -11,34 +11,7 @@ namespace DAL
 {
     public class DAL_ConexionDB
     {
-        //public static string ObtenerCadena()
-        //{
-
-        //    string rutaConfig = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "servidor_config.txt");
-
-
-        //    string servidor = ".";
-
-        //    if (File.Exists(rutaConfig))
-        //    {
-        //        servidor = File.ReadAllText(rutaConfig).Trim();
-        //    }
-
-        //    return $"Data Source={servidor};Initial Catalog=BD_CuentaClara;Integrated Security=True;TrustServerCertificate=True;";
-        //}
-        //public static string ObtenerCadenaMaster()
-        //{
-        //    string rutaConfig = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "servidor_config.txt");
-        //    string servidor = ".";
-
-        //    if (File.Exists(rutaConfig))
-        //    {
-        //        servidor = File.ReadAllText(rutaConfig).Trim();
-        //    }
-
-        //    // Es idéntica a la otra, pero cambia Initial Catalog por "master"
-        //    return $"Data Source={servidor};Initial Catalog=master;Integrated Security=True;TrustServerCertificate=True;";
-        //}
+       
 
         private static string ObtenerServidor()
         {
@@ -49,33 +22,56 @@ namespace DAL
             {
                 return File.ReadAllText(rutaConfig).Trim();
             }
-            return "."; // Por defecto, si el archivo no existe
+            return ".";
         }
 
-        // Cadena principal para usar en toda la app
+  
         public static string ObtenerCadena()
         {
             string servidor = ObtenerServidor();
             return $"Data Source={servidor};Initial Catalog=BD_CuentaClara;Integrated Security=True;TrustServerCertificate=True;";
         }
 
-        // Cadena específica para conectarse a "master" durante la instalación
+        public static bool VerificarBaseDatosExistente()
+        {
+            try
+            {
+          
+                string connString = ObtenerCadenaMaster(null);
+                string consulta = "SELECT name FROM sys.databases WHERE name = 'BD_CuentaClara'";
+
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    using (SqlDataAdapter da = new SqlDataAdapter(consulta, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+      
+                        return dt.Rows.Count > 0;
+                    }
+                }
+            }
+            catch
+            {
+               
+                return false;
+            }
+        }
+
+
         public static string ObtenerCadenaMaster(string servidorParam)
         {
             string servidor = servidorParam ?? ObtenerServidor();
             return $"Data Source={servidor};Initial Catalog=master;Integrated Security=True;TrustServerCertificate=True;";
         }
 
-        // --- MÉTODOS DE INSTALACIÓN INCORPORADOS AQUÍ ---
-
-        // Busca servidores en la red local
         public DataTable ObtenerServidoresRed()
         {
             SqlDataSourceEnumerator instance = SqlDataSourceEnumerator.Instance;
             return instance.GetDataSources();
         }
 
-        // Ejecuta el script de base de datos
+
         public void EjecutarScriptSQL(string script, string servidor)
         {
             string connString = ObtenerCadenaMaster(servidor);

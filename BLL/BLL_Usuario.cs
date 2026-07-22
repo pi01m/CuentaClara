@@ -12,7 +12,7 @@ namespace BLL
     {
         private readonly BLL_BitacoraEvento _bitacoraServicio;
         private readonly DAL_Usuario _dalUsuario;
-        private readonly DAL_Familia _dalFamiliaPermiso;
+        private readonly DAL_Familia _bllFamiliaPermiso;
         private readonly Servicio_Cripto _encriptadorServicio;
         private readonly SessionManager _sm;
         private readonly BLL_DigitoVerificador _bllDV;
@@ -96,29 +96,28 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                // Loguea el error real para saber si falló el DAL o el DV
+
                 return false;
             }
         }
         public bool CrearUsuario(Servicio_Usuario usuario)
     
         {
-            // 1. Validaciones (Si fallan, lanzan una excepción que llega al Form)
+        
             ValidarDatosBasicos(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.email);
 
             if (_dalUsuario.ExisteUsuario(usuario.Login))
-                throw new Exception("err_UsuarioYaExiste"); // Clave para traducir en el Form
+                throw new Exception("err_UsuarioYaExiste"); 
 
             string contraseñaInicial = usuario.Apellido + usuario.DNI;
             usuario.Password = _encriptadorServicio.CalcularHash(contraseñaInicial);
             usuario.Bloqueo = 0;
 
-            // 2. Intentamos guardar en la BD
             bool resultado = _dalUsuario.CrearUsuario(usuario);
 
             if (resultado)
             {
-                // 3. ACTUALIZACIÓN DE DÍGITOS (Aquí es donde se corrige el Modo Emergencia)
+
                 try
                 {
                     List<Servicio_Usuario> todos = this.ListarUsuarios();
@@ -127,7 +126,7 @@ namespace BLL
                 }
                 catch (Exception ex)
                 {
-                    // Si falla la seguridad, lanzamos un error que el usuario debe saber
+   
                     throw new Exception("err_ErrorActualizacionDV");
                 }
             }
@@ -285,22 +284,10 @@ namespace BLL
                 }
             }
 
-
-
-
             _sm.CrearSesion(usuario);
 
-
-
-            _bitacoraServicio.RegistrarBitacora("Login correcto",
-                
-                usuario.Login,
-                "Seguridad",
-                1);
-
-
-
-
+            _bitacoraServicio.RegistrarBitacora("Login correcto", usuario.Login, "Seguridad", 1);
+  
             return true;
         }
 

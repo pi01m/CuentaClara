@@ -47,10 +47,8 @@ namespace BLL
 
             string script = File.ReadAllText(scriptPath);
 
-            // Llamamos al método que ahora está en DAL_ConexionDB
             dalConexion.EjecutarScriptSQL(script, servidorElegido);
 
-            // Guardamos las configuraciones en AppData
             string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
             Directory.CreateDirectory(appDataFolder);
 
@@ -59,6 +57,20 @@ namespace BLL
 
             string banderaPath = Path.Combine(appDataFolder, "bandera.txt");
             File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now.ToString());
+        }
+
+        public bool EsNecesarioInstalar()
+        {
+            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
+            string rutaBandera = Path.Combine(appDataFolder, "bandera.txt");
+
+            if (!File.Exists(rutaBandera))
+            {
+                return true;
+            }
+            bool baseExisteEnSql = DAL_ConexionDB.VerificarBaseDatosExistente();
+
+            return !baseExisteEnSql;
         }
     }
 }

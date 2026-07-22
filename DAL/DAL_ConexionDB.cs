@@ -32,12 +32,11 @@ namespace DAL
             return $"Data Source={servidor};Initial Catalog=BD_CuentaClara;Integrated Security=True;TrustServerCertificate=True;";
         }
 
-        public static bool VerificarBaseDatosExistente()
+        public static bool VerificarBaseDatosExistente(string servidorElegido = null)
         {
             try
             {
-          
-                string connString = ObtenerCadenaMaster(null);
+                string connString = ObtenerCadenaMaster(servidorElegido);
                 string consulta = "SELECT name FROM sys.databases WHERE name = 'BD_CuentaClara'";
 
                 using (SqlConnection conn = new SqlConnection(connString))
@@ -46,14 +45,12 @@ namespace DAL
                     {
                         DataTable dt = new DataTable();
                         da.Fill(dt);
-      
                         return dt.Rows.Count > 0;
                     }
                 }
             }
             catch
             {
-               
                 return false;
             }
         }

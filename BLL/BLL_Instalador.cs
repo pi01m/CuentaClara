@@ -40,15 +40,18 @@ namespace BLL
 
         public void InstalarBaseDeDatos(string servidorElegido, string scriptPath)
         {
-            if (!File.Exists(scriptPath))
+            bool baseYaExiste = DAL_ConexionDB.VerificarBaseDatosExistente(servidorElegido);
+
+            if (!baseYaExiste)
             {
-                throw new Exception("No se encontró el archivo SetupData.sql en la carpeta de instalación.");
+                if (!File.Exists(scriptPath))
+                {
+                    throw new Exception("No se encontró el archivo SetupData.sql en la carpeta de instalación.");
+                }
+
+                string script = File.ReadAllText(scriptPath);
+                dalConexion.EjecutarScriptSQL(script, servidorElegido);
             }
-
-            string script = File.ReadAllText(scriptPath);
-
-            dalConexion.EjecutarScriptSQL(script, servidorElegido);
-
             string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
             Directory.CreateDirectory(appDataFolder);
 

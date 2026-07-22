@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrimeraVez));
             btnBuscar = new Button();
             listaServidores = new ListBox();
             btnGuardar = new Button();
@@ -46,10 +45,10 @@
             btnBuscar.FlatStyle = FlatStyle.Flat;
             btnBuscar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBuscar.ForeColor = Color.FromArgb(18, 87, 150);
-            btnBuscar.Location = new Point(255, 252);
+            btnBuscar.Location = new Point(619, 689);
             btnBuscar.Margin = new Padding(0);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(159, 43);
+            btnBuscar.Size = new Size(386, 118);
             btnBuscar.TabIndex = 43;
             btnBuscar.Tag = "";
             btnBuscar.Text = "Buscar";
@@ -61,11 +60,11 @@
             listaServidores.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listaServidores.BorderStyle = BorderStyle.FixedSingle;
             listaServidores.FormattingEnabled = true;
-            listaServidores.ItemHeight = 15;
-            listaServidores.Location = new Point(23, 188);
+            listaServidores.ItemHeight = 41;
+            listaServidores.Location = new Point(56, 514);
             listaServidores.Margin = new Padding(0);
             listaServidores.Name = "listaServidores";
-            listaServidores.Size = new Size(177, 257);
+            listaServidores.Size = new Size(427, 699);
             listaServidores.TabIndex = 42;
             // 
             // btnGuardar
@@ -75,10 +74,10 @@
             btnGuardar.FlatStyle = FlatStyle.Flat;
             btnGuardar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(255, 320);
+            btnGuardar.Location = new Point(619, 875);
             btnGuardar.Margin = new Padding(0);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(159, 43);
+            btnGuardar.Size = new Size(386, 118);
             btnGuardar.TabIndex = 41;
             btnGuardar.Tag = "";
             btnGuardar.Text = "Guardar";
@@ -89,9 +88,10 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label1.Location = new Point(23, 114);
+            label1.Location = new Point(56, 312);
+            label1.Margin = new Padding(7, 0, 7, 0);
             label1.Name = "label1";
-            label1.Size = new Size(391, 38);
+            label1.Size = new Size(914, 92);
             label1.TabIndex = 44;
             label1.Tag = "lbl_Nombre";
             label1.Text = "Para comenzar, necesitamos preparar tu entorno. \r\nPor favor, selecciona el nombre de tu servidor SQL local.";
@@ -101,10 +101,10 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
-            lblTitulo.Location = new Point(80, 20);
-            lblTitulo.Margin = new Padding(1, 0, 1, 0);
+            lblTitulo.Location = new Point(194, 55);
+            lblTitulo.Margin = new Padding(2, 0, 2, 0);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(152, 32);
+            lblTitulo.Size = new Size(373, 81);
             lblTitulo.TabIndex = 45;
             lblTitulo.Text = "CuentaClara";
             // 
@@ -112,9 +112,10 @@
             // 
             lblNombre.AutoSize = true;
             lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblNombre.Location = new Point(23, 80);
+            lblNombre.Location = new Point(56, 219);
+            lblNombre.Margin = new Padding(7, 0, 7, 0);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(102, 19);
+            lblNombre.Size = new Size(242, 46);
             lblNombre.TabIndex = 46;
             lblNombre.Tag = "lbl_Nombre";
             lblNombre.Text = "Bienvenida/o ";
@@ -122,21 +123,21 @@
             // picLogo
             // 
             picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
-            picLogo.Location = new Point(23, 9);
+            picLogo.Image = Properties.Resources.logo;
+            picLogo.Location = new Point(56, 25);
             picLogo.Margin = new Padding(0);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(56, 43);
+            picLogo.Size = new Size(133, 114);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 47;
             picLogo.TabStop = false;
             // 
             // FormPrimeraVez
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(446, 478);
+            ClientSize = new Size(1083, 1307);
             Controls.Add(picLogo);
             Controls.Add(lblNombre);
             Controls.Add(lblTitulo);
@@ -144,7 +145,7 @@
             Controls.Add(btnBuscar);
             Controls.Add(listaServidores);
             Controls.Add(btnGuardar);
-            Margin = new Padding(1, 1, 1, 1);
+            Margin = new Padding(2, 3, 2, 3);
             MaximizeBox = false;
             Name = "FormPrimeraVez";
             StartPosition = FormStartPosition.CenterScreen;

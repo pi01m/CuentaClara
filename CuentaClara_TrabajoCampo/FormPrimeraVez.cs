@@ -144,6 +144,40 @@ namespace IU
             //{
             //    this.Cursor = Cursors.Default;
             //}
+
+            //Nuevo1
+            //if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
+            //{
+            //    MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
+
+            //string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
+            //string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
+
+            //this.Cursor = Cursors.WaitCursor;
+            //btnGuardar.Enabled = false;
+
+            //try
+            //{
+            //    bllInstalador.InstalarBaseDeDatos(servidorElegido, scriptPath);
+
+            //    MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //    this.DialogResult = DialogResult.OK;
+            //    this.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Error al configurar la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    btnGuardar.Enabled = true;
+            //}
+            //finally
+            //{
+            //    this.Cursor = Cursors.Default;
+            //}
+
+            //nuevo 2
             if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
             {
                 MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -151,14 +185,14 @@ namespace IU
             }
 
             string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
-            string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
 
             this.Cursor = Cursors.WaitCursor;
             btnGuardar.Enabled = false;
 
             try
             {
-                bllInstalador.InstalarBaseDeDatos(servidorElegido, scriptPath);
+                // Ya no necesitamos pasarle ninguna ruta física
+                bllInstalador.InstalarBaseDeDatos(servidorElegido);
 
                 MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -174,7 +208,7 @@ namespace IU
             {
                 this.Cursor = Cursors.Default;
             }
-        
+
         }
 
         //private void EjecutarScriptSQL(string path, string connString)

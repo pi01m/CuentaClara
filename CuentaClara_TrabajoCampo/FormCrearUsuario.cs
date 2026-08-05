@@ -32,11 +32,11 @@ namespace CuentaClara_TrabajoCampo
                 usuario.Apellido = txtApellido.Text;
                 usuario.DNI = txtDNI.Text;
                 usuario.email = txtCorreo.Text;
-                txtLogin.Text = txtNombre.Text + txtDNI.Text;
-                usuario.Login = txtLogin.Text;
+                //txtLogin.Text = txtNombre.Text + txtDNI.Text;
+                //usuario.Login = txtLogin.Text;
                 usuario.IdRol = cmbRol.SelectedValue.ToString();
                 usuario.Activo = chkActivo.Checked ? 1 : 0;
-
+                usuario.Login = txtNombre.Text + txtDNI.Text;
 
                 BLL_Usuario bll = new BLL_Usuario();
 

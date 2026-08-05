@@ -95,32 +95,58 @@ namespace IU
         {
             if (listaServidores.SelectedItem == null && string.IsNullOrWhiteSpace(listaServidores.Text))
             {
-                MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, selecciona o escribe el nombre de un servidor SQL.",
+                    "Atención",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-        
-            string servidorElegido = listaServidores.SelectedItem != null ? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
-
-      
-            string scriptPath = Path.Combine(Application.StartupPath, "SetupData.sql");
-
+            string servidorElegido = listaServidores.SelectedItem != null? listaServidores.SelectedItem.ToString() : listaServidores.Text.Trim();
+               
+                
             this.Cursor = Cursors.WaitCursor;
             btnGuardar.Enabled = false;
 
             try
             {
 
-                bllInstalador.InstalarBaseDeDatos(servidorElegido, scriptPath);
+                //var assembly = typeof(FormPrimeraVez).Assembly;
 
-                MessageBox.Show("¡Base de datos instalada y configurada con éxito!", "Configuración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show(assembly.Location);
+
+                //string recursos = string.Join(Environment.NewLine, assembly.GetManifestResourceNames());
+
+                //MessageBox.Show(recursos);
+
+                var assembly = typeof(FormPrimeraVez).Assembly;
+
+                using Stream stream = assembly.GetManifestResourceStream("IU.SetupData.sql");
+
+                if (stream == null)
+                    throw new Exception("No se encontró el recurso SetupData.sql.");
+
+                using StreamReader reader = new StreamReader(stream);
+
+                string script = reader.ReadToEnd();
+
+                bllInstalador.InstalarBaseDeDatos(servidorElegido, script);
+
+                MessageBox.Show("¡Base de datos instalada y configurada con éxito!",
+                    "Configuración Completa",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al configurar la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
                 btnGuardar.Enabled = true;
             }
             finally

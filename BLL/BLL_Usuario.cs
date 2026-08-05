@@ -109,6 +109,10 @@ namespace BLL
             if (_dalUsuario.ExisteUsuario(usuario.Login))
                 throw new Exception("err_UsuarioYaExiste"); // Clave para traducir en el Form
 
+            if (_dalUsuario.ExisteEmail(usuario.email))
+                throw new Exception("err_EmailYaExiste");
+
+
             string contraseñaInicial = usuario.Apellido + usuario.DNI;
             usuario.Password = _encriptadorServicio.CalcularHash(contraseñaInicial);
             usuario.Bloqueo = 0;
@@ -450,6 +454,8 @@ namespace BLL
                 if (usuario == null) throw new Exception("err_UsuarioNoEncontrado");
                 if (!VerificarEstadoUsuario(usuario)) throw new Exception("err_UsuarioEstadoInvalido");
 
+                if (_dalUsuario.ExisteEmail(nuevoEmail, dni))throw new Exception("err_EmailYaExiste");
+                
                 usuario.Nombre = nuevoNombre;
                 usuario.Apellido = nuevoApellido;
                 usuario.email = nuevoEmail;

@@ -19,12 +19,12 @@ namespace IU
         {
 
             InitializeComponent();
-           
+
         }
 
         private void FormCrearPrimerUsuario_Load(object sender, EventArgs e)
         {
-           
+            txt_Login.Text = txtNombre.Text + txtDNI.Text;
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace IU
                 usuario.Login = txtNombre.Text + txtDNI.Text;
                 usuario.IdRol = "R1";
                 usuario.Activo = 1;
-              
+
 
                 BLL_Usuario bll = new BLL_Usuario();
 
@@ -93,6 +93,15 @@ namespace IU
         {
             this.Close();
         }
-        
+
+        private void txtDNI_TextChanged(object sender, EventArgs e)
+        {
+            txt_Login.Text = txtNombre.Text + txtDNI.Text;
+        }
+
+        private void txtNombre_TextChanged(object sender, EventArgs e)
+        {
+            txt_Login.Text = txtNombre.Text + txtDNI.Text;
+        }
     }
 }

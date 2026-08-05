@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using IU.Properties;
 
 namespace CuentaClara_TrabajoCampo
 {
@@ -17,6 +18,7 @@ namespace CuentaClara_TrabajoCampo
     {
         private readonly BLL_Usuario _bllUsuario;
         private BLL_Idioma bllIdioma;
+        private bool contraseñaVisible = false;
         public frmLogIn()
         {
             GestorIdioma.GetInstancia().Suscribir(this);
@@ -30,12 +32,12 @@ namespace CuentaClara_TrabajoCampo
 
             try
             {
-           
+
                 if (!bllUsuario.ExisteAlgunaCuenta())
                 {
                     MessageBox.Show("Es la primera vez que inicia el sistema. Por favor, registre al administrador inicial.");
 
-                   
+
                     FormCrearPrimerUsuario formAlta = new FormCrearPrimerUsuario();
                     formAlta.ShowDialog();
 
@@ -57,6 +59,11 @@ namespace CuentaClara_TrabajoCampo
             comboBox1.DataSource = bllIdioma.ListarIdiomasBD();
             comboBox1.DisplayMember = "Nombre";
             comboBox1.ValueMember = "Id_Idioma";
+
+            txtContrasena.UseSystemPasswordChar = true;
+
+            ojo.Text = "";
+            CambiarImagenOjo(Resources.ojo_abierto);
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -74,7 +81,7 @@ namespace CuentaClara_TrabajoCampo
 
             try
             {
-               
+
                 bool loginExitoso = _bllUsuario.CargarCredenciales(nombreUsuario, contrasena);
 
                 if (loginExitoso)
@@ -99,7 +106,7 @@ namespace CuentaClara_TrabajoCampo
             }
             finally
             {
-                
+
                 btnIngresar.Enabled = true;
             }
         }
@@ -236,10 +243,47 @@ namespace CuentaClara_TrabajoCampo
         {
             if (panelLogin != null)
             {
-                
+
                 panelLogin.Left = (this.ClientSize.Width - panelLogin.Width) / 2;
                 panelLogin.Top = (this.ClientSize.Height - panelLogin.Height) / 2;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            contraseñaVisible = !contraseñaVisible;
+
+            if (contraseñaVisible)
+            {
+                // Mostrar contraseña
+                txtContrasena.UseSystemPasswordChar = false;
+
+                // Ojo cerrado
+                CambiarImagenOjo(Resources.ojo_cerrado);
+            }
+            else
+            {
+                // Ocultar contraseña
+                txtContrasena.UseSystemPasswordChar = true;
+
+                // Ojo abierto
+                CambiarImagenOjo(Resources.ojo_abierto);
+            }
+        }
+        private void CambiarImagenOjo(Bitmap imagen)
+        {
+            ojo.Image = new Bitmap(imagen, new Size(55, 52));
+            ojo.ImageAlign = ContentAlignment.MiddleCenter;
+        }
+
+        private void panelLogin_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtContrasena_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

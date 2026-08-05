@@ -18,6 +18,7 @@ namespace DAL
         {
             
         }
+
         public bool HayUsuariosRegistrados()
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -459,5 +460,50 @@ namespace DAL
 
             }
         }
+
+        public bool ExisteEmail(string email)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario", conn);
+
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Usuario");
+
+                foreach (DataRow fila in ds.Tables["Usuario"].Rows)
+                {
+                    if (fila["email"].ToString().Equals(email, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public bool ExisteEmail(string email, string dni)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Usuario", conn);
+
+                DataSet ds = new DataSet();
+                adapter.Fill(ds, "Usuario");
+
+                foreach (DataRow fila in ds.Tables["Usuario"].Rows)
+                {
+                    if (fila["email"].ToString().Equals(email, StringComparison.OrdinalIgnoreCase)
+                        && fila["DNI"].ToString() != dni)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+
     }
 }

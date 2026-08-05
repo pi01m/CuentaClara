@@ -1,6 +1,7 @@
 using BLL;
 using IU;
 using Servicio;
+using System.Diagnostics;
 
 namespace CuentaClara_TrabajoCampo
 {
@@ -351,6 +352,28 @@ namespace CuentaClara_TrabajoCampo
         private void panelMovimientos_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void button8_Click(object sender, EventArgs e)//boton de ayuda
+        {
+            string ruta = Path.Combine(Application.StartupPath, "Manual_de_Usuario_e_Instalacion.pdf");
+
+            if (File.Exists(ruta))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = ruta,
+                    UseShellExecute = true
+                });
+            }
+            else
+            {
+                MessageBox.Show(
+                    TraducirTexto("err_ManualNoEncontrado"),
+                    TraducirTexto("Ayuda"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

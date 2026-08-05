@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCrearUsuario));
             panelPrincipal = new Panel();
+            picLogo = new PictureBox();
             lblTitulo = new Label();
             lblDNI = new Label();
             txtDNI = new TextBox();
@@ -41,12 +42,9 @@
             txtApellido = new TextBox();
             lblCorreo = new Label();
             txtCorreo = new TextBox();
-            lblLogin = new Label();
-            txtLogin = new TextBox();
             chkActivo = new CheckBox();
             btnCancelar = new Button();
             btnGuardar = new Button();
-            picLogo = new PictureBox();
             panelPrincipal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
@@ -68,8 +66,6 @@
             panelPrincipal.Controls.Add(txtApellido);
             panelPrincipal.Controls.Add(lblCorreo);
             panelPrincipal.Controls.Add(txtCorreo);
-            panelPrincipal.Controls.Add(lblLogin);
-            panelPrincipal.Controls.Add(txtLogin);
             panelPrincipal.Controls.Add(chkActivo);
             panelPrincipal.Controls.Add(btnCancelar);
             panelPrincipal.Controls.Add(btnGuardar);
@@ -79,6 +75,18 @@
             panelPrincipal.TabIndex = 0;
             panelPrincipal.Paint += panelPrincipal_Paint;
             // 
+            // picLogo
+            // 
+            picLogo.BorderStyle = BorderStyle.FixedSingle;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(53, 14);
+            picLogo.Margin = new Padding(0);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(71, 57);
+            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picLogo.TabIndex = 18;
+            picLogo.TabStop = false;
+            // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
@@ -86,7 +94,7 @@
             lblTitulo.ForeColor = Color.FromArgb(20, 70, 120);
             lblTitulo.Location = new Point(146, 27);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(252, 32);
+            lblTitulo.Size = new Size(617, 81);
             lblTitulo.TabIndex = 0;
             lblTitulo.Tag = "lbl_TituloCrearNuevoUsuario";
             lblTitulo.Text = "Crear Nuevo Usuario";
@@ -97,7 +105,7 @@
             lblDNI.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblDNI.Location = new Point(53, 118);
             lblDNI.Name = "lblDNI";
-            lblDNI.Size = new Size(34, 19);
+            lblDNI.Size = new Size(83, 46);
             lblDNI.TabIndex = 1;
             lblDNI.Tag = "lbl_DNI";
             lblDNI.Text = "DNI";
@@ -106,7 +114,7 @@
             // 
             txtDNI.Location = new Point(53, 140);
             txtDNI.Name = "txtDNI";
-            txtDNI.Size = new Size(250, 25);
+            txtDNI.Size = new Size(250, 52);
             txtDNI.TabIndex = 2;
             // 
             // lblRol
@@ -115,7 +123,7 @@
             lblRol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblRol.Location = new Point(478, 108);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(98, 19);
+            lblRol.Size = new Size(232, 46);
             lblRol.TabIndex = 3;
             lblRol.Tag = "lbl_RolAsignado";
             lblRol.Text = "Rol Asignado";
@@ -126,7 +134,7 @@
             cmbRol.Items.AddRange(new object[] { "Admin", "Operador" });
             cmbRol.Location = new Point(478, 140);
             cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(250, 25);
+            cmbRol.Size = new Size(250, 53);
             cmbRol.TabIndex = 4;
             // 
             // lblNombre
@@ -135,7 +143,7 @@
             lblNombre.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblNombre.Location = new Point(53, 193);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(71, 19);
+            lblNombre.Size = new Size(167, 46);
             lblNombre.TabIndex = 5;
             lblNombre.Tag = "lbl_Nombre";
             lblNombre.Text = "Nombres";
@@ -144,7 +152,7 @@
             // 
             txtNombre.Location = new Point(53, 230);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(250, 25);
+            txtNombre.Size = new Size(250, 52);
             txtNombre.TabIndex = 6;
             // 
             // lblApellido
@@ -153,7 +161,7 @@
             lblApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblApellido.Location = new Point(478, 204);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(72, 19);
+            lblApellido.Size = new Size(170, 46);
             lblApellido.TabIndex = 7;
             lblApellido.Tag = "lbl_Apellido";
             lblApellido.Text = "Apellidos";
@@ -162,7 +170,7 @@
             // 
             txtApellido.Location = new Point(478, 230);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(250, 25);
+            txtApellido.Size = new Size(250, 52);
             txtApellido.TabIndex = 8;
             // 
             // lblCorreo
@@ -171,7 +179,7 @@
             lblCorreo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCorreo.Location = new Point(53, 281);
             lblCorreo.Name = "lblCorreo";
-            lblCorreo.Size = new Size(134, 19);
+            lblCorreo.Size = new Size(316, 46);
             lblCorreo.TabIndex = 9;
             lblCorreo.Tag = "lbl_Correo";
             lblCorreo.Text = "Correo Electrónico";
@@ -180,27 +188,8 @@
             // 
             txtCorreo.Location = new Point(53, 314);
             txtCorreo.Name = "txtCorreo";
-            txtCorreo.Size = new Size(250, 25);
+            txtCorreo.Size = new Size(250, 52);
             txtCorreo.TabIndex = 10;
-            // 
-            // lblLogin
-            // 
-            lblLogin.AutoSize = true;
-            lblLogin.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblLogin.Location = new Point(478, 281);
-            lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(127, 19);
-            lblLogin.TabIndex = 11;
-            lblLogin.Tag = "lbl_NomdeLogin";
-            lblLogin.Text = "Nombre de Login";
-            // 
-            // txtLogin
-            // 
-            txtLogin.Enabled = false;
-            txtLogin.Location = new Point(478, 314);
-            txtLogin.Name = "txtLogin";
-            txtLogin.Size = new Size(250, 25);
-            txtLogin.TabIndex = 12;
             // 
             // chkActivo
             // 
@@ -209,7 +198,7 @@
             chkActivo.ForeColor = Color.FromArgb(20, 70, 120);
             chkActivo.Location = new Point(53, 384);
             chkActivo.Name = "chkActivo";
-            chkActivo.Size = new Size(195, 23);
+            chkActivo.Size = new Size(454, 50);
             chkActivo.TabIndex = 15;
             chkActivo.Tag = "chk_Activo";
             chkActivo.Text = "Habilitar Acceso (Activo)";
@@ -247,21 +236,9 @@
             btnGuardar.UseVisualStyleBackColor = false;
             btnGuardar.Click += btnGuardar_Click;
             // 
-            // picLogo
-            // 
-            picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
-            picLogo.Location = new Point(53, 14);
-            picLogo.Margin = new Padding(0);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(71, 57);
-            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            picLogo.TabIndex = 18;
-            picLogo.TabStop = false;
-            // 
             // FormCrearUsuario
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(18F, 45F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
             ClientSize = new Size(856, 669);
@@ -299,9 +276,6 @@
 
         private Label lblCorreo;
         private TextBox txtCorreo;
-
-        private Label lblLogin;
-        private TextBox txtLogin;
 
         private Label lblRol;
         private ComboBox cmbRol;

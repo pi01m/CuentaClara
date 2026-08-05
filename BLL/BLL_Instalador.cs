@@ -17,7 +17,7 @@ namespace BLL
         public List<string> ObtenerListaServidores()
         {
             List<string> lista = new List<string>();
-            DataTable table = dalConexion.ObtenerServidoresRed(); 
+            DataTable table = dalConexion.ObtenerServidoresRed();
 
             foreach (DataRow row in table.Rows)
             {
@@ -37,37 +37,33 @@ namespace BLL
             }
 
             return lista;
-        }
+        } 
 
-        public void InstalarBaseDeDatos(string servidorElegido, string scriptPath)
+        public void InstalarBaseDeDatos(string servidorElegido, string script = "")
         {
-        
             bool baseYaExiste = DAL_ConexionDB.VerificarBaseDatosExistente(servidorElegido);
 
-        
             if (!baseYaExiste)
             {
-                if (!File.Exists(scriptPath))
-                {
-                    throw new Exception("No se encontró el archivo SetupData.sql en la carpeta de instalación.");
-                }
-
-                string script = File.ReadAllText(scriptPath);
                 dalConexion.EjecutarScriptSQL(script, servidorElegido);
             }
 
-            
-            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
+            string appDataFolder = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "CuentaClara");
+
             Directory.CreateDirectory(appDataFolder);
 
             string configPath = Path.Combine(appDataFolder, "servidor_config.txt");
             File.WriteAllText(configPath, servidorElegido);
 
             string banderaPath = Path.Combine(appDataFolder, "bandera.txt");
-            File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now.ToString());
+            File.WriteAllText(banderaPath, "INSTALADO OK - " + DateTime.Now);
         }
+
         public bool EsNecesarioInstalar()
         {
+           
             string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CuentaClara");
             string rutaBandera = Path.Combine(appDataFolder, "bandera.txt");
 
@@ -75,6 +71,7 @@ namespace BLL
             {
                 return true;
             }
+
             bool baseExisteEnSql = DAL_ConexionDB.VerificarBaseDatosExistente();
 
             return !baseExisteEnSql;

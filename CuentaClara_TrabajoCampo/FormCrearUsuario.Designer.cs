@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCrearUsuario));
             panelPrincipal = new Panel();
+            picLogo = new PictureBox();
             lblTitulo = new Label();
             lblDNI = new Label();
             txtDNI = new TextBox();
@@ -46,7 +47,6 @@
             chkActivo = new CheckBox();
             btnCancelar = new Button();
             btnGuardar = new Button();
-            picLogo = new PictureBox();
             panelPrincipal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
@@ -78,6 +78,18 @@
             panelPrincipal.Size = new Size(801, 632);
             panelPrincipal.TabIndex = 0;
             panelPrincipal.Paint += panelPrincipal_Paint;
+            // 
+            // picLogo
+            // 
+            picLogo.BorderStyle = BorderStyle.FixedSingle;
+            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
+            picLogo.Location = new Point(53, 14);
+            picLogo.Margin = new Padding(0);
+            picLogo.Name = "picLogo";
+            picLogo.Size = new Size(71, 57);
+            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picLogo.TabIndex = 18;
+            picLogo.TabStop = false;
             // 
             // lblTitulo
             // 
@@ -246,18 +258,6 @@
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
             btnGuardar.Click += btnGuardar_Click;
-            // 
-            // picLogo
-            // 
-            picLogo.BorderStyle = BorderStyle.FixedSingle;
-            picLogo.Image = (Image)resources.GetObject("picLogo.Image");
-            picLogo.Location = new Point(53, 14);
-            picLogo.Margin = new Padding(0);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(71, 57);
-            picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            picLogo.TabIndex = 18;
-            picLogo.TabStop = false;
             // 
             // FormCrearUsuario
             // 

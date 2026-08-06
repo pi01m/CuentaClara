@@ -272,7 +272,7 @@ namespace CuentaClara_TrabajoCampo
         }
         private void CambiarImagenOjo(Bitmap imagen)
         {
-            ojo.Image = new Bitmap(imagen, new Size(55, 52));
+            ojo.Image = new Bitmap(imagen, new Size(38, 34));
             ojo.ImageAlign = ContentAlignment.MiddleCenter;
         }
 
